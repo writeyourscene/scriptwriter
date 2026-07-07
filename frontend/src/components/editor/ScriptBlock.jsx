@@ -141,8 +141,13 @@ export default function ScriptBlock({
 
     if (!scrollContainer) return
 
-    const textareaRect = textarea.getBoundingClientRect()
-    const containerRect = scrollContainer.getBoundingClientRect()
+    // Calculate the absolute vertical offset of the textarea relative to the scrollable container content
+    let elementScrollOffset = 0
+    let el = textarea
+    while (el && el !== scrollContainer) {
+      elementScrollOffset += el.offsetTop || 0
+      el = el.offsetParent
+    }
 
     const selectionStart = textarea.selectionStart || 0
     const textBeforeCursor = textarea.value.substring(0, selectionStart)
@@ -150,28 +155,31 @@ export default function ScriptBlock({
     const totalLines = Math.max(1, textarea.value.split('\n').length)
     const lineRatio = caretLine / totalLines
     
-    const caretViewportY = textareaRect.top + (textareaRect.height * lineRatio)
-    // Default thresholds for desktop
-    let bottomThreshold = containerRect.top + (containerRect.height * 0.5)
-    let topThreshold = containerRect.top + 150
-
-    // Adjust thresholds for mobile / virtual keyboards using Visual Viewport API
-    if (window.visualViewport) {
-      const isMobile = window.innerWidth < 768
-      if (isMobile) {
-        // On mobile, the keyboard shrinks the visual viewport height.
-        // We want the caret to stay in the visible window, well above the keyboard and mobile toolbar (height ~56px).
-        bottomThreshold = window.visualViewport.height - 120 // 120px safety margin above the visible bottom
-        topThreshold = 100 // 100px below the top of the visible screen (below header)
+    // Caret vertical offset inside the scroll container
+    const caretScrollOffset = elementScrollOffset + (textarea.offsetHeight * lineRatio)
+    
+    const isMobile = window.innerWidth < 768
+    if (isMobile) {
+      // Keep the active typing cursor locked to the upper 1/3 of the screen (approx 150px from top of container)
+      const targetScrollTop = caretScrollOffset - 150
+      if (Math.abs(scrollContainer.scrollTop - targetScrollTop) > 5) {
+        scrollContainer.scrollTop = targetScrollTop
       }
-    }
+    } else {
+      // Desktop behavior: standard bounds checking relative to the viewport
+      const textareaRect = textarea.getBoundingClientRect()
+      const containerRect = scrollContainer.getBoundingClientRect()
+      const caretViewportY = textareaRect.top + (textareaRect.height * lineRatio)
+      const bottomThreshold = containerRect.top + (containerRect.height * 0.5)
+      const topThreshold = containerRect.top + 150
 
-    if (caretViewportY > bottomThreshold) {
-      const diff = caretViewportY - bottomThreshold
-      scrollContainer.scrollTop += diff
-    } else if (caretViewportY < topThreshold) {
-      const diff = topThreshold - caretViewportY
-      scrollContainer.scrollTop -= diff
+      if (caretViewportY > bottomThreshold) {
+        const diff = caretViewportY - bottomThreshold
+        scrollContainer.scrollTop += diff
+      } else if (caretViewportY < topThreshold) {
+        const diff = topThreshold - caretViewportY
+        scrollContainer.scrollTop -= diff
+      }
     }
   }
 
