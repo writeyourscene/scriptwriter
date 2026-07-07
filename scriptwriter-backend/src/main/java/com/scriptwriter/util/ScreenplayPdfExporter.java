@@ -347,33 +347,24 @@ public final class ScreenplayPdfExporter {
                         }
                     }
                 }
-                document.newPage(); // Start script content on a fresh page after title page
-            } else {
-                // Auto title page — center vertically using PdfPTable
-                float usableH = document.getPageSize().getHeight() - document.topMargin() - document.bottomMargin();
                 
-                com.lowagie.text.pdf.PdfPTable table = new com.lowagie.text.pdf.PdfPTable(1);
-                table.setWidthPercentage(100);
-                com.lowagie.text.pdf.PdfPCell cell = new com.lowagie.text.pdf.PdfPCell();
-                cell.setBorder(com.lowagie.text.Rectangle.NO_BORDER);
-                cell.setMinimumHeight(usableH);
-                cell.setVerticalAlignment(com.lowagie.text.Element.ALIGN_MIDDLE);
-
-                Paragraph titlePara = new Paragraph(title.toUpperCase(), titleFont);
-                titlePara.setAlignment(Element.ALIGN_CENTER);
-                titlePara.setSpacingAfter(24);
-                cell.addElement(titlePara);
-
-                Paragraph writtenByPara = new Paragraph("Written by\nAuthor", normalFont);
-                writtenByPara.setAlignment(Element.ALIGN_CENTER);
-                writtenByPara.setLeading(16f);
-                cell.addElement(writtenByPara);
-
-                table.addCell(cell);
-                document.add(table);
-
-
-                document.newPage();
+                // Only create a new page if there are actually elements in the script body to render
+                boolean hasContent = false;
+                for (Map<String, Object> element : elements) {
+                    String type = String.valueOf(element.get("type"));
+                    if (!ScreenplayElementType.TITLE_PAGE.name().equals(type)
+                            && !ScreenplayElementType.SYNOPSIS.name().equals(type)
+                            && !ScreenplayElementType.BEAT.name().equals(type)) {
+                        String rawText = element.get("text") != null ? String.valueOf(element.get("text")) : "";
+                        if (!rawText.isBlank()) {
+                            hasContent = true;
+                            break;
+                        }
+                    }
+                }
+                if (hasContent) {
+                    document.newPage(); // Start script content on a fresh page after title page
+                }
             }
         }
 

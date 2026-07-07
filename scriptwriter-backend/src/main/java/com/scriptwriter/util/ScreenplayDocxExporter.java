@@ -222,32 +222,24 @@ public final class ScreenplayDocxExporter {
                         }
                     }
                 }
-                XWPFParagraph breakP = document.createParagraph();
-                breakP.setPageBreak(true);
-            } else {
-                for (int i = 0; i < 10; i++) {
-                    document.createParagraph();
+                // Only create a new page if there are actually elements in the script body to render
+                boolean hasContent = false;
+                for (Map<String, Object> element : elements) {
+                    String type = String.valueOf(element.get("type"));
+                    if (!ScreenplayElementType.TITLE_PAGE.name().equals(type)
+                            && !ScreenplayElementType.SYNOPSIS.name().equals(type)
+                            && !ScreenplayElementType.BEAT.name().equals(type)) {
+                        String rawText = element.get("text") != null ? String.valueOf(element.get("text")) : "";
+                        if (!rawText.isBlank()) {
+                            hasContent = true;
+                            break;
+                        }
+                    }
                 }
-                
-                XWPFParagraph pTitle = document.createParagraph();
-                pTitle.setAlignment(ParagraphAlignment.CENTER);
-                XWPFRun rTitle = pTitle.createRun();
-                rTitle.setFontFamily(docFont);
-                rTitle.setFontSize(14);
-                rTitle.setBold(true);
-                rTitle.setText(title.toUpperCase());
-                
-                XWPFParagraph pWrittenBy = document.createParagraph();
-                pWrittenBy.setAlignment(ParagraphAlignment.CENTER);
-                XWPFRun rWritten = pWrittenBy.createRun();
-                rWritten.setFontFamily(docFont);
-                rWritten.setFontSize(12);
-                rWritten.setText("Written by");
-                rWritten.addBreak();
-                rWritten.setText("Author");
-                
-                XWPFParagraph breakP = document.createParagraph();
-                breakP.setPageBreak(true);
+                if (hasContent) {
+                    XWPFParagraph breakP = document.createParagraph();
+                    breakP.setPageBreak(true);
+                }
             }
         }
 
