@@ -424,24 +424,18 @@ public final class ScreenplayPdfExporter {
             }
 
             // ── Element rendering ─────────────────────────────────────────────────────────────────
-            // CSS reference: --editor-font-size: 12pt, --editor-line-height: 1.2
-            //   → leading = 12 × 1.2 = 14.4pt  (used for all blocks)
-            // Width percentages (content = 451pt on A4):
-            //   character   60% → indent each side = 451 × 0.20 = 90pt
-            //   dialogue    70% → indent each side = 451 × 0.15 = 68pt
-            //   parenthetical 50% → indent each side = 451 × 0.25 = 113pt
-            // ─────────────────────────────────────────────────────────────────────────────────────
-            final float LINE_HEIGHT = 13.5f; // 12pt × 1.125 line-height to match browser font metrics
-            final float BLOCK_PAD   = 1.5f;  // .script-block padding: 2px 0 → ~1.5pt per side
+            // Leading = font-size × line-height = 12pt × 1.2 = 14.4pt (matches CSS exactly)
+            final float LINE_HEIGHT = 14.4f;
             float spacingBefore;
-            
+
             if (firstContentElement) {
-                spacingBefore = getMarginBefore(type) + BLOCK_PAD;
+                // First element on page: just use the element's own margin-top
+                spacingBefore = getMarginBefore(type);
                 firstContentElement = false;
             } else {
                 float prevMarginAfter = getMarginAfter(prevType);
                 float currentMarginBefore = getMarginBefore(type);
-                spacingBefore = Math.max(prevMarginAfter, currentMarginBefore) + (2 * BLOCK_PAD);
+                spacingBefore = Math.max(prevMarginAfter, currentMarginBefore);
             }
             prevType = type;
 

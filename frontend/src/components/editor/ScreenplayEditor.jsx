@@ -171,10 +171,12 @@ export default function ScreenplayEditor({
     let currentPage = 1
     let currentHeight = 72
     blockElements.forEach((el, idx) => {
-      const ta = el.querySelector('.script-block')
-      const style = ta ? window.getComputedStyle(ta) : window.getComputedStyle(el)
-      const marginTop = Math.round(parseFloat(style.marginTop) || 0)
-      const marginBottom = Math.round(parseFloat(style.marginBottom) || 0)
+      // Use the wrapper element itself (el) for margin calculations, because
+      // wrapper-scene-heading, wrapper-character etc. set margins on el, not on the inner textarea.
+      const wrapperStyle = window.getComputedStyle(el)
+      const marginTop = Math.round(parseFloat(wrapperStyle.marginTop) || 0)
+      const marginBottom = Math.round(parseFloat(wrapperStyle.marginBottom) || 0)
+      // offsetHeight does NOT include an element's own margins, so we add them manually.
       const blockHeight = Math.round(el.offsetHeight + marginTop + marginBottom)
 
       const block = blocks[idx]
