@@ -10,6 +10,7 @@
 }
 
 .editor-page {
+  box-sizing: border-box;
   width: var(--page-width);
   min-height: var(--page-min-height);
   background: white;
