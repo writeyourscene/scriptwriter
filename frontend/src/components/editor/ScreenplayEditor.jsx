@@ -169,15 +169,14 @@ export default function ScreenplayEditor({
     const newPageBreaks = []
     const newPageHeights = {}
     let currentPage = 1
-    let currentHeight = 72
+    let currentHeight = 72  // start at top padding
+    let prevMarginBottom = 0 // track previous element's bottom margin for CSS collapsing
+
     blockElements.forEach((el, idx) => {
-      // Use the wrapper element itself (el) for margin calculations, because
-      // wrapper-scene-heading, wrapper-character etc. set margins on el, not on the inner textarea.
+      // Margins are on the wrapper element (scene-heading, character, etc.)
       const wrapperStyle = window.getComputedStyle(el)
       const marginTop = Math.round(parseFloat(wrapperStyle.marginTop) || 0)
       const marginBottom = Math.round(parseFloat(wrapperStyle.marginBottom) || 0)
-      // offsetHeight does NOT include an element's own margins, so we add them manually.
-      const blockHeight = Math.round(el.offsetHeight + marginTop + marginBottom)
 
       const block = blocks[idx]
       const prevBlock = blocks[idx - 1]
@@ -188,14 +187,21 @@ export default function ScreenplayEditor({
          prevBlock.type === ELEMENT_TYPES.TITLE_PAGE) ||
         (block?.pageBreakBefore === true)
 
-      if ((!isTitlePage && currentHeight + blockHeight > heightLimit - 72) || forcePageBreak) {
+      // CSS margin collapsing: the gap before this element is max(prevBottom, curTop), not their sum.
+      const spaceBefore = Math.max(prevMarginBottom, marginTop)
+      // Height this element contributes to the current page accumulator.
+      const elementHeight = spaceBefore + el.offsetHeight
+
+      if ((!isTitlePage && currentHeight + elementHeight > heightLimit - 72) || forcePageBreak) {
         newPageHeights[currentPage] = currentHeight
         newPageBreaks.push(idx)
         currentPage++
-        currentHeight = 72
+        currentHeight = 72   // reset: new page starts at top padding
+        prevMarginBottom = 0 // no previous element on new page
       }
 
-      currentHeight += blockHeight
+      currentHeight += elementHeight
+      prevMarginBottom = marginBottom  // remember for next element's collapse calculation
     })
     newPageHeights[currentPage] = currentHeight
 
