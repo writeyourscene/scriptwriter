@@ -558,7 +558,14 @@ export default function EditorPage() {
               <button
                 key={type}
                 type="button"
-                onClick={() => handleBlockTypeChange(type)}
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  handleBlockTypeChange(type)
+                }}
+                onTouchStart={(e) => {
+                  e.preventDefault()
+                  handleBlockTypeChange(type)
+                }}
                 className={`flex flex-col items-center justify-center gap-0.5 w-12 h-10 rounded-lg transition-all border border-transparent ${
                   isActive 
                     ? activeClasses 
