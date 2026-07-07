@@ -175,8 +175,7 @@ export default function ScreenplayEditor({
       const style = ta ? window.getComputedStyle(ta) : window.getComputedStyle(el)
       const marginTop = Math.round(parseFloat(style.marginTop) || 0)
       const marginBottom = Math.round(parseFloat(style.marginBottom) || 0)
-      const zoomFactor = (zoom || 100) / 100
-      const blockHeight = Math.round((el.offsetHeight + marginTop + marginBottom) / zoomFactor)
+      const blockHeight = Math.round(el.offsetHeight + marginTop + marginBottom)
 
       const block = blocks[idx]
       const prevBlock = blocks[idx - 1]
