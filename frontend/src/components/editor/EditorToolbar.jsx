@@ -114,6 +114,9 @@ export default function EditorToolbar({
   const [showDownloadDropdown, setShowDownloadDropdown] = useState(false)
   const downloadDropdownRef = useRef(null)
 
+  const [showTranslitDropdown, setShowTranslitDropdown] = useState(false)
+  const translitDropdownRef = useRef(null)
+
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (profileRef.current && !profileRef.current.contains(e.target)) {
@@ -130,6 +133,9 @@ export default function EditorToolbar({
       }
       if (downloadDropdownRef.current && !downloadDropdownRef.current.contains(e.target)) {
         setShowDownloadDropdown(false)
+      }
+      if (translitDropdownRef.current && !translitDropdownRef.current.contains(e.target)) {
+        setShowTranslitDropdown(false)
       }
     }
     document.addEventListener('mousedown', handleOutsideClick)
@@ -423,13 +429,14 @@ export default function EditorToolbar({
 
           {/* Action Button Toggles */}
           <div className="flex items-center border-l border-gray-200 dark:border-surface-700 pl-2 gap-1">
-            {/* Language / Transliteration Picker moved to left side of panel symbol */}
-            <div className="relative mr-1 group hidden md:block">
+            {/* Language / Transliteration Picker */}
+            <div className="relative mr-1" ref={translitDropdownRef}>
               <button
+                onClick={() => setShowTranslitDropdown(!showTranslitDropdown)}
                 className={`rounded p-2 transition-colors cursor-pointer flex items-center gap-1 active:scale-95 ${
                   translitLang
                     ? 'bg-orange-500/10 text-[#ee7712]'
-                    : 'hover:bg-gray-200/60 dark:hover:bg-surface-750 text-gray-500 dark:text-gray-400'
+                    : showTranslitDropdown ? 'bg-gray-200/60 dark:bg-surface-750 text-gray-500 dark:text-gray-400' : 'hover:bg-gray-200/60 dark:hover:bg-surface-750 text-gray-500 dark:text-gray-400'
                 }`}
                 title={translitLang ? `Transliteration: ${INDIAN_LANGUAGES.find(l => l.code === translitLang)?.label || 'On'}` : 'Indian Language Transliteration'}
               >
@@ -441,53 +448,55 @@ export default function EditorToolbar({
                 )}
               </button>
 
-              <div className="absolute left-0 top-full pt-1.5 z-[999] opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto">
-                <div className="w-52 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
-                  <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
-                    Transliterate to
-                  </div>
+              {showTranslitDropdown && (
+                <div className="absolute left-0 top-full pt-1.5 z-[999]">
+                  <div className="w-52 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
+                    <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
+                      Transliterate to
+                    </div>
 
-                  {/* Off / English option */}
-                  <button
-                    onClick={() => { onTranslitLangChange(null) }}
-                    className={`w-full flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs text-left transition-all ${
-                      !translitLang
-                        ? 'bg-gray-100 dark:bg-surface-750 text-gray-800 dark:text-white font-semibold'
-                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-surface-800'
-                    }`}
-                  >
-                    <span className="text-base">🔤</span>
-                    <span>English (Off)</span>
-                    {!translitLang && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-gray-500" />}
-                  </button>
+                    {/* Off / English option */}
+                    <button
+                      onClick={() => { setShowTranslitDropdown(false); onTranslitLangChange(null); }}
+                      className={`w-full flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs text-left transition-all ${
+                        !translitLang
+                          ? 'bg-gray-100 dark:bg-surface-750 text-gray-800 dark:text-white font-semibold'
+                          : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-surface-800'
+                      }`}
+                    >
+                      <span className="text-base">🔤</span>
+                      <span>English (Off)</span>
+                      {!translitLang && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-gray-500" />}
+                    </button>
 
-                  <div className="my-1 border-t border-gray-100 dark:border-surface-800" />
+                    <div className="my-1 border-t border-gray-100 dark:border-surface-800" />
 
-                  <div className="max-h-60 overflow-y-auto custom-scrollbar space-y-0.5">
-                    {INDIAN_LANGUAGES.map((lang) => {
-                      const isActive = translitLang === lang.code
-                      return (
-                        <button
-                          key={lang.code}
-                          onClick={() => { onTranslitLangChange(lang.code) }}
-                          className={`w-full flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs text-left transition-all ${
-                            isActive
-                              ? 'bg-orange-500/10 text-[#ee7712] font-semibold'
-                              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-surface-800'
-                          }`}
-                        >
-                          <span className="text-base w-5 text-center">{lang.native.charAt(0)}</span>
-                          <div className="flex flex-col flex-1">
-                            <span className="font-semibold">{lang.label}</span>
-                            <span className="text-[10px] text-gray-400 dark:text-gray-500 leading-none">{lang.native}</span>
-                          </div>
-                          {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#ee7712]" />}
-                        </button>
-                      )
-                    })}
+                    <div className="max-h-60 overflow-y-auto custom-scrollbar space-y-0.5">
+                      {INDIAN_LANGUAGES.map((lang) => {
+                        const isActive = translitLang === lang.code
+                        return (
+                          <button
+                            key={lang.code}
+                            onClick={() => { setShowTranslitDropdown(false); onTranslitLangChange(lang.code); }}
+                            className={`w-full flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs text-left transition-all ${
+                              isActive
+                                ? 'bg-orange-500/10 text-[#ee7712] font-semibold'
+                                : 'text-gray-705 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-surface-800'
+                            }`}
+                          >
+                            <span className="text-base w-5 text-center">{lang.native.charAt(0)}</span>
+                            <div className="flex flex-col flex-1">
+                              <span className="font-semibold">{lang.label}</span>
+                              <span className="text-[10px] text-gray-400 dark:text-gray-500 leading-none">{lang.native}</span>
+                            </div>
+                            {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#ee7712]" />}
+                          </button>
+                        )
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
             <div className="w-px h-4 bg-gray-300 dark:bg-surface-600 mx-1" />
@@ -589,7 +598,7 @@ export default function EditorToolbar({
 
             <button
               onClick={onToggleSidebar}
-              className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer hidden md:block"
+              className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer"
               title="Toggle Panel"
             >
               <FiSidebar className="text-sm text-blue-500" />
