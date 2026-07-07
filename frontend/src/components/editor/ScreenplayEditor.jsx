@@ -163,7 +163,7 @@ export default function ScreenplayEditor({
     }
     if (!editorRef.current) return
 
-    const heightLimit = pageSize === 'letter' ? 1056 : 1122
+    const heightLimit = pageSize === 'letter' ? 1130 : 1200
     const blockElements = editorRef.current.querySelectorAll('.script-block-wrapper')
 
     const zoomScale = (zoom || 100) / 100
@@ -937,7 +937,7 @@ export default function ScreenplayEditor({
 
 
   const totalPages = pageBreaks.length + 1
-  const heightLimit = pageSize === 'letter' ? 1056 : 1122
+  const heightLimit = pageSize === 'letter' ? 1130 : 1200
 
   return (
     <>
