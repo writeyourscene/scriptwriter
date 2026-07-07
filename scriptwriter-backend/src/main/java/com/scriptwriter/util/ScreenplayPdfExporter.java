@@ -157,7 +157,7 @@ public final class ScreenplayPdfExporter {
                 || ScreenplayElementType.CHARACTER.name().equals(type)
                 || ScreenplayElementType.TRANSITION.name().equals(type)
                 || ScreenplayElementType.SHOT.name().equals(type)) {
-            return 24f;
+            return 18f;
         }
         return 0f;
     }
@@ -170,7 +170,7 @@ public final class ScreenplayPdfExporter {
                 || ScreenplayElementType.SHOT.name().equals(type)
                 || ScreenplayElementType.LYRICS.name().equals(type)
                 || ScreenplayElementType.NOTE.name().equals(type)) {
-            return 12f;
+            return 9f;
         }
         return 0f;
     }
