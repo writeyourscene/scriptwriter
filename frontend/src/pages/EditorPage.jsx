@@ -514,7 +514,7 @@ export default function EditorPage() {
 
 
       {/* Mobile Sticky Footer Formatting Bar */}
-      {focusedBlock && focusedBlock.type !== 'TITLE_PAGE' && (
+      {(!focusedBlock || focusedBlock.type !== 'TITLE_PAGE') && (
         <div className="md:hidden fixed bottom-0 left-0 right-0 w-full flex h-14 items-center justify-around px-2 bg-surface-900/95 dark:bg-surface-950/95 border-t border-surface-800 backdrop-blur-md z-50 select-none pb-safe">
           {ELEMENT_TYPES_LIST.map(({ type, label, Icon, activeClasses }) => {
             const isActive = focusedBlockType === type;
