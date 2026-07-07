@@ -1185,6 +1185,7 @@ export default function ScreenplayEditor({
                 autoCaps={autoCaps}
                 translitLang={translitLang}
                 pageSize={pageSize}
+                zoom={zoom}
               />
             </div>
           )

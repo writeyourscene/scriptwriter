@@ -116,6 +116,22 @@ export default function EditorPage() {
   }, [])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const lockLayoutScroll = () => {
+      // Prevent browser layout viewport from drifting/scrolling when the virtual keyboard is open
+      if (window.scrollY !== 0 || window.scrollX !== 0) {
+        window.scrollTo(0, 0)
+      }
+    }
+
+    window.addEventListener('scroll', lockLayoutScroll)
+    return () => {
+      window.removeEventListener('scroll', lockLayoutScroll)
+    }
+  }, [])
+
+  useEffect(() => {
     if (script?.updatedAt) {
       try {
         const dateObj = new Date(script.updatedAt)

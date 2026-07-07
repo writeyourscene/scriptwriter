@@ -70,6 +70,7 @@ export default function ScriptBlock({
   autoCaps = false,
   translitLang = null,
   pageSize = 'a4',
+  zoom = 100,
 }) {
   const ref = useRef(null)
   const [suggestions, setSuggestions] = useState([])
@@ -139,8 +140,6 @@ export default function ScriptBlock({
     const scrollContainer = textarea.closest('.editor-root')
     if (!scrollContainer) return
 
-    if (!scrollContainer) return
-
     // Calculate the absolute vertical offset of the textarea relative to the scrollable container content
     let elementScrollOffset = 0
     let el = textarea
@@ -155,8 +154,10 @@ export default function ScriptBlock({
     const totalLines = Math.max(1, textarea.value.split('\n').length)
     const lineRatio = caretLine / totalLines
     
-    // Caret vertical offset inside the scroll container
-    const caretScrollOffset = elementScrollOffset + (textarea.offsetHeight * lineRatio)
+    // Scale layout offset coordinates by the zoom factor because the editor pages are zoomed, 
+    // but the scroll container (.editor-root) is not zoomed.
+    const zoomFactor = (zoom || 100) / 100
+    const caretScrollOffset = (elementScrollOffset + (textarea.offsetHeight * lineRatio)) * zoomFactor
     
     const isMobile = window.innerWidth < 768
     if (isMobile) {
