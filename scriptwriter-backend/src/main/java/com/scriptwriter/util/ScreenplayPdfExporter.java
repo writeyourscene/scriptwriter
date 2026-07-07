@@ -53,7 +53,7 @@ public final class ScreenplayPdfExporter {
                          ScreenplayPdfExporter.class.getResourceAsStream("/fonts/" + key)) {
                 if (is == null) return null;
                 byte[] bytes = is.readAllBytes();
-                return BaseFont.createFont(key, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true, bytes, null);
+                return BaseFont.createFont(key, BaseFont.CP1252, BaseFont.EMBEDDED, true, bytes, null);
             } catch (Exception e) {
                 return null;
             }
