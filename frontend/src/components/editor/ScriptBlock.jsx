@@ -139,28 +139,28 @@ export default function ScriptBlock({
     const scrollContainer = textarea.closest('.editor-root')
     if (!scrollContainer) return
 
-    if (!scrollContainer) return
+    // 200ms timeout allows the mobile keyboard to slide up and resize the viewport
+    setTimeout(() => {
+      if (!textarea) return
+      const containerRect = scrollContainer.getBoundingClientRect()
+      const textareaRect = textarea.getBoundingClientRect()
 
-    const textareaRect = textarea.getBoundingClientRect()
-    const containerRect = scrollContainer.getBoundingClientRect()
+      const selectionStart = textarea.selectionStart || 0
+      const textBeforeCursor = textarea.value.substring(0, selectionStart)
+      const caretLine = textBeforeCursor.split('\n').length
+      const totalLines = Math.max(1, textarea.value.split('\n').length)
+      const lineRatio = caretLine / totalLines
 
-    const selectionStart = textarea.selectionStart || 0
-    const textBeforeCursor = textarea.value.substring(0, selectionStart)
-    const caretLine = textBeforeCursor.split('\n').length
-    const totalLines = Math.max(1, textarea.value.split('\n').length)
-    const lineRatio = caretLine / totalLines
-    
-    const caretViewportY = textareaRect.top + (textareaRect.height * lineRatio)
-    const bottomThreshold = containerRect.top + (containerRect.height * 0.5)
-    const topThreshold = containerRect.top + 150
+      // Position the active line of text in the upper third (35% from top) of the scroll container
+      // This keeps the focused element safely visible above the mobile keyboard and sticky formatting bar.
+      const caretRelativeY = (textareaRect.top - containerRect.top) + (textareaRect.height * lineRatio)
+      const targetScrollTop = scrollContainer.scrollTop + caretRelativeY - (containerRect.height * 0.35)
 
-    if (caretViewportY > bottomThreshold) {
-      const diff = caretViewportY - bottomThreshold
-      scrollContainer.scrollTop += diff
-    } else if (caretViewportY < topThreshold) {
-      const diff = topThreshold - caretViewportY
-      scrollContainer.scrollTop -= diff
-    }
+      scrollContainer.scrollTo({
+        top: Math.max(0, targetScrollTop),
+        behavior: 'smooth'
+      })
+    }, 200)
   }
 
   useEffect(() => {
