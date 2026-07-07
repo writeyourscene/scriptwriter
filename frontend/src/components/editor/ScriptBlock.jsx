@@ -161,10 +161,23 @@ export default function ScriptBlock({
     
     const isMobile = window.innerWidth < 768
     if (isMobile) {
-      // Keep the active typing cursor locked to the upper 1/3 of the screen (approx 150px from top of container)
-      const targetScrollTop = caretScrollOffset - 150
-      if (Math.abs(scrollContainer.scrollTop - targetScrollTop) > 5) {
-        scrollContainer.scrollTop = targetScrollTop
+      // Calculate active caret position in screen viewport coordinates
+      const textareaRect = textarea.getBoundingClientRect()
+      const caretViewportY = textareaRect.top + (textareaRect.height * lineRatio)
+      
+      const vv = window.visualViewport
+      const vvHeight = vv ? vv.height : window.innerHeight
+      
+      // Target alignment: keep active cursor resting directly on top of the formatting toolbar (height 56px)
+      const bottomThreshold = vvHeight - 80
+      const topThreshold = 100 // 100px safety margin below the top header
+
+      if (caretViewportY > bottomThreshold) {
+        const diff = caretViewportY - bottomThreshold
+        scrollContainer.scrollTop += diff / zoomFactor
+      } else if (caretViewportY < topThreshold) {
+        const diff = topThreshold - caretViewportY
+        scrollContainer.scrollTop -= diff / zoomFactor
       }
     } else {
       // Desktop behavior: standard bounds checking relative to the viewport
