@@ -1,0 +1,347 @@
+@import url('https://fonts.googleapis.com/css2?family=Suranna&family=Peddana&family=NTR&display=swap');
+
+.editor-root {
+  --page-width: 210mm;
+  --page-min-height: 297mm;
+  --editor-font: 'Courier New', Courier, 'Suranna', 'Peddana', 'NTR', monospace;
+  --editor-font-size: 12pt;
+  --editor-line-height: 1.2;
+  cursor: default;
+}
+
+.editor-page {
+  width: var(--page-width);
+  min-height: var(--page-min-height);
+  background: white;
+  color: black;
+  font-family: var(--editor-font);
+  font-size: var(--editor-font-size);
+  line-height: var(--editor-line-height);
+  padding: 72px 80px;
+  margin: 0 auto 24px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0,0,0,0.05);
+  position: relative;
+  cursor: default;
+}
+
+.visual-page-break {
+  display: flex;
+  flex-direction: column;
+  margin-left: -80px;
+  margin-right: -80px;
+  user-select: none;
+  position: relative;
+  cursor: default;
+}
+
+.page-break-bottom-margin {
+  height: 72px;
+  background: white;
+  border-bottom: 1px dashed #e5e5e5;
+  pointer-events: none;
+}
+
+.page-break-gap {
+  height: 48px;
+  background: #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 11px;
+  font-family: sans-serif;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.page-break-top-margin {
+  height: 72px;
+  background: white;
+  border-top: 1px dashed #e5e5e5;
+  pointer-events: none;
+}
+
+.visual-page-break .page-number-label {
+  position: absolute;
+  bottom: 36px;
+  right: 36px;
+  font-family: var(--editor-font);
+  font-size: 12pt;
+  font-weight: 700;
+  color: black;
+  pointer-events: none;
+}
+
+html:not(.light-mode) .visual-page-break .page-number-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.script-block {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 2px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  resize: none;
+  overflow: hidden;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='14'><rect x='3' y='0' width='2' height='14' fill='black'/><rect x='1' y='0' width='6' height='2' fill='black'/><rect x='1' y='12' width='6' height='2' fill='black'/></svg>") 4 7, text;
+  caret-color: #3b82f6 !important;
+}
+
+html:not(.light-mode) .script-block {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='14'><rect x='3' y='0' width='2' height='14' fill='white'/><rect x='1' y='0' width='6' height='2' fill='white'/><rect x='1' y='12' width='6' height='2' fill='white'/></svg>") 4 7, text;
+}
+
+.script-block:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.block-scene-heading {
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.block-action {
+  width: 100%;
+}
+
+.block-character {
+  text-transform: uppercase;
+  text-align: center;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 60% !important;
+}
+
+.block-dialogue {
+  text-align: center;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 70% !important;
+}
+
+.block-parenthetical {
+  text-align: center;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 50% !important;
+}
+
+.block-transition {
+  text-align: right;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.block-title-page {
+  text-align: center;
+  white-space: pre-wrap;
+  max-height: 780px !important;
+  overflow: hidden !important;
+  resize: none !important;
+}
+
+.script-block-wrapper:first-child.wrapper-title-page {
+  margin-top: 0;
+}
+
+/* Wrapper margins for vertical spacing and alignment */
+.wrapper-scene-heading {
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+.wrapper-action {
+  margin-bottom: 12px;
+}
+.wrapper-character {
+  margin-top: 24px;
+  margin-bottom: 0;
+}
+.wrapper-dialogue {
+  margin-bottom: 12px;
+}
+.wrapper-parenthetical {
+  margin-bottom: 0;
+}
+.wrapper-transition {
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+.wrapper-title-page {
+  margin-top: 0;
+}
+
+/* Title page structured field inputs */
+.block-title-page-container {
+  position: relative;
+}
+
+.title-page-field {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='14'><rect x='3' y='0' width='2' height='14' fill='black'/><rect x='1' y='0' width='6' height='2' fill='black'/><rect x='1' y='12' width='6' height='2' fill='black'/></svg>") 4 7, text;
+  caret-color: #3b82f6 !important;
+  padding: 4px 0;
+  /* Hide native placeholder — we use our own overlay divs */
+}
+
+html:not(.light-mode) .title-page-field {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='14'><rect x='3' y='0' width='2' height='14' fill='white'/><rect x='1' y='0' width='6' height='2' fill='white'/><rect x='1' y='12' width='6' height='2' fill='white'/></svg>") 4 7, text;
+}
+
+.title-page-field::placeholder {
+  color: rgba(0, 0, 0, 0.15) !important;
+  font-weight: 300 !important;
+  text-transform: uppercase;
+  opacity: 1 !important;
+}
+
+html:not(.light-mode) .title-page-field::placeholder {
+  color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.title-page-field:focus::placeholder {
+  color: transparent !important;
+  opacity: 0 !important;
+}
+
+.title-page-field-secondary {
+  border: 1px dashed transparent !important;
+  border-radius: 4px;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.title-page-field-secondary:hover,
+.title-page-field-secondary:focus {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  background-color: rgba(0, 0, 0, 0.01);
+}
+
+html:not(.light-mode) .title-page-field-secondary:hover,
+html:not(.light-mode) .title-page-field-secondary:focus {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background-color: rgba(255, 255, 255, 0.01);
+}
+
+.block-note {
+  color: #666;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+
+.block-label {
+  position: absolute;
+  left: -74px;
+  top: 4px;
+  font-size: 8.5px;
+  color: #999;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.script-block-wrapper:hover .block-label,
+.script-block-wrapper:focus-within .block-label {
+  opacity: 1;
+}
+
+.suggestions-dropdown {
+  position: absolute;
+  z-index: 50;
+  background: #262626;
+  border: 1px solid #404040;
+  border-radius: 8px;
+  padding: 4px;
+  min-width: 160px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.suggestions-dropdown button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: #e5e5e5;
+  border-radius: 4px;
+}
+
+.suggestions-dropdown button:hover {
+  background: #404040;
+}
+
+.title-field-title {
+  font-size: 42pt;
+}
+.title-field-director {
+  font-size: 26pt;
+}
+.title-field-writer {
+  font-size: 23pt;
+}
+.title-field-screenplay {
+  font-size: 20pt;
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.modal-animate-slide-in {
+  animation: slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Watermark Styling */
+.watermark-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.watermark-text {
+  font-size: 64pt;
+  font-weight: 900;
+  color: #a0aec0; /* Tailwind gray-400 */
+  text-transform: uppercase;
+  transform: rotate(-45deg);
+  white-space: nowrap;
+  letter-spacing: 0.15em;
+  font-family: inherit;
+}
+
+/* Hide watermark during browser print since backend handles PDF watermarking */
+@media print {
+  .watermark-overlay {
+    display: none !important;
+  }
+}
+

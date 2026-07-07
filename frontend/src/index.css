@@ -1,0 +1,892 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *, .dark-mode, .dark-mode *));
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
+  --color-brand-50: #fef7ee;
+  --color-brand-100: #fdecd3;
+  --color-brand-200: #fad5a5;
+  --color-brand-300: #f6b86d;
+  --color-brand-400: #f19332;
+  --color-brand-500: #ee7712;
+  --color-brand-600: #df5c08;
+  --color-brand-700: #b94409;
+  --color-brand-800: #93360f;
+  --color-brand-900: #772e10;
+  --color-brand-primary: #ee7712;
+  --color-brand-lightbg: rgba(238, 119, 18, 0.1);
+  --color-brand-border: rgba(238, 119, 18, 0.3);
+  --color-brand-hoverbg: rgba(238, 119, 18, 0.2);
+  --color-surface-900: #0f0f0f;
+  --color-surface-850: #141416;
+  --color-surface-800: #1a1a1a;
+  --color-surface-750: #202024;
+  --color-surface-700: #262626;
+  --color-surface-650: #2c2d30;
+  --color-surface-600: #333333;
+}
+
+body {
+  @apply bg-surface-900 text-white antialiased;
+  font-family: var(--font-sans);
+  margin: 0;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Light / Colorful Normal Mode Styles */
+html.light-mode {
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #0284c7;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #1e40af;
+  --color-brand-900: #1e3a8a;
+  --color-brand-primary: #0284c7;
+  --color-brand-lightbg: rgba(2, 132, 199, 0.1);
+  --color-brand-border: rgba(2, 132, 199, 0.3);
+  --color-brand-hoverbg: rgba(2, 132, 199, 0.2);
+  --color-surface-900: #f3f4f6;
+  --color-surface-850: #ffffff;
+  --color-surface-800: #ffffff;
+  --color-surface-750: #f8fafc;
+  --color-surface-700: #eaecef;
+  --color-surface-650: #e2e8f0;
+  --color-surface-600: #cbd5e1;
+}
+
+html.light-mode body {
+  background-color: #f3f4f6 !important;
+  background-image: none !important;
+  color: #0f172a !important;
+}
+
+html.light-mode h1,
+html.light-mode h2,
+html.light-mode h3,
+html.light-mode h4,
+html.light-mode h5,
+html.light-mode h6,
+html.light-mode .font-semibold,
+html.light-mode .font-bold {
+  color: #0f172a !important;
+}
+
+html.light-mode p:not([class*="text-"]),
+html.light-mode label:not([class*="text-"]),
+html.light-mode div:not(.bg-brand-500):not(.text-white) > span:not(.text-white):not([class*="text-"]) {
+  color: #334155;
+}
+
+html.light-mode .text-gray-400,
+html.light-mode .text-gray-500 {
+  color: #64748b !important;
+}
+
+html.light-mode .text-gray-300 {
+  color: #475569 !important;
+}
+
+html.light-mode .bg-surface-800 {
+  background-color: #ffffff !important;
+  backdrop-filter: none !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-mode .bg-surface-700 {
+  background-color: #eaecef !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light-mode .bg-surface-900 {
+  background: transparent !important;
+}
+
+html.light-mode input,
+html.light-mode select,
+html.light-mode textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light-mode input::placeholder,
+html.light-mode textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light-mode .border-surface-700,
+html.light-mode .border-surface-600 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Auth Layout Elements styling */
+.auth-card {
+  background: rgba(26, 26, 26, 0.6) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 24px !important;
+  padding: 40px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.3s ease !important;
+}
+
+html.light-mode .auth-card {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(238, 119, 18, 0.15) !important;
+  box-shadow: 0 20px 50px rgba(238, 119, 18, 0.05), 0 4px 20px rgba(0, 0, 0, 0.02) !important;
+}
+
+/* Ensure the left dark panel in AuthLayout remains dark with white text in all modes */
+.auth-dark-panel {
+  background-color: #111115 !important;
+}
+.auth-dark-panel h1,
+.auth-dark-panel p,
+.auth-dark-panel span {
+  color: #ffffff !important;
+}
+.auth-dark-panel p.text-gray-300 {
+  color: #cbd5e1 !important;
+}
+.auth-dark-panel p.text-gray-400 {
+  color: #94a3b8 !important;
+}
+.auth-dark-panel p.text-gray-500 {
+  color: #64748b !important;
+}
+.auth-dark-panel span.text-brand-400 {
+  color: #fb923c !important; /* light orange in dark panel */
+}
+
+/* Auth right panel form overrides */
+html.light-mode .auth-card h2 {
+  color: #0f172a !important;
+}
+html.light-mode .auth-card p {
+  color: #475569 !important;
+}
+html.light-mode .auth-card label {
+  color: #334155 !important;
+  font-weight: 600 !important;
+}
+
+/* Secondary Action Button (Google Button) light mode fix */
+html.light-mode button.bg-surface-700 {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02) !important;
+}
+html.light-mode button.bg-surface-700:hover {
+  background-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Link Contrast Fixes */
+html.light-mode a.text-brand-400 {
+  color: var(--color-brand-600) !important;
+  font-weight: 600 !important;
+}
+html.light-mode a.text-brand-400:hover {
+  color: var(--color-brand-primary) !important;
+}
+
+/* Vertical Toolbar Styles */
+.left-floating-toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: rgba(22, 22, 26, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: none;
+  border-radius: 0 20px 20px 0;
+  padding: 16px 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+html.light-mode .left-floating-toolbar {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: var(--color-brand-border) !important;
+  box-shadow: 0 10px 30px var(--color-brand-lightbg) !important;
+}
+
+.toolbar-mode-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: #a1a1aa;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 58px;
+}
+
+.toolbar-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+html.light-mode .toolbar-mode-btn {
+  color: #334155 !important;
+  font-weight: 600 !important;
+}
+
+html.light-mode .toolbar-mode-btn:hover {
+  background: var(--color-brand-lightbg) !important;
+  color: var(--color-brand-primary) !important;
+  transform: translateX(4px);
+}
+
+.toolbar-mode-btn.active {
+  background: linear-gradient(135deg, var(--color-brand-lightbg), var(--color-brand-hoverbg));
+  color: var(--color-brand-primary);
+  box-shadow: 0 4px 12px var(--color-brand-lightbg);
+  font-weight: 600;
+}
+
+html.light-mode .toolbar-mode-btn.active {
+  background: linear-gradient(135deg, var(--color-brand-lightbg), var(--color-brand-hoverbg)) !important;
+  color: var(--color-brand-primary) !important;
+  box-shadow: 0 4px 12px var(--color-brand-lightbg) !important;
+}
+
+/* Top Header Toolbar select overrides in light mode */
+html.light-mode select {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid var(--color-brand-border) !important;
+  color: #1e293b !important;
+  border-radius: 12px !important;
+  padding: 8px 16px !important;
+  font-weight: 550 !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+html.light-mode select:hover {
+  border-color: var(--color-brand-primary) !important;
+  box-shadow: 0 6px 16px var(--color-brand-lightbg) !important;
+  transform: translateY(-1px);
+}
+
+/* Specific styling for smaller toolbar selects to match format buttons */
+html.light-mode select.toolbar-select-box {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  text-align: center !important;
+  text-align-last: center !important;
+}
+
+html.light-mode select.toolbar-select-box:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: var(--color-brand-primary) !important;
+}
+
+/* Toolbar Select Box Dark Mode styling overrides */
+html.dark-mode select.toolbar-select-box {
+  background-color: #1a1a1a !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #262626 !important;
+  border-radius: 8px !important;
+  height: 32px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  text-align: center !important;
+  text-align-last: center !important;
+}
+
+html.dark-mode select.toolbar-select-box:hover {
+  background-color: #202024 !important;
+  border-color: var(--color-brand-primary) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+html.dark-mode select.toolbar-select-box option {
+  background-color: #1a1a1a !important;
+  color: #e2e8f0 !important;
+}
+
+html.light-mode select.toolbar-select-box option {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+}
+
+/* Make toolbar action buttons look modern and colorful in light mode */
+html.light-mode button.btn-panel,
+html.light-mode button.btn-find,
+html.light-mode button.btn-ai,
+html.light-mode button.btn-share,
+html.light-mode button.btn-import,
+html.light-mode button.btn-pdf,
+html.light-mode button.btn-save {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+html.light-mode button.btn-panel,
+html.light-mode button.btn-find,
+html.light-mode button.btn-share,
+html.light-mode button.btn-import,
+html.light-mode button.btn-pdf {
+  background: rgba(51, 65, 85, 0.05) !important;
+  color: #334155 !important;
+  border: 1px solid rgba(51, 65, 85, 0.2) !important;
+}
+html.light-mode button.btn-panel:hover,
+html.light-mode button.btn-find:hover,
+html.light-mode button.btn-share:hover,
+html.light-mode button.btn-import:hover,
+html.light-mode button.btn-pdf:hover {
+  background: rgba(51, 65, 85, 0.1) !important;
+  border-color: #334155 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(51, 65, 85, 0.05) !important;
+}
+
+html.light-mode button.btn-ai {
+  background: linear-gradient(135deg, var(--color-brand-lightbg) 0%, var(--color-brand-hoverbg) 100%) !important;
+  color: var(--color-brand-primary) !important;
+  border: 1px solid var(--color-brand-border) !important;
+}
+html.light-mode button.btn-ai:hover {
+  background: linear-gradient(135deg, var(--color-brand-hoverbg) 0%, var(--color-brand-border) 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px var(--color-brand-lightbg) !important;
+}
+
+html.light-mode button.btn-save {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(238, 119, 18, 0.3) !important;
+}
+html.light-mode button.btn-save:hover {
+  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(238, 119, 18, 0.4) !important;
+}
+
+/* Specific component overrides for normal mode styling */
+html.light-mode .editor-root {
+  background-color: #eaecef !important;
+  background-image: none !important;
+}
+
+.editor-page {
+  border-radius: 4px;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255,255,255,0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+html.light-mode .editor-page {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.03), inset 0 0 0 1px rgba(255,255,255,0.8) !important;
+}
+
+/* Page Break Divider overrides in light mode */
+html.light-mode .page-break-gap {
+  background-color: #eaecef !important;
+  border-top: 1px dashed #cbd5e1 !important;
+  border-bottom: 1px dashed #cbd5e1 !important;
+  color: #64748b !important;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+html.light-mode .page-break-bottom-margin,
+html.light-mode .page-break-top-margin {
+  background-color: white !important;
+}
+
+/* Suggestions Dropdown */
+html.light-mode .suggestions-dropdown {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-mode .suggestions-dropdown button {
+  color: #0f172a !important;
+}
+
+html.light-mode .suggestions-dropdown button:hover,
+html.light-mode .suggestions-dropdown button.selected {
+  background-color: #f1f5f9 !important;
+}
+
+/* Beautiful custom animations and styling touches */
+.theme-toggle-btn {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-btn:hover {
+  transform: rotate(30deg) scale(1.1);
+}
+
+/* Script Page Delete Button Styles */
+.script-page-delete-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #ef4444 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+}
+
+.script-page-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.12) !important;
+  color: #e53e3e !important;
+  transform: scale(1.08) !important;
+}
+
+html.light-mode .script-page-delete-btn {
+  background: transparent !important;
+  border: none !important;
+}
+
+html.light-mode .script-page-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.08) !important;
+  color: #e53e3e !important;
+}
+
+/* Script Page Add Button Styles */
+.script-page-add-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #10b981 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+}
+
+.script-page-add-btn:hover {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #059669 !important;
+  transform: scale(1.08) !important;
+}
+
+html.light-mode .script-page-add-btn {
+  background: transparent !important;
+  border: none !important;
+}
+
+html.light-mode .script-page-add-btn:hover {
+  background: rgba(16, 185, 129, 0.08) !important;
+  color: #059669 !important;
+}
+
+/* Sidebar and Panel light-mode overrides */
+html.light-mode aside {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(16px);
+  border-left: 1px solid rgba(226, 232, 240, 0.8) !important;
+}
+
+html.light-mode aside .border-b {
+  border-bottom-color: rgba(226, 232, 240, 0.8) !important;
+}
+
+html.light-mode aside button:not(.active) {
+  color: #64748b !important;
+}
+
+html.light-mode aside button:hover:not(.active) {
+  color: var(--color-brand-primary) !important;
+  background-color: var(--color-brand-lightbg) !important;
+}
+
+/* Premium active tab style */
+html.light-mode aside button.border-brand-500 {
+  border-bottom: 2px solid var(--color-brand-primary) !important;
+  color: var(--color-brand-primary) !important;
+  font-weight: 700 !important;
+  background-color: var(--color-brand-lightbg) !important;
+}
+
+/* Beautiful Sidebar Statistics Panel */
+html.light-mode dl.space-y-2 > div {
+  background: rgba(248, 250, 252, 0.8) !important;
+  border: 1px solid rgba(226, 232, 240, 0.6) !important;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+html.light-mode dl.space-y-2 > div:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-brand-border);
+  box-shadow: 0 4px 12px var(--color-brand-lightbg);
+}
+
+/* Stats Card Dynamic Left Borders (2 Colors Only) */
+html.light-mode dl.space-y-2 > div {
+  border-left: 4px solid #cbd5e1 !important;
+  transition: all 0.25s ease !important;
+}
+html.light-mode dl.space-y-2 > div:hover {
+  border-left-color: var(--color-brand-primary) !important;
+}
+
+html:not(.light-mode) dl.space-y-2 > div {
+  border-left: 4px solid rgba(255, 255, 255, 0.15) !important;
+  transition: all 0.25s ease !important;
+}
+html:not(.light-mode) dl.space-y-2 > div:hover {
+  border-left-color: #fb923c !important;
+}
+
+html.light-mode dl.space-y-2 dt {
+  color: #475569 !important;
+  font-weight: 500;
+}
+
+html.light-mode dl.space-y-2 dd {
+  color: var(--color-brand-primary) !important;
+  font-weight: 700;
+  font-size: 1.1em;
+  background: var(--color-brand-lightbg) !important;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+/* Versions Panel Cards */
+html.light-mode ul.space-y-2 button {
+  background: rgba(248, 250, 252, 0.8) !important;
+  border: 1px solid rgba(226, 232, 240, 0.6) !important;
+  border-radius: 10px !important;
+  padding: 8px 12px !important;
+  color: #334155 !important;
+  transition: all 0.2s ease !important;
+}
+
+html.light-mode ul.space-y-2 button:hover {
+  background: #ffffff !important;
+  border-color: var(--color-brand-border) !important;
+  color: var(--color-brand-primary) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--color-brand-lightbg) !important;
+}
+
+/* Character Panel overrides */
+html.light-mode .text-gray-200 {
+  color: #1e293b !important;
+}
+
+html.light-mode button.hover\:bg-surface-700:hover {
+  background-color: #f1f5f9 !important;
+}
+
+html.light-mode .bg-surface-600 {
+  background-color: var(--color-brand-lightbg) !important;
+  color: var(--color-brand-primary) !important;
+}
+
+html.light-mode .bg-surface-600.text-gray-400 {
+  color: var(--color-brand-primary) !important;
+}
+
+/* Scene Navigator overrides */
+html.light-mode button.text-gray-600 {
+  color: #94a3b8 !important;
+}
+
+html.light-mode button.text-gray-600:hover {
+  color: #f59e0b !important;
+}
+
+/* Clean focus with outline removed and no side-bar shadow */
+.script-block:focus {
+  outline: none !important;
+}
+
+.script-block {
+  transition: background-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+/* Animated Background Blobs */
+.editor-bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.5s ease;
+}
+
+html.light-mode .editor-bg-blob {
+  opacity: 0.12; /* subtle colorful background glow */
+}
+
+.blob-1 {
+  width: 350px;
+  height: 350px;
+  background: #f43f5e; /* Rose */
+  top: 10%;
+  left: 5%;
+  animation: float-blob-1 25s infinite alternate ease-in-out;
+}
+
+.blob-2 {
+  width: 450px;
+  height: 450px;
+  background: #3b82f6; /* Blue */
+  bottom: 15%;
+  right: 8%;
+  animation: float-blob-2 30s infinite alternate ease-in-out;
+}
+
+.blob-3 {
+  width: 300px;
+  height: 300px;
+  background: #fbbf24; /* Amber */
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: float-blob-3 20s infinite alternate ease-in-out;
+}
+
+@keyframes float-blob-1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, 30px) scale(1.1); }
+  100% { transform: translate(-20px, 80px) scale(0.95); }
+}
+
+@keyframes float-blob-2 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-60px, -40px) scale(0.9); }
+  100% { transform: translate(40px, 20px) scale(1.05); }
+}
+
+@keyframes float-blob-3 {
+  0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  50% { transform: translate(-40%, -60%) rotate(180deg) scale(1.15); }
+  100% { transform: translate(-60%, -40%) rotate(360deg) scale(0.9); }
+}
+
+/* Sidebar List Item scale transitions for BOTH themes */
+html.light-mode ul.space-y-1 li,
+html:not(.light-mode) ul.space-y-1 li {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+html.light-mode ul.space-y-1 li:hover,
+html:not(.light-mode) ul.space-y-1 li:hover {
+  transform: translateX(2px) scale(1.01);
+}
+
+/* Dark Mode Action Button Styling */
+html:not(.light-mode) button.btn-panel,
+html:not(.light-mode) button.btn-find,
+html:not(.light-mode) button.btn-ai,
+html:not(.light-mode) button.btn-share,
+html:not(.light-mode) button.btn-import,
+html:not(.light-mode) button.btn-pdf,
+html:not(.light-mode) button.btn-save {
+  border-radius: 10px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+html:not(.light-mode) button.btn-panel,
+html:not(.light-mode) button.btn-find,
+html:not(.light-mode) button.btn-share,
+html:not(.light-mode) button.btn-import,
+html:not(.light-mode) button.btn-pdf {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: #cbd5e1 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+html:not(.light-mode) button.btn-panel:hover,
+html:not(.light-mode) button.btn-find:hover,
+html:not(.light-mode) button.btn-share:hover,
+html:not(.light-mode) button.btn-import:hover,
+html:not(.light-mode) button.btn-pdf:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05) !important;
+}
+
+html:not(.light-mode) button.btn-ai {
+  background: rgba(238, 119, 18, 0.1) !important;
+  color: #fb923c !important;
+  border: 1px solid rgba(238, 119, 18, 0.35) !important;
+}
+html:not(.light-mode) button.btn-ai:hover {
+  background: rgba(238, 119, 18, 0.18) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(238, 119, 18, 0.15) !important;
+}
+
+/* Dark Mode Screenplay canvas background & Paper sheets */
+html:not(.light-mode) .editor-root {
+  background: radial-gradient(circle at 50% 50%, #18181b 0%, #09090b 100%) !important;
+}
+
+html:not(.light-mode) .editor-page {
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.65), 0 4px 20px -5px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Dark Mode Sidebar widgets */
+html:not(.light-mode) dl.space-y-2 > div {
+  background: rgba(30, 30, 35, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+html:not(.light-mode) dl.space-y-2 > div:hover {
+  transform: translateY(-1px);
+  border-color: rgba(238, 119, 18, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(238, 119, 18, 0.08) !important;
+}
+
+html:not(.light-mode) dl.space-y-2 dt {
+  color: #a1a1aa !important;
+  font-weight: 500;
+}
+
+html:not(.light-mode) dl.space-y-2 dd {
+  color: #fb923c !important;
+  font-weight: 700;
+  font-size: 1.1em;
+  background: rgba(238, 119, 18, 0.15) !important;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+/* Dark Mode Versions button cards */
+html:not(.light-mode) ul.space-y-2 button {
+  background: rgba(30, 30, 35, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 10px !important;
+  padding: 8px 12px !important;
+  color: #cbd5e1 !important;
+  transition: all 0.2s ease !important;
+}
+
+html:not(.light-mode) ul.space-y-2 button:hover {
+  background: rgba(238, 119, 18, 0.08) !important;
+  border-color: rgba(238, 119, 18, 0.3) !important;
+  color: #fb923c !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(238, 119, 18, 0.08) !important;
+}
+
+/* Animated Suggestions Dropdown */
+.suggestions-dropdown {
+  animation: suggestion-slide-in 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-origin: top left;
+}
+
+@keyframes suggestion-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Prevent selection of UI chrome when user selects text or presses Ctrl+A */
+header,
+.left-floating-toolbar,
+aside,
+.page-navigator,
+.script-page-delete-btn,
+.script-page-add-btn,
+.page-break-gap,
+.page-number-label,
+.block-label,
+.visual-page-break,
+.visual-page-break * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+/* Force orange theme for Auth Layout (Login, Register pages) */
+.auth-layout, .auth-layout * {
+  --color-brand-50: #fef7ee !important;
+  --color-brand-100: #fdecd3 !important;
+  --color-brand-200: #fad5a5 !important;
+  --color-brand-300: #f6b86d !important;
+  --color-brand-400: #f19332 !important;
+  --color-brand-500: #ee7712 !important;
+  --color-brand-600: #df5c08 !important;
+  --color-brand-700: #b94409 !important;
+  --color-brand-800: #93360f !important;
+  --color-brand-900: #772e10 !important;
+  --color-brand-primary: #ee7712 !important;
+  --color-brand-lightbg: rgba(238, 119, 18, 0.1) !important;
+  --color-brand-border: rgba(238, 119, 18, 0.3) !important;
+  --color-brand-hoverbg: rgba(238, 119, 18, 0.2) !important;
+}
+
+@keyframes modal-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+.modal-animate-in {
+  animation: modal-scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+
