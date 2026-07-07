@@ -192,11 +192,25 @@ export default function ScriptBlock({
       return
     }
 
-    // Calculate height change to prevent scroll jumps on every keypress
     const prevHeight = textarea.style.height
-    textarea.style.height = 'auto'
-    const newHeight = `${textarea.scrollHeight + 6}px`
-    textarea.style.height = newHeight
+    let newHeight = prevHeight
+    
+    const currentScrollHeight = textarea.scrollHeight + 6
+    const prevHeightPx = parseFloat(prevHeight) || 0
+
+    // Only set height to 'auto' (which triggers layout reflow and causes blinking) 
+    // if this is the initial load or the user deleted text (which might shrink the field).
+    if (!textarea.__prevTextLength || block.text.length < textarea.__prevTextLength) {
+      textarea.style.height = 'auto'
+      newHeight = `${textarea.scrollHeight + 6}px`
+      textarea.style.height = newHeight
+    } else if (currentScrollHeight > prevHeightPx) {
+      // Text wrapped/grew without deleting characters - expand the height directly
+      newHeight = `${currentScrollHeight}px`
+      textarea.style.height = newHeight
+    }
+    
+    textarea.__prevTextLength = block.text.length
 
     if (document.activeElement === textarea) {
       if (prevHeight !== newHeight) {
