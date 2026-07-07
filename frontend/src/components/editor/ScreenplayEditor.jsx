@@ -189,8 +189,17 @@ export default function ScreenplayEditor({
 
       // CSS margin collapsing: the gap before this element is max(prevBottom, curTop), not their sum.
       const spaceBefore = Math.max(prevMarginBottom, marginTop)
+
+      // .script-block textarea has `padding: 2px 0` (2px top + 2px bottom = 4px).
+      // el.offsetHeight includes that padding, but the PDF paragraphs have no equivalent padding.
+      // Subtract it so the editor's height accumulator matches the PDF exactly.
+      const ta = el.querySelector('.script-block')
+      const taPaddingTop    = ta ? Math.round(parseFloat(window.getComputedStyle(ta).paddingTop)    || 0) : 0
+      const taPaddingBottom = ta ? Math.round(parseFloat(window.getComputedStyle(ta).paddingBottom) || 0) : 0
+      const contentHeight = el.offsetHeight - taPaddingTop - taPaddingBottom
+
       // Height this element contributes to the current page accumulator.
-      const elementHeight = spaceBefore + el.offsetHeight
+      const elementHeight = spaceBefore + contentHeight
 
       if ((!isTitlePage && currentHeight + elementHeight > heightLimit - 72) || forcePageBreak) {
         newPageHeights[currentPage] = currentHeight
