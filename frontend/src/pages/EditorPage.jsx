@@ -81,6 +81,39 @@ export default function EditorPage() {
   const [showShare, setShowShare] = useState(false)
   const [lastSavedTime, setLastSavedTime] = useState('')
   const fileInputRef = useRef(null)
+  const [viewportStyle, setViewportStyle] = useState({})
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handleViewportChange = () => {
+      const vv = window.visualViewport
+      if (vv) {
+        // Calculate exact visible viewport bottom to position formatting bar above keyboard
+        setViewportStyle({
+          position: 'fixed',
+          top: `${vv.offsetTop + vv.height - 56}px`,
+          bottom: 'auto',
+          height: '56px',
+        })
+      }
+    }
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleViewportChange)
+      window.visualViewport.addEventListener('scroll', handleViewportChange)
+      window.addEventListener('focusin', handleViewportChange)
+      handleViewportChange()
+    }
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleViewportChange)
+        window.visualViewport.removeEventListener('scroll', handleViewportChange)
+        window.removeEventListener('focusin', handleViewportChange)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (script?.updatedAt) {
@@ -515,7 +548,10 @@ export default function EditorPage() {
 
       {/* Mobile Sticky Footer Formatting Bar */}
       {(!focusedBlock || focusedBlock.type !== 'TITLE_PAGE') && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 w-full flex h-14 items-center justify-around px-2 bg-surface-900/95 dark:bg-surface-950/95 border-t border-surface-800 backdrop-blur-md z-50 select-none pb-safe">
+        <div 
+          style={viewportStyle}
+          className="md:hidden fixed bottom-0 left-0 right-0 w-full flex h-14 items-center justify-around px-2 bg-surface-900/95 dark:bg-surface-950/95 border-t border-surface-800 backdrop-blur-md z-50 select-none pb-safe"
+        >
           {ELEMENT_TYPES_LIST.map(({ type, label, Icon, activeClasses }) => {
             const isActive = focusedBlockType === type;
             return (
