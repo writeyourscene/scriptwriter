@@ -4,7 +4,7 @@
   --page-width: 210mm;
   --page-min-height: 297mm;
   --editor-font: 'Courier New', Courier, 'Suranna', 'Peddana', 'NTR', monospace;
-  --editor-font-size: 13.5pt;
+  --editor-font-size: 13pt;
   --editor-line-height: 1.2;
   cursor: default;
 }
@@ -68,7 +68,7 @@
   bottom: 36px;
   right: 36px;
   font-family: var(--editor-font);
-  font-size: 13.5pt;
+  font-size: 13pt;
   font-weight: 700;
   color: black;
   pointer-events: none;

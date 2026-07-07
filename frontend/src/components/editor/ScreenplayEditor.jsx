@@ -217,8 +217,8 @@ export default function ScreenplayEditor({
         // Determine number of lines (rounded to nearest integer)
         const linesCount = Math.round(textHeight / elementLineHeight) || 1
         
-        // Match the PDF line height: 13.5pt * 1.2 = 16.2pt (exactly 21.6px in editor scale)
-        const pdfLineHeightPx = 21.6
+        // Match the PDF line height: 13pt * 1.2 = 15.6pt (exactly 20.8px in editor scale)
+        const pdfLineHeightPx = 20.8
         contentHeight = linesCount * pdfLineHeightPx
       }
 
