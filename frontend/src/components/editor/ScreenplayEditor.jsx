@@ -163,7 +163,7 @@ export default function ScreenplayEditor({
     }
     if (!editorRef.current) return
 
-    const heightLimit = pageSize === 'letter' ? 840 : 900
+    const heightLimit = pageSize === 'letter' ? 1056 : 1122
     const blockElements = editorRef.current.querySelectorAll('.script-block-wrapper')
 
     const newPageBreaks = []
@@ -706,7 +706,7 @@ export default function ScreenplayEditor({
           const marginBottom = parseFloat(style.marginBottom) || 0
           totalTitleHeight += el.offsetHeight + marginTop + marginBottom
         })
-        const heightLimit = pageSize === 'letter' ? 840 : 900
+        const heightLimit = pageSize === 'letter' ? 1056 : 1122
         if (totalTitleHeight > heightLimit - 72) {
           e.preventDefault()
           return
@@ -892,7 +892,7 @@ export default function ScreenplayEditor({
 
 
   const totalPages = pageBreaks.length + 1
-  const heightLimit = pageSize === 'letter' ? 840 : 900
+  const heightLimit = pageSize === 'letter' ? 1056 : 1122
 
   return (
     <>
@@ -937,7 +937,7 @@ export default function ScreenplayEditor({
         className="editor-page"
         style={{
           '--page-width': pageSize === 'letter' ? '215.9mm' : '210mm',
-          '--page-min-height': pageSize === 'script' ? 'auto' : pageSize === 'letter' ? '224mm' : '240mm',
+          '--page-min-height': pageSize === 'script' ? 'auto' : pageSize === 'letter' ? '279.4mm' : '297mm',
           width: 'var(--page-width)',
           minHeight: 'var(--page-min-height)',
           fontFamily: fontFamily,
