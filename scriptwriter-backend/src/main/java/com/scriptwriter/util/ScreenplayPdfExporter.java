@@ -431,7 +431,7 @@ public final class ScreenplayPdfExporter {
             //   dialogue    70% → indent each side = 451 × 0.15 = 68pt
             //   parenthetical 50% → indent each side = 451 × 0.25 = 113pt
             // ─────────────────────────────────────────────────────────────────────────────────────
-            final float LINE_HEIGHT = 14.4f; // 12pt × 1.2 line-height
+            final float LINE_HEIGHT = 13.5f; // 12pt × 1.125 line-height to match browser font metrics
             final float BLOCK_PAD   = 1.5f;  // .script-block padding: 2px 0 → ~1.5pt per side
             float spacingBefore;
             
