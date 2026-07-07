@@ -80,6 +80,7 @@ export default function EditorPage() {
   const [jumpToSceneNumber, setJumpToSceneNumber] = useState(null)
   const [showShare, setShowShare] = useState(false)
   const [lastSavedTime, setLastSavedTime] = useState('')
+  const [keyboardHeight, setKeyboardHeight] = useState(0)
   const fileInputRef = useRef(null)
 
   useEffect(() => {
@@ -111,6 +112,31 @@ export default function EditorPage() {
     window.addEventListener('resize', handleAutoZoom)
     return () => window.removeEventListener('resize', handleAutoZoom)
   }, [pageSize])
+
+  // Track the virtual keyboard height using VisualViewport API on mobile devices
+  // so the formatting bar stays perfectly pinned to the top of the open keyboard.
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.visualViewport) return
+
+    const handleViewportChange = () => {
+      const vv = window.visualViewport
+      // Calculate height taken by virtual keyboard or browser bottom UI
+      const offsetBottom = window.innerHeight - vv.height
+      setKeyboardHeight(Math.max(0, offsetBottom))
+    }
+
+    window.visualViewport.addEventListener('resize', handleViewportChange)
+    window.visualViewport.addEventListener('scroll', handleViewportChange)
+    
+    handleViewportChange()
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleViewportChange)
+        window.visualViewport.removeEventListener('scroll', handleViewportChange)
+      }
+    }
+  }, [])
 
   const {
     characters,
@@ -515,7 +541,10 @@ export default function EditorPage() {
 
       {/* Mobile Sticky Footer Formatting Bar */}
       {focusedBlock && focusedBlock.type !== 'TITLE_PAGE' && (
-        <div className="md:hidden flex h-14 items-center justify-around px-2 bg-surface-900/95 dark:bg-surface-950/95 border-t border-surface-800 backdrop-blur-md z-40 select-none pb-safe">
+        <div 
+          className="md:hidden fixed left-0 right-0 flex h-14 items-center justify-around px-2 bg-surface-900/95 dark:bg-surface-950/95 border-t border-surface-800 backdrop-blur-md z-50 select-none pb-safe"
+          style={{ bottom: `${keyboardHeight}px` }}
+        >
           {ELEMENT_TYPES_LIST.map(({ type, label, Icon, activeClasses }) => {
             const isActive = focusedBlockType === type;
             return (
