@@ -106,6 +106,12 @@ export default function ScreenplayEditor({
   // Keep a ref copy of pageBreaks so handlers always see latest value without stale closure
   const pageBreaksRef = useRef([])
   const pageHeightsRef = useRef({})
+
+  const zoomRef = useRef(zoom)
+  useEffect(() => {
+    zoomRef.current = zoom
+  }, [zoom])
+
   useEffect(() => {
     const handleWheel = (e) => {
       if (e.ctrlKey) {
@@ -135,15 +141,59 @@ export default function ScreenplayEditor({
       }
     }
 
+    // Touch gesture pinch-to-zoom variables
+    let startDistance = 0
+    let startZoom = 100
+
+    const handleTouchStart = (e) => {
+      if (e.touches.length === 2) {
+        e.preventDefault() // prevent standard browser viewport zoom
+        const dx = e.touches[0].clientX - e.touches[1].clientX
+        const dy = e.touches[0].clientY - e.touches[1].clientY
+        startDistance = Math.sqrt(dx * dx + dy * dy)
+        startZoom = zoomRef.current
+      }
+    }
+
+    const handleTouchMove = (e) => {
+      if (e.touches.length === 2 && startDistance > 0) {
+        e.preventDefault() // prevent standard browser viewport zoom
+        const dx = e.touches[0].clientX - e.touches[1].clientX
+        const dy = e.touches[0].clientY - e.touches[1].clientY
+        const distance = Math.sqrt(dx * dx + dy * dy)
+        
+        const ratio = distance / startDistance
+        let newZoom = Math.round(startZoom * ratio)
+        // Clamp mobile zoom between 50% and 180% for perfect styling boundaries
+        newZoom = Math.max(50, Math.min(180, newZoom))
+        
+        if (onZoomChange) {
+          onZoomChange(newZoom)
+        }
+      }
+    }
+
+    const handleTouchEnd = () => {
+      startDistance = 0
+    }
+
     const rootEl = editorRootRef.current
     if (rootEl) {
       rootEl.addEventListener('wheel', handleWheel, { passive: false })
       rootEl.addEventListener('focusin', handleFocusIn, true)
+      rootEl.addEventListener('touchstart', handleTouchStart, { passive: false })
+      rootEl.addEventListener('touchmove', handleTouchMove, { passive: false })
+      rootEl.addEventListener('touchend', handleTouchEnd)
+      rootEl.addEventListener('touchcancel', handleTouchEnd)
     }
     return () => {
       if (rootEl) {
         rootEl.removeEventListener('wheel', handleWheel)
         rootEl.removeEventListener('focusin', handleFocusIn, true)
+        rootEl.removeEventListener('touchstart', handleTouchStart)
+        rootEl.removeEventListener('touchmove', handleTouchMove)
+        rootEl.removeEventListener('touchend', handleTouchEnd)
+        rootEl.removeEventListener('touchcancel', handleTouchEnd)
       }
     }
   }, [onZoomChange])
