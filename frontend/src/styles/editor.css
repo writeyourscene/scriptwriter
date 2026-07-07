@@ -2,7 +2,7 @@
 
 .editor-root {
   --page-width: 210mm;
-  --page-min-height: 297mm;
+  --page-min-height: 322mm; /* 297mm A4 + 5 extra lines (~25mm) to match PDF capacity */
   --editor-font: 'Courier New', Courier, 'Suranna', 'Peddana', 'NTR', monospace;
   --editor-font-size: 12pt;
   --editor-line-height: 1.2;

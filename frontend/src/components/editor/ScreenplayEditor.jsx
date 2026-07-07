@@ -163,7 +163,9 @@ export default function ScreenplayEditor({
     }
     if (!editorRef.current) return
 
-    const heightLimit = pageSize === 'letter' ? 1056 : 1122
+    // 5 extra lines (5 × 19.2px = 96px) so the web page matches the PDF capacity
+    const EXTRA_PX = 96
+    const heightLimit = pageSize === 'letter' ? 1056 + EXTRA_PX : 1122 + EXTRA_PX
     const blockElements = editorRef.current.querySelectorAll('.script-block-wrapper')
 
     const newPageBreaks = []
@@ -201,7 +203,7 @@ export default function ScreenplayEditor({
       // Height this element contributes to the current page accumulator.
       const elementHeight = spaceBefore + contentHeight
 
-      if ((!isTitlePage && currentHeight + elementHeight > heightLimit - 72) || forcePageBreak) {
+      if ((!isTitlePage && currentHeight + elementHeight > heightLimit - 72) || forcePageBreak) {  // threshold includes 5 extra lines
         newPageHeights[currentPage] = currentHeight
         newPageBreaks.push(idx)
         currentPage++
