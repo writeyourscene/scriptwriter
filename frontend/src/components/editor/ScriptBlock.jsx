@@ -192,39 +192,28 @@ export default function ScriptBlock({
       return
     }
 
+    // Skip all height recalculations while the user is actively zooming the page.
+    // The browser's native scaling handles the visual sizing smoothly, and we trigger a 
+    // single clean recalculation when the zoom gesture ends.
+    if (window.__isZooming) return
+
     const wrapper = textarea.closest('.script-block-wrapper')
     const prevHeight = textarea.style.height
-    const prevHeightPx = parseFloat(prevHeight) || 0
-    const prevText = textarea.__prevText || ''
-    const prevType = textarea.__prevType || ''
 
-    let newHeight = prevHeight
-
-    const isShrinking = block.text.length < prevText.length
-    const typeChanged = prevType && prevType !== block.type
-
-    if (isShrinking || typeChanged || !prevHeight) {
-      // Shrinking, type changes, or initial load require resetting to 'auto' to recalculate shrink/reformat
-      if (wrapper && prevHeight) {
-        wrapper.style.minHeight = prevHeight
-      }
-      textarea.style.height = 'auto'
-      newHeight = `${textarea.scrollHeight + 6}px`
-      textarea.style.height = newHeight
-      if (wrapper) {
-        wrapper.style.minHeight = ''
-      }
-    } else {
-      // Growing text: check scrollHeight directly. This completely prevents DOM flickering/keyboard glitching on mobile.
-      const currentScrollHeight = textarea.scrollHeight + 6
-      if (currentScrollHeight > prevHeightPx) {
-        newHeight = `${currentScrollHeight}px`
-        textarea.style.height = newHeight
-      }
+    // Lock the wrapper's min-height to match the current textarea height.
+    // This prevents the page layout from collapsing or jumping while we calculate the new height.
+    if (wrapper && prevHeight) {
+      wrapper.style.minHeight = prevHeight
     }
 
-    textarea.__prevText = block.text
-    textarea.__prevType = block.type
+    textarea.style.height = 'auto'
+    const newHeight = `${textarea.scrollHeight + 6}px`
+    textarea.style.height = newHeight
+
+    // Release the wrapper min-height lock
+    if (wrapper) {
+      wrapper.style.minHeight = ''
+    }
 
     if (document.activeElement === textarea) {
       if (prevHeight !== newHeight) {
@@ -234,13 +223,23 @@ export default function ScriptBlock({
     }
 
     const resizeObserver = new ResizeObserver((entries) => {
+      if (window.__isZooming) return // Skip observer updates during active zoom
       for (let entry of entries) {
         const { width } = entry.contentRect
         if (textarea.__prevWidth !== width) {
           textarea.__prevWidth = width
           requestAnimationFrame(() => {
+            if (window.__isZooming) return
+            const currentWrapper = textarea.closest('.script-block-wrapper')
+            const currentPrevHeight = textarea.style.height
+            if (currentWrapper && currentPrevHeight) {
+              currentWrapper.style.minHeight = currentPrevHeight
+            }
             textarea.style.height = 'auto'
             textarea.style.height = `${textarea.scrollHeight + 6}px`
+            if (currentWrapper) {
+              currentWrapper.style.minHeight = ''
+            }
           })
         }
       }

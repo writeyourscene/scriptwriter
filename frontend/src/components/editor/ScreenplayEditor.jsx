@@ -113,9 +113,18 @@ export default function ScreenplayEditor({
   }, [zoom])
 
   useEffect(() => {
+    let wheelTimeout = null
+
     const handleWheel = (e) => {
       if (e.ctrlKey) {
         e.preventDefault()
+        window.__isZooming = true
+        clearTimeout(wheelTimeout)
+        wheelTimeout = setTimeout(() => {
+          window.__isZooming = false
+          window.dispatchEvent(new Event('resize'))
+        }, 150)
+
         if (!onZoomChange) return
         
         // Calculate new zoom level smoothly (supports fractional trackpad pinch deltas)
@@ -148,6 +157,7 @@ export default function ScreenplayEditor({
     const handleTouchStart = (e) => {
       if (e.touches.length === 2) {
         e.preventDefault() // prevent standard browser viewport zoom
+        window.__isZooming = true
         const dx = e.touches[0].clientX - e.touches[1].clientX
         const dy = e.touches[0].clientY - e.touches[1].clientY
         startDistance = Math.sqrt(dx * dx + dy * dy)
@@ -175,6 +185,13 @@ export default function ScreenplayEditor({
 
     const handleTouchEnd = () => {
       startDistance = 0
+      if (window.__isZooming) {
+        window.__isZooming = false
+        // Trigger a clean single layout resize event once the gesture finishes
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'))
+        }, 50)
+      }
     }
 
     const rootEl = editorRootRef.current
