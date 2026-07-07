@@ -192,25 +192,23 @@ export default function ScriptBlock({
       return
     }
 
+    const wrapper = textarea.closest('.script-block-wrapper')
     const prevHeight = textarea.style.height
-    let newHeight = prevHeight
-    
-    const currentScrollHeight = textarea.scrollHeight + 6
-    const prevHeightPx = parseFloat(prevHeight) || 0
 
-    // Only set height to 'auto' (which triggers layout reflow and causes blinking) 
-    // if this is the initial load or the user deleted text (which might shrink the field).
-    if (!textarea.__prevTextLength || block.text.length < textarea.__prevTextLength) {
-      textarea.style.height = 'auto'
-      newHeight = `${textarea.scrollHeight + 6}px`
-      textarea.style.height = newHeight
-    } else if (currentScrollHeight > prevHeightPx) {
-      // Text wrapped/grew without deleting characters - expand the height directly
-      newHeight = `${currentScrollHeight}px`
-      textarea.style.height = newHeight
+    // Temporarily lock the wrapper's min-height to match the current textarea height.
+    // This prevents the page layout from collapsing or jumping while we calculate the new height.
+    if (wrapper && prevHeight) {
+      wrapper.style.minHeight = prevHeight
     }
-    
-    textarea.__prevTextLength = block.text.length
+
+    textarea.style.height = 'auto'
+    const newHeight = `${textarea.scrollHeight + 6}px`
+    textarea.style.height = newHeight
+
+    // Release the wrapper min-height lock
+    if (wrapper) {
+      wrapper.style.minHeight = ''
+    }
 
     if (document.activeElement === textarea) {
       if (prevHeight !== newHeight) {
