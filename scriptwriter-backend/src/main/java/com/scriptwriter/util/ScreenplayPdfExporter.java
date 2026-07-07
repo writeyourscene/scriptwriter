@@ -152,6 +152,29 @@ public final class ScreenplayPdfExporter {
         }
     }
 
+    private static float getMarginBefore(String type) {
+        if (ScreenplayElementType.SCENE_HEADING.name().equals(type)
+                || ScreenplayElementType.CHARACTER.name().equals(type)
+                || ScreenplayElementType.TRANSITION.name().equals(type)
+                || ScreenplayElementType.SHOT.name().equals(type)) {
+            return 24f;
+        }
+        return 0f;
+    }
+
+    private static float getMarginAfter(String type) {
+        if (ScreenplayElementType.SCENE_HEADING.name().equals(type)
+                || ScreenplayElementType.ACTION.name().equals(type)
+                || ScreenplayElementType.DIALOGUE.name().equals(type)
+                || ScreenplayElementType.TRANSITION.name().equals(type)
+                || ScreenplayElementType.SHOT.name().equals(type)
+                || ScreenplayElementType.LYRICS.name().equals(type)
+                || ScreenplayElementType.NOTE.name().equals(type)) {
+            return 12f;
+        }
+        return 0f;
+    }
+
     /**
      * Returns true if the element has a pageBreakBefore flag set to true.
      */
@@ -198,8 +221,9 @@ public final class ScreenplayPdfExporter {
             pageFormat = PageSize.A4;
         }
 
-        // Standard screenplay margins: 1 inch left/right, 1 inch top/bottom (72pt = 1 inch)
-        Document document = new Document(pageFormat, 72, 72, 72, 72);
+        // Margins mapped to match frontend editor exactly (padding: 72px 80px)
+        // Left/Right: 80px = 60pt, Top/Bottom: 72px = 54pt
+        Document document = new Document(pageFormat, 60, 60, 54, 54);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, outputStream);
 
@@ -371,6 +395,7 @@ public final class ScreenplayPdfExporter {
         // ── Script body ──────────────────────────────────────────────────────────
         int sceneCounter = 0;
         boolean firstContentElement = true;
+        String prevType = null;
 
         for (Map<String, Object> element : elements) {
             String type = String.valueOf(element.get("type"));
@@ -395,19 +420,12 @@ public final class ScreenplayPdfExporter {
             // insert a hard page break (exactly as the user sees in the editor).
             if (!isScript && !firstContentElement && hasPageBreakBefore(element)) {
                 document.newPage();
+                firstContentElement = true;
             }
-            firstContentElement = false;
 
             // ── Element rendering ─────────────────────────────────────────────────────────────────
             // CSS reference: --editor-font-size: 12pt, --editor-line-height: 1.2
             //   → leading = 12 × 1.2 = 14.4pt  (used for all blocks)
-            // CSS wrapper margins map directly to spacingBefore / spacingAfter:
-            //   .wrapper-scene-heading  { margin-top: 24px; margin-bottom: 12px }
-            //   .wrapper-action         { margin-bottom: 12px }  (no margin-top)
-            //   .wrapper-character      { margin-top: 24px; margin-bottom: 0 }
-            //   .wrapper-dialogue       { margin-bottom: 12px }  (no margin-top)
-            //   .wrapper-parenthetical  { margin-bottom: 0 }     (no margins)
-            //   .wrapper-transition     { margin-top: 24px; margin-bottom: 12px }
             // Width percentages (content = 451pt on A4):
             //   character   60% → indent each side = 451 × 0.20 = 90pt
             //   dialogue    70% → indent each side = 451 × 0.15 = 68pt
@@ -415,6 +433,17 @@ public final class ScreenplayPdfExporter {
             // ─────────────────────────────────────────────────────────────────────────────────────
             final float LINE_HEIGHT = 14.4f; // 12pt × 1.2 line-height
             final float BLOCK_PAD   = 1.5f;  // .script-block padding: 2px 0 → ~1.5pt per side
+            float spacingBefore;
+            
+            if (firstContentElement) {
+                spacingBefore = getMarginBefore(type) + BLOCK_PAD;
+                firstContentElement = false;
+            } else {
+                float prevMarginAfter = getMarginAfter(prevType);
+                float currentMarginBefore = getMarginBefore(type);
+                spacingBefore = Math.max(prevMarginAfter, currentMarginBefore) + (2 * BLOCK_PAD);
+            }
+            prevType = type;
 
             if (ScreenplayElementType.SCENE_HEADING.name().equals(type)) {
                 sceneCounter++;
@@ -422,34 +451,27 @@ public final class ScreenplayPdfExporter {
 
                 // Single Paragraph — Courier is monospace so "%2d " is always 3 chars wide (3 × 7.2pt = 21.6pt)
                 // This keeps the scene number and heading text together as one unit that moves left/right together.
-                // e.g. " 1 INT/EXT. HOME"  or "10 INT/EXT. HOME"
                 String numPrefix = String.format("%d ", sceneCounter); // "1 ", "10 ", "100 "
                 Paragraph heading = new Paragraph();
                 heading.add(new Chunk(numPrefix, boldFont));
                 heading.add(new Chunk(sceneText, boldFont));
                 heading.setLeading(LINE_HEIGHT);
-                heading.setSpacingBefore(24f + BLOCK_PAD); // .wrapper-scene-heading margin-top: 24px
-                heading.setSpacingAfter(12f + BLOCK_PAD);  // .wrapper-scene-heading margin-bottom: 12px
+                heading.setSpacingBefore(spacingBefore);
+                heading.setSpacingAfter(0f);
                 document.add(heading);
 
             } else if (ScreenplayElementType.ACTION.name().equals(type)) {
                 // .block-action: full width, no bold, no extra margin-top
-                // .wrapper-action: margin-bottom: 12px
-                // indentationLeft matches scene heading text start:
-                // "1 " prefix = 2 chars × 7.2pt = 14.4pt for single-digit scenes
-                // Use 18f as a balanced indent that looks good for both 1- and 2-digit scene numbers
                 Paragraph paragraph = new Paragraph();
                 paragraph.add(semiBoldChunk(rawText, normalFont));
                 paragraph.setLeading(LINE_HEIGHT);
                 paragraph.setIndentationLeft(18f); // aligns with scene heading text
-                paragraph.setSpacingBefore(BLOCK_PAD);
-                paragraph.setSpacingAfter(12f + BLOCK_PAD);
+                paragraph.setSpacingBefore(spacingBefore);
+                paragraph.setSpacingAfter(0f);
                 document.add(paragraph);
-
 
             } else if (ScreenplayElementType.CHARACTER.name().equals(type)) {
                 // .block-character: uppercase, center, width: 60%, no bold
-                // .wrapper-character: margin-top: 24px, margin-bottom: 0
                 String charText = rawText.toUpperCase();
                 Paragraph paragraph = new Paragraph();
                 paragraph.add(semiBoldChunk(charText, normalFont));
@@ -457,46 +479,43 @@ public final class ScreenplayPdfExporter {
                 paragraph.setAlignment(Element.ALIGN_CENTER);
                 paragraph.setIndentationLeft(90f);  // (1 - 0.60) / 2 × 451pt = 90pt
                 paragraph.setIndentationRight(90f);
-                paragraph.setSpacingBefore(24f + BLOCK_PAD); // margin-top: 24px
-                paragraph.setSpacingAfter(BLOCK_PAD);        // margin-bottom: 0
+                paragraph.setSpacingBefore(spacingBefore);
+                paragraph.setSpacingAfter(0f);
                 document.add(paragraph);
 
             } else if (ScreenplayElementType.DIALOGUE.name().equals(type)) {
                 // .block-dialogue: center, width: 70%, no bold
-                // .wrapper-dialogue: margin-bottom: 12px, no margin-top
                 Paragraph paragraph = new Paragraph();
                 paragraph.add(semiBoldChunk(rawText, normalFont));
                 paragraph.setLeading(LINE_HEIGHT);
                 paragraph.setAlignment(Element.ALIGN_CENTER);
                 paragraph.setIndentationLeft(68f);  // (1 - 0.70) / 2 × 451pt ≈ 68pt
                 paragraph.setIndentationRight(68f);
-                paragraph.setSpacingBefore(BLOCK_PAD);       // no margin-top
-                paragraph.setSpacingAfter(12f + BLOCK_PAD);  // margin-bottom: 12px
+                paragraph.setSpacingBefore(spacingBefore);
+                paragraph.setSpacingAfter(0f);
                 document.add(paragraph);
 
             } else if (ScreenplayElementType.PARENTHETICAL.name().equals(type)) {
                 // .block-parenthetical: center, width: 50%, no bold
-                // .wrapper-parenthetical: margin-bottom: 0, no margin-top
                 Paragraph paragraph = new Paragraph();
                 paragraph.add(semiBoldChunk(rawText, normalFont));
                 paragraph.setLeading(LINE_HEIGHT);
                 paragraph.setAlignment(Element.ALIGN_CENTER);
                 paragraph.setIndentationLeft(113f); // (1 - 0.50) / 2 × 451pt ≈ 113pt
                 paragraph.setIndentationRight(113f);
-                paragraph.setSpacingBefore(BLOCK_PAD); // no margin-top
-                paragraph.setSpacingAfter(BLOCK_PAD);  // no margin-bottom
+                paragraph.setSpacingBefore(spacingBefore);
+                paragraph.setSpacingAfter(0f);
                 document.add(paragraph);
 
             } else if (ScreenplayElementType.TRANSITION.name().equals(type)) {
                 // .block-transition: right-align, uppercase, full width
-                // .wrapper-transition: margin-top: 24px, margin-bottom: 12px
                 String transText = rawText.toUpperCase();
                 Paragraph paragraph = new Paragraph();
                 paragraph.add(semiBoldChunk(transText, normalFont));
                 paragraph.setLeading(LINE_HEIGHT);
                 paragraph.setAlignment(Element.ALIGN_RIGHT);
-                paragraph.setSpacingBefore(24f + BLOCK_PAD); // margin-top: 24px
-                paragraph.setSpacingAfter(12f + BLOCK_PAD);  // margin-bottom: 12px
+                paragraph.setSpacingBefore(spacingBefore);
+                paragraph.setSpacingAfter(0f);
                 document.add(paragraph);
 
             } else if (ScreenplayElementType.SHOT.name().equals(type)) {
@@ -505,8 +524,8 @@ public final class ScreenplayPdfExporter {
                 Paragraph paragraph = new Paragraph();
                 paragraph.add(semiBoldChunk(shotText, normalFont));
                 paragraph.setLeading(LINE_HEIGHT);
-                paragraph.setSpacingBefore(24f + BLOCK_PAD);
-                paragraph.setSpacingAfter(12f + BLOCK_PAD);
+                paragraph.setSpacingBefore(spacingBefore);
+                paragraph.setSpacingAfter(0f);
                 document.add(paragraph);
 
             } else if (ScreenplayElementType.LYRICS.name().equals(type)) {
@@ -516,18 +535,18 @@ public final class ScreenplayPdfExporter {
                 paragraph.add(semiBoldChunk(rawText, italicFont));
                 paragraph.setLeading(LINE_HEIGHT);
                 paragraph.setAlignment(Element.ALIGN_CENTER);
-                paragraph.setSpacingBefore(BLOCK_PAD);
-                paragraph.setSpacingAfter(12f + BLOCK_PAD);
+                paragraph.setSpacingBefore(spacingBefore);
+                paragraph.setSpacingAfter(0f);
                 document.add(paragraph);
 
             } else if (ScreenplayElementType.NOTE.name().equals(type)) {
-                // Note: italic, smaller, semi-bold — .block-note { margin-bottom: 12px }
+                // Note: italic, smaller, semi-bold
                 Font italicFont = getFont(fontFamily, 11, Font.ITALIC);
                 Paragraph paragraph = new Paragraph();
                 paragraph.add(semiBoldChunk("[[" + rawText + "]]", italicFont));
                 paragraph.setLeading(LINE_HEIGHT);
-                paragraph.setSpacingBefore(BLOCK_PAD);
-                paragraph.setSpacingAfter(12f + BLOCK_PAD);
+                paragraph.setSpacingBefore(spacingBefore);
+                paragraph.setSpacingAfter(0f);
                 document.add(paragraph);
 
             } else {
@@ -535,8 +554,8 @@ public final class ScreenplayPdfExporter {
                 Paragraph paragraph = new Paragraph();
                 paragraph.add(semiBoldChunk(rawText, normalFont));
                 paragraph.setLeading(LINE_HEIGHT);
-                paragraph.setSpacingBefore(BLOCK_PAD);
-                paragraph.setSpacingAfter(12f + BLOCK_PAD);
+                paragraph.setSpacingBefore(spacingBefore);
+                paragraph.setSpacingAfter(0f);
                 document.add(paragraph);
             }
         }
