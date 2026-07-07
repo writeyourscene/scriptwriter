@@ -69,6 +69,7 @@ export default function ScriptBlock({
   isSelected = false,
   autoCaps = false,
   translitLang = null,
+  pageSize = 'a4',
 }) {
   const ref = useRef(null)
   const [suggestions, setSuggestions] = useState([])
@@ -194,7 +195,7 @@ export default function ScriptBlock({
 
     resizeObserver.observe(textarea)
     return () => resizeObserver.disconnect()
-  }, [block.text, block.type])
+  }, [block.text, block.type, pageSize])
 
   useEffect(() => {
     if (block.type === ELEMENT_TYPES.SCENE_HEADING && !block.text && document.activeElement === ref.current) {

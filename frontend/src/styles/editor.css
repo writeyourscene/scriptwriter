@@ -151,7 +151,7 @@ html:not(.light-mode) .script-block {
 .block-title-page {
   text-align: center;
   white-space: pre-wrap;
-  max-height: 780px !important;
+  max-height: calc(var(--page-min-height) - 144px) !important;
   overflow: hidden !important;
   resize: none !important;
 }

@@ -937,8 +937,10 @@ export default function ScreenplayEditor({
         ref={editorRef}
         className="editor-page"
         style={{
-          width: pageSize === 'letter' ? '215.9mm' : '210mm',
-          minHeight: pageSize === 'script' ? 'auto' : pageSize === 'letter' ? '279.4mm' : '297mm',
+          '--page-width': pageSize === 'letter' ? '215.9mm' : '210mm',
+          '--page-min-height': pageSize === 'script' ? 'auto' : pageSize === 'letter' ? '279.4mm' : '297mm',
+          width: 'var(--page-width)',
+          minHeight: 'var(--page-min-height)',
           fontFamily: fontFamily,
           paddingBottom: pageSize === 'script' ? '120px' : '72px',
         }}
@@ -1138,6 +1140,7 @@ export default function ScreenplayEditor({
                 isSelected={selectedBlockIndices.includes(index)}
                 autoCaps={autoCaps}
                 translitLang={translitLang}
+                pageSize={pageSize}
               />
             </div>
           )
