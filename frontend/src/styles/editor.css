@@ -2,7 +2,7 @@
 
 .editor-root {
   --page-width: 210mm;
-  --page-min-height: 260mm;
+  --page-min-height: 240mm;
   --editor-font: 'Courier New', Courier, 'Suranna', 'Peddana', 'NTR', monospace;
   --editor-font-size: 12pt;
   --editor-line-height: 1.2;
