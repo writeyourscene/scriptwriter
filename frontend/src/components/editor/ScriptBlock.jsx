@@ -70,7 +70,6 @@ export default function ScriptBlock({
   autoCaps = false,
   translitLang = null,
   pageSize = 'a4',
-  zoom = 100,
 }) {
   const ref = useRef(null)
   const [suggestions, setSuggestions] = useState([])
@@ -140,6 +139,8 @@ export default function ScriptBlock({
     const scrollContainer = textarea.closest('.editor-root')
     if (!scrollContainer) return
 
+    if (!scrollContainer) return
+
     // Calculate the absolute vertical offset of the textarea relative to the scrollable container content
     let elementScrollOffset = 0
     let el = textarea
@@ -154,22 +155,15 @@ export default function ScriptBlock({
     const totalLines = Math.max(1, textarea.value.split('\n').length)
     const lineRatio = caretLine / totalLines
     
-    // Scale layout offset coordinates by the zoom factor because the editor pages are zoomed, 
-    // but the scroll container (.editor-root) is not zoomed.
-    const zoomFactor = (zoom || 100) / 100
-    const caretScrollOffset = (elementScrollOffset + (textarea.offsetHeight * lineRatio)) * zoomFactor
+    // Caret vertical offset inside the scroll container
+    const caretScrollOffset = elementScrollOffset + (textarea.offsetHeight * lineRatio)
     
     const isMobile = window.innerWidth < 768
     if (isMobile) {
       // Keep the active typing cursor locked to the upper 1/3 of the screen (approx 150px from top of container)
       const targetScrollTop = caretScrollOffset - 150
       if (Math.abs(scrollContainer.scrollTop - targetScrollTop) > 5) {
-        scrollContainer.__isAdjustingScroll = true
         scrollContainer.scrollTop = targetScrollTop
-        scrollContainer.__savedScrollTop = targetScrollTop
-        setTimeout(() => {
-          scrollContainer.__isAdjustingScroll = false
-        }, 80)
       }
     } else {
       // Desktop behavior: standard bounds checking relative to the viewport
@@ -270,29 +264,28 @@ export default function ScriptBlock({
 
     // Transliteration: when a space/newline is typed after a pure-English word,
     // send the word to Google Input Tools and replace it asynchronously.
-    if (translitLang) {
-      const insertedAt = cursorPos - 1
-      if (insertedAt >= 0) {
-        const insertedChar = value[insertedAt]
-        if ((insertedChar === ' ' || insertedChar === '\n') && insertedAt > 0) {
-          const textBeforeSpace = value.substring(0, insertedAt)
-          const wordMatch = textBeforeSpace.match(/([a-zA-Z]+)$/)
-          if (wordMatch) {
-            const word = wordMatch[1]
-            const wordStart = insertedAt - word.length
-            // Snapshot values before async call to avoid stale closure issues
-            const valueSnapshot = value
-            const blockSnapshot = block
-            transliterateWord(word, translitLang).then((transliterated) => {
-              if (transliterated && transliterated !== word) {
-                const newText =
-                  valueSnapshot.substring(0, wordStart) +
-                  transliterated +
-                  valueSnapshot.substring(insertedAt)
-                onChange(index, { ...blockSnapshot, text: newText })
-              }
-            })
-          }
+    if (translitLang && cursorPos !== null && cursorPos !== undefined) {
+      const textBeforeCursor = value.substring(0, cursorPos)
+      if (textBeforeCursor.endsWith(' ') || textBeforeCursor.endsWith('\n')) {
+        const trimmedBefore = textBeforeCursor.slice(0, -1)
+        const wordMatch = trimmedBefore.match(/([a-zA-Z]+)$/)
+        if (wordMatch) {
+          const word = wordMatch[1]
+          const wordStart = trimmedBefore.length - word.length
+          // Snapshot values before async call to avoid stale closure issues
+          const valueSnapshot = value
+          const blockSnapshot = block
+          // Convert word to lowercase before sending to API since Google Input Tools 
+          // fails on uppercase words (which are produced by autoCaps in screenplays).
+          transliterateWord(word.toLowerCase(), translitLang).then((transliterated) => {
+            if (transliterated && transliterated.toLowerCase() !== word.toLowerCase()) {
+              const newText =
+                valueSnapshot.substring(0, wordStart) +
+                transliterated +
+                valueSnapshot.substring(trimmedBefore.length)
+              onChange(index, { ...blockSnapshot, text: newText })
+            }
+          })
         }
       }
     }

@@ -922,36 +922,6 @@ export default function ScreenplayEditor({
     }
   }, [editorRef, readOnly, focusAndScroll])
 
-  const handleContainerScroll = useCallback((e) => {
-    const el = e.target
-    if (el.__isAdjustingScroll) return
-
-    const isTyping = document.activeElement && document.activeElement.classList.contains('script-block')
-    const isTouchActive = el.__isTouchActive
-
-    if (isTyping && !isTouchActive && el.__savedScrollTop !== undefined) {
-      if (el.scrollTop !== el.__savedScrollTop) {
-        el.scrollTop = el.__savedScrollTop
-      }
-    } else {
-      el.__savedScrollTop = el.scrollTop
-    }
-  }, [])
-
-  const handleTouchStart = useCallback(() => {
-    const rootEl = editorRootRef.current
-    if (rootEl) {
-      rootEl.__isTouchActive = true
-    }
-  }, [])
-
-  const handleTouchEnd = useCallback(() => {
-    const rootEl = editorRootRef.current
-    if (rootEl) {
-      rootEl.__isTouchActive = false
-    }
-  }, [])
-
   // Element type toolbar items
   const ELEMENT_TOOLBAR = [
     { type: ELEMENT_TYPES.SCENE_HEADING, label: 'Scene',       Icon: FiFilm },
@@ -978,10 +948,6 @@ export default function ScreenplayEditor({
         ref={editorRootRef}
         className="editor-root flex-1 overflow-auto pt-8 pb-[60vh] md:pb-8 relative"
         onClick={handlePageClick}
-        onScroll={handleContainerScroll}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchEnd}
       >
         <div className="editor-bg-blob blob-1" />
         <div className="editor-bg-blob blob-2" />
@@ -1219,7 +1185,6 @@ export default function ScreenplayEditor({
                 autoCaps={autoCaps}
                 translitLang={translitLang}
                 pageSize={pageSize}
-                zoom={zoom}
               />
             </div>
           )
