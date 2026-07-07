@@ -192,13 +192,17 @@ export default function ScriptBlock({
       return
     }
 
-    // Initial height calculation
+    // Calculate height change to prevent scroll jumps on every keypress
+    const prevHeight = textarea.style.height
     textarea.style.height = 'auto'
-    textarea.style.height = `${textarea.scrollHeight + 6}px`
+    const newHeight = `${textarea.scrollHeight + 6}px`
+    textarea.style.height = newHeight
 
     if (document.activeElement === textarea) {
-      setTimeout(adjustScroll, 0)
-      setTimeout(adjustScroll, 150)
+      if (prevHeight !== newHeight) {
+        setTimeout(adjustScroll, 0)
+        setTimeout(adjustScroll, 150)
+      }
     }
 
     const resizeObserver = new ResizeObserver((entries) => {
