@@ -163,9 +163,7 @@ export default function ScreenplayEditor({
     }
     if (!editorRef.current) return
 
-    // 5 extra lines (5 × 19.2px = 96px) so the web page matches the PDF capacity
-    const EXTRA_PX = 96
-    const heightLimit = pageSize === 'letter' ? 1056 + EXTRA_PX : 1122 + EXTRA_PX
+    const heightLimit = pageSize === 'letter' ? 1056 : 1122
     const blockElements = editorRef.current.querySelectorAll('.script-block-wrapper')
 
     const newPageBreaks = []
@@ -192,18 +190,37 @@ export default function ScreenplayEditor({
       // CSS margin collapsing: the gap before this element is max(prevBottom, curTop), not their sum.
       const spaceBefore = Math.max(prevMarginBottom, marginTop)
 
-      // .script-block textarea has `padding: 2px 0` (2px top + 2px bottom = 4px).
-      // el.offsetHeight includes that padding, but the PDF paragraphs have no equivalent padding.
-      // Subtract it so the editor's height accumulator matches the PDF exactly.
+      let contentHeight = el.offsetHeight
       const ta = el.querySelector('.script-block')
-      const taPaddingTop    = ta ? Math.round(parseFloat(window.getComputedStyle(ta).paddingTop)    || 0) : 0
-      const taPaddingBottom = ta ? Math.round(parseFloat(window.getComputedStyle(ta).paddingBottom) || 0) : 0
-      const contentHeight = el.offsetHeight - taPaddingTop - taPaddingBottom
+      if (ta) {
+        // Read active styles to determine the exact line height of the text in the browser
+        const style = window.getComputedStyle(ta)
+        const fontSize = parseFloat(style.fontSize) || 16
+        const styleLineHeight = style.lineHeight
+        let elementLineHeight = fontSize * 1.2
+        if (styleLineHeight && styleLineHeight !== 'normal') {
+          elementLineHeight = parseFloat(styleLineHeight) || elementLineHeight
+        }
+        
+        const paddingTop = parseFloat(style.paddingTop) || 0
+        const paddingBottom = parseFloat(style.paddingBottom) || 0
+        
+        // Exact height of the text block inside textarea
+        const rawScrollHeight = ta.scrollHeight
+        const textHeight = Math.max(0, rawScrollHeight - paddingTop - paddingBottom)
+        
+        // Determine number of lines (rounded to nearest integer)
+        const linesCount = Math.round(textHeight / elementLineHeight) || 1
+        
+        // Match the PDF line height: 12pt * 1.2 = 14.4pt (exactly 19.2px in editor scale)
+        const pdfLineHeightPx = 19.2
+        contentHeight = linesCount * pdfLineHeightPx
+      }
 
       // Height this element contributes to the current page accumulator.
       const elementHeight = spaceBefore + contentHeight
 
-      if ((!isTitlePage && currentHeight + elementHeight > heightLimit - 72) || forcePageBreak) {  // threshold includes 5 extra lines
+      if ((!isTitlePage && currentHeight + elementHeight > heightLimit - 72) || forcePageBreak) {
         newPageHeights[currentPage] = currentHeight
         newPageBreaks.push(idx)
         currentPage++
