@@ -946,7 +946,7 @@ export default function ScreenplayEditor({
 
       <div
         ref={editorRootRef}
-        className="editor-root flex-1 overflow-auto pt-8 pb-24 md:pb-8 relative"
+        className="editor-root flex-1 overflow-auto pt-8 pb-[60vh] md:pb-8 relative"
         onClick={handlePageClick}
       >
         <div className="editor-bg-blob blob-1" />

@@ -198,6 +198,7 @@ export default function ScriptBlock({
 
     if (document.activeElement === textarea) {
       setTimeout(adjustScroll, 0)
+      setTimeout(adjustScroll, 150)
     }
 
     const resizeObserver = new ResizeObserver((entries) => {
