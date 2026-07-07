@@ -139,28 +139,40 @@ export default function ScriptBlock({
     const scrollContainer = textarea.closest('.editor-root')
     if (!scrollContainer) return
 
-    // 200ms timeout allows the mobile keyboard to slide up and resize the viewport
-    setTimeout(() => {
-      if (!textarea) return
-      const containerRect = scrollContainer.getBoundingClientRect()
-      const textareaRect = textarea.getBoundingClientRect()
+    if (!scrollContainer) return
 
-      const selectionStart = textarea.selectionStart || 0
-      const textBeforeCursor = textarea.value.substring(0, selectionStart)
-      const caretLine = textBeforeCursor.split('\n').length
-      const totalLines = Math.max(1, textarea.value.split('\n').length)
-      const lineRatio = caretLine / totalLines
+    const textareaRect = textarea.getBoundingClientRect()
+    const containerRect = scrollContainer.getBoundingClientRect()
 
-      // Position the active line of text in the upper third (35% from top) of the scroll container
-      // This keeps the focused element safely visible above the mobile keyboard and sticky formatting bar.
-      const caretRelativeY = (textareaRect.top - containerRect.top) + (textareaRect.height * lineRatio)
-      const targetScrollTop = scrollContainer.scrollTop + caretRelativeY - (containerRect.height * 0.35)
+    const selectionStart = textarea.selectionStart || 0
+    const textBeforeCursor = textarea.value.substring(0, selectionStart)
+    const caretLine = textBeforeCursor.split('\n').length
+    const totalLines = Math.max(1, textarea.value.split('\n').length)
+    const lineRatio = caretLine / totalLines
+    
+    const caretViewportY = textareaRect.top + (textareaRect.height * lineRatio)
+    // Default thresholds for desktop
+    let bottomThreshold = containerRect.top + (containerRect.height * 0.5)
+    let topThreshold = containerRect.top + 150
 
-      scrollContainer.scrollTo({
-        top: Math.max(0, targetScrollTop),
-        behavior: 'smooth'
-      })
-    }, 200)
+    // Adjust thresholds for mobile / virtual keyboards using Visual Viewport API
+    if (window.visualViewport) {
+      const isMobile = window.innerWidth < 768
+      if (isMobile) {
+        // On mobile, the keyboard shrinks the visual viewport height.
+        // We want the caret to stay in the visible window, well above the keyboard and mobile toolbar (height ~56px).
+        bottomThreshold = window.visualViewport.height - 120 // 120px safety margin above the visible bottom
+        topThreshold = 100 // 100px below the top of the visible screen (below header)
+      }
+    }
+
+    if (caretViewportY > bottomThreshold) {
+      const diff = caretViewportY - bottomThreshold
+      scrollContainer.scrollTop += diff
+    } else if (caretViewportY < topThreshold) {
+      const diff = topThreshold - caretViewportY
+      scrollContainer.scrollTop -= diff
+    }
   }
 
   useEffect(() => {
