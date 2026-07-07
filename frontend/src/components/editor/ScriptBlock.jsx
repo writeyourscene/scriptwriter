@@ -72,7 +72,6 @@ export default function ScriptBlock({
   pageSize = 'a4',
 }) {
   const ref = useRef(null)
-  const prevLinesCountRef = useRef(1)
   const [suggestions, setSuggestions] = useState([])
   const [activeSuggestionIdx, setActiveSuggestionIdx] = useState(-1)
 
@@ -140,6 +139,8 @@ export default function ScriptBlock({
     const scrollContainer = textarea.closest('.editor-root')
     if (!scrollContainer) return
 
+    if (!scrollContainer) return
+
     const textareaRect = textarea.getBoundingClientRect()
     const containerRect = scrollContainer.getBoundingClientRect()
 
@@ -150,31 +151,15 @@ export default function ScriptBlock({
     const lineRatio = caretLine / totalLines
     
     const caretViewportY = textareaRect.top + (textareaRect.height * lineRatio)
+    const bottomThreshold = containerRect.top + (containerRect.height * 0.5)
+    const topThreshold = containerRect.top + 150
 
-    // Check if we are on a mobile device or if height is small (keyboard open)
-    const isMobile = window.innerWidth <= 768 || containerRect.height < 500
-
-    if (isMobile) {
-      // Position cursor comfortably in the top region (90px below scroll header)
-      // to keep it far away from the mobile virtual keyboard
-      const targetCaretY = containerRect.top + 90
-      const diff = caretViewportY - targetCaretY
-      // Only scroll if difference is significant to avoid typing jitter
-      if (Math.abs(diff) > 15) {
-        scrollContainer.scrollTop += diff
-      }
-    } else {
-      // Desktop scroll threshold positioning
-      const bottomThreshold = containerRect.top + (containerRect.height * 0.5)
-      const topThreshold = containerRect.top + 150
-
-      if (caretViewportY > bottomThreshold) {
-        const diff = caretViewportY - bottomThreshold
-        scrollContainer.scrollTop += diff
-      } else if (caretViewportY < topThreshold) {
-        const diff = topThreshold - caretViewportY
-        scrollContainer.scrollTop -= diff
-      }
+    if (caretViewportY > bottomThreshold) {
+      const diff = caretViewportY - bottomThreshold
+      scrollContainer.scrollTop += diff
+    } else if (caretViewportY < topThreshold) {
+      const diff = topThreshold - caretViewportY
+      scrollContainer.scrollTop -= diff
     }
   }
 
@@ -191,25 +176,9 @@ export default function ScriptBlock({
     textarea.style.height = 'auto'
     textarea.style.height = `${textarea.scrollHeight + 6}px`
 
-    // Determine current number of lines to prevent unnecessary scrolling during mid-line typing
-    const style = window.getComputedStyle(textarea)
-    const fontSize = parseFloat(style.fontSize) || 16
-    let elementLineHeight = fontSize * 1.2
-    if (style.lineHeight && style.lineHeight !== 'normal') {
-      elementLineHeight = parseFloat(style.lineHeight) || elementLineHeight
-    }
-    const paddingTop = parseFloat(style.paddingTop) || 0
-    const paddingBottom = parseFloat(style.paddingBottom) || 0
-    const textHeight = Math.max(0, textarea.scrollHeight - paddingTop - paddingBottom)
-    const linesCount = Math.round(textHeight / elementLineHeight) || 1
-
     if (document.activeElement === textarea) {
-      // Only scroll if line count changed (e.g. wrapper wrap or enter pressed)
-      if (linesCount !== prevLinesCountRef.current) {
-        setTimeout(adjustScroll, 0)
-      }
+      setTimeout(adjustScroll, 0)
     }
-    prevLinesCountRef.current = linesCount
 
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
