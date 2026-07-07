@@ -141,14 +141,14 @@ public final class ScreenplayPdfExporter {
                     PdfContentByte cb = writer.getDirectContent();
 
                     // Bold page number — matching .page-number-label { font-weight: 700 }
-                    Font resolvedFont = getFont(fontFamily, 15, Font.BOLD);
+                    Font resolvedFont = getFont(fontFamily, 14, Font.BOLD);
                     BaseFont bf = resolvedFont.getBaseFont();
                     if (bf == null) {
                         bf = BaseFont.createFont(BaseFont.COURIER_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                     }
 
                     cb.beginText();
-                    cb.setFontAndSize(bf, 15);
+                    cb.setFontAndSize(bf, 14);
                     float x = document.right();
                     float y = document.top() + 36;
                     cb.showTextAligned(Element.ALIGN_RIGHT, text, x, y, 0);
@@ -280,8 +280,8 @@ public final class ScreenplayPdfExporter {
 
         document.open();
 
-        Font normalFont = getFont(fontFamily, 15, Font.NORMAL);
-        Font boldFont = getFont(fontFamily, 15, Font.BOLD);
+        Font normalFont = getFont(fontFamily, 14, Font.NORMAL);
+        Font boldFont = getFont(fontFamily, 14, Font.BOLD);
         Font titleFont = getFont(fontFamily, 44, Font.BOLD);
 
         // ── Title page ──────────────────────────────────────────────────────────
@@ -461,8 +461,8 @@ public final class ScreenplayPdfExporter {
             }
 
             // ── Element rendering ─────────────────────────────────────────────────────────────────
-            // Leading = font-size × line-height = 15pt × 1.2 = 18.0pt (matches CSS exactly)
-            final float LINE_HEIGHT = 18.0f;
+            // Leading = font-size × line-height = 14pt × 1.2 = 16.8pt (matches CSS exactly)
+            final float LINE_HEIGHT = 16.8f;
             float spacingBefore;
 
             if (firstContentElement) {
@@ -561,7 +561,7 @@ public final class ScreenplayPdfExporter {
 
             } else if (ScreenplayElementType.LYRICS.name().equals(type)) {
                 // Lyrics: centered, italic, semi-bold
-                Font italicFont = getFont(fontFamily, 15, Font.ITALIC);
+                Font italicFont = getFont(fontFamily, 14, Font.ITALIC);
                 Paragraph paragraph = new Paragraph();
                 paragraph.add(semiBoldChunk(rawText, italicFont));
                 paragraph.setLeading(LINE_HEIGHT);
@@ -572,7 +572,7 @@ public final class ScreenplayPdfExporter {
 
             } else if (ScreenplayElementType.NOTE.name().equals(type)) {
                 // Note: italic, smaller, semi-bold
-                Font italicFont = getFont(fontFamily, 14, Font.ITALIC);
+                Font italicFont = getFont(fontFamily, 13, Font.ITALIC);
                 Paragraph paragraph = new Paragraph();
                 paragraph.add(semiBoldChunk("[[" + rawText + "]]", italicFont));
                 paragraph.setLeading(LINE_HEIGHT);
