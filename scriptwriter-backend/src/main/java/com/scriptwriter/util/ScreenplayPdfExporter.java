@@ -29,6 +29,13 @@ public final class ScreenplayPdfExporter {
         }
     }
 
+    // ── Bundled font loader ──────────────────────────────────────────────────
+    // Courier Prime TTF files are stored in src/main/resources/fonts/
+    // and are embedded into the JAR at build time. We load them once and
+    // cache the BaseFont objects so we never pay the IO cost twice.
+    private static final java.util.Map<String, BaseFont> BASE_FONT_CACHE =
+            new java.util.concurrent.ConcurrentHashMap<>();
+
     private static Font getFont(String fontFamily, float size, int style) {
         String cacheKey = fontFamily + "_" + size + "_" + style;
         Font cached = FONT_CACHE.get(cacheKey);
@@ -40,25 +47,56 @@ public final class ScreenplayPdfExporter {
         return resolved;
     }
 
+    private static BaseFont loadCourierPrimeBase(String resourceName) {
+        return BASE_FONT_CACHE.computeIfAbsent(resourceName, key -> {
+            try (java.io.InputStream is =
+                         ScreenplayPdfExporter.class.getResourceAsStream("/fonts/" + key)) {
+                if (is == null) return null;
+                byte[] bytes = is.readAllBytes();
+                return BaseFont.createFont(key, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true, bytes, null);
+            } catch (Exception e) {
+                return null;
+            }
+        });
+    }
+
+    /** Returns the right Courier Prime TTF filename for a given iText style flag. */
+    private static String courierPrimeTtfName(int style) {
+        boolean bold   = (style & Font.BOLD)   != 0;
+        boolean italic = (style & Font.ITALIC)  != 0;
+        if (bold && italic) return "CourierPrime-BoldItalic.ttf";
+        if (bold)           return "CourierPrime-Bold.ttf";
+        if (italic)         return "CourierPrime-Italic.ttf";
+        return "CourierPrime-Regular.ttf";
+    }
+
     private static Font resolveFont(String fontFamily, float size, int style) {
         try {
-            String pdfFontName = FontFactory.COURIER;
-            if ("Courier New".equalsIgnoreCase(fontFamily)) {
-                pdfFontName = "Courier New";
-            } else if ("Courier Prime".equalsIgnoreCase(fontFamily)) {
-                pdfFontName = "Courier New";
-            } else if ("Cinzel".equalsIgnoreCase(fontFamily)) {
+            // ── Courier Prime / Courier New / Special Elite: use bundled TTF ──
+            if ("Courier Prime".equalsIgnoreCase(fontFamily)
+                    || "Courier New".equalsIgnoreCase(fontFamily)
+                    || "Special Elite".equalsIgnoreCase(fontFamily)) {
+                String ttf = courierPrimeTtfName(style);
+                BaseFont bf = loadCourierPrimeBase(ttf);
+                if (bf != null) {
+                    return new Font(bf, size, Font.NORMAL); // style is baked into filename
+                }
+                return FontFactory.getFont(FontFactory.COURIER, size, style);
+            }
+
+            // ── Other fonts: try system fonts via FontFactory ────────────────
+            String pdfFontName;
+            if ("Cinzel".equalsIgnoreCase(fontFamily)) {
                 pdfFontName = "Times New Roman";
-            } else if ("Special Elite".equalsIgnoreCase(fontFamily)) {
-                pdfFontName = "Courier New";
             } else if ("Space Mono".equalsIgnoreCase(fontFamily)) {
                 pdfFontName = "Consolas";
             } else if ("IM Fell English".equalsIgnoreCase(fontFamily)) {
                 pdfFontName = "Georgia";
-            } else if ("Ultra".equalsIgnoreCase(fontFamily)) {
+            } else if ("Ultra".equalsIgnoreCase(fontFamily)
+                    || "Bungee".equalsIgnoreCase(fontFamily)) {
                 pdfFontName = "Impact";
-            } else if ("Bungee".equalsIgnoreCase(fontFamily)) {
-                pdfFontName = "Impact";
+            } else {
+                pdfFontName = FontFactory.COURIER;
             }
 
             ensureFontsRegistered();
