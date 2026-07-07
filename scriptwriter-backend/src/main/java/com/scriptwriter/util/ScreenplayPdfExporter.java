@@ -277,7 +277,7 @@ public final class ScreenplayPdfExporter {
                                     table.setWidthPercentage(100);
                                     com.lowagie.text.pdf.PdfPCell cell = new com.lowagie.text.pdf.PdfPCell();
                                     cell.setBorder(com.lowagie.text.Rectangle.NO_BORDER);
-                                    cell.setMinimumHeight(usableHeight);
+                                    cell.setMinimumHeight(usableHeight - 20f);
                                     cell.setVerticalAlignment(com.lowagie.text.Element.ALIGN_MIDDLE);
 
                                     // ── Render fields into the cell ──
@@ -339,7 +339,7 @@ public final class ScreenplayPdfExporter {
                                     table.setWidthPercentage(100);
                                     com.lowagie.text.pdf.PdfPCell cell = new com.lowagie.text.pdf.PdfPCell();
                                     cell.setBorder(com.lowagie.text.Rectangle.NO_BORDER);
-                                    cell.setMinimumHeight(usableH);
+                                    cell.setMinimumHeight(usableH - 20f);
                                     cell.setVerticalAlignment(com.lowagie.text.Element.ALIGN_MIDDLE);
                                     
                                     Paragraph titlePagePara = new Paragraph(text, normalFont);
@@ -357,7 +357,7 @@ public final class ScreenplayPdfExporter {
                                 table.setWidthPercentage(100);
                                 com.lowagie.text.pdf.PdfPCell cell = new com.lowagie.text.pdf.PdfPCell();
                                 cell.setBorder(com.lowagie.text.Rectangle.NO_BORDER);
-                                cell.setMinimumHeight(usableH);
+                                cell.setMinimumHeight(usableH - 20f);
                                 cell.setVerticalAlignment(com.lowagie.text.Element.ALIGN_MIDDLE);
                                 
                                 Paragraph titlePagePara = new Paragraph(semiBoldChunk(text, normalFont));
