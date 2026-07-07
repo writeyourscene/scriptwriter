@@ -228,13 +228,12 @@ public final class ScreenplayPdfExporter {
     }
 
     /**
-     * Creates a Chunk rendered in PDF "fill + stroke" mode with a stroke to make text thicker.
-     * This compensates for standard Courier looking too thin in PDFs.
+     * Returns a plain Chunk with normal fill-only text rendering.
+     * Previously used fill+stroke mode but that looked wrong on mobile PDF viewers.
+     * Now that Courier Prime is embedded with proper Bold/Italic variants, no hack is needed.
      */
     private static Chunk semiBoldChunk(String text, Font font) {
-        Chunk chunk = new Chunk(text, font);
-        chunk.setTextRenderMode(PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE, 0.4f, null);
-        return chunk;
+        return new Chunk(text, font);
     }
 
     /**
