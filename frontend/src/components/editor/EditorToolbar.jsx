@@ -108,6 +108,12 @@ export default function EditorToolbar({
   const [showVersionDropdown, setShowVersionDropdown] = useState(false)
   const versionDropdownRef = useRef(null)
 
+  const [showShareDropdown, setShowShareDropdown] = useState(false)
+  const shareDropdownRef = useRef(null)
+
+  const [showDownloadDropdown, setShowDownloadDropdown] = useState(false)
+  const downloadDropdownRef = useRef(null)
+
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (profileRef.current && !profileRef.current.contains(e.target)) {
@@ -118,6 +124,12 @@ export default function EditorToolbar({
       }
       if (versionDropdownRef.current && !versionDropdownRef.current.contains(e.target)) {
         setShowVersionDropdown(false)
+      }
+      if (shareDropdownRef.current && !shareDropdownRef.current.contains(e.target)) {
+        setShowShareDropdown(false)
+      }
+      if (downloadDropdownRef.current && !downloadDropdownRef.current.contains(e.target)) {
+        setShowDownloadDropdown(false)
       }
     }
     document.addEventListener('mousedown', handleOutsideClick)
@@ -357,7 +369,7 @@ export default function EditorToolbar({
       <div className="flex h-12 items-center justify-between px-4 bg-gray-50 dark:bg-surface-800">
         <div className="flex items-center gap-2 md:gap-4">
           {/* Save Status & Time (Toolbar - Row 2) */}
-          <div className="hidden md:flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 select-none mr-2">
+          <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 select-none mr-2">
             <div className="relative inline-flex mr-0.5">
               <FiSave className="text-gray-400 dark:text-gray-500 text-sm" />
               {saveStatus === 'saving' ? (
@@ -502,23 +514,30 @@ export default function EditorToolbar({
             >
               <FiZap className="text-sm text-amber-500" />
             </button>
-            <div className="relative group hidden md:block">
+            {/* Share options */}
+            <div className="relative" ref={shareDropdownRef}>
               <button
-                className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer flex items-center gap-1"
+                onClick={() => setShowShareDropdown(!showShareDropdown)}
+                className={`rounded p-2 transition-all active:scale-95 cursor-pointer flex items-center gap-1 ${
+                  showShareDropdown ? 'bg-gray-200/60 dark:bg-surface-750' : 'hover:bg-gray-200/60 dark:hover:bg-surface-750'
+                }`}
                 title="Share Script"
               >
                 <FiShare2 className="text-sm text-emerald-500" />
               </button>
               
-              <div className="absolute right-0 top-full pt-1.5 z-[999] opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto">
-                <ShareModal 
-                  scriptId={scriptId}
-                  scriptTitle={title}
-                  isShared={isShared}
-                  onToggleShare={onToggleShare}
-                />
-              </div>
+              {showShareDropdown && (
+                <div className="absolute right-0 top-full pt-1.5 z-[999]">
+                  <ShareModal 
+                    scriptId={scriptId}
+                    scriptTitle={title}
+                    isShared={isShared}
+                    onToggleShare={onToggleShare}
+                  />
+                </div>
+              )}
             </div>
+
             <button
               onClick={onImport}
               className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer hidden md:block"
@@ -526,41 +545,46 @@ export default function EditorToolbar({
             >
               <FiUpload className="text-sm text-pink-500" />
             </button>
-            {/* Download Options (Hover to open) */}
-            <div className="relative group hidden md:block">
+
+            {/* Download Options */}
+            <div className="relative" ref={downloadDropdownRef}>
               <button
-                className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer flex items-center gap-1"
+                onClick={() => setShowDownloadDropdown(!showDownloadDropdown)}
+                className={`rounded p-2 transition-all active:scale-95 cursor-pointer flex items-center gap-1 ${
+                  showDownloadDropdown ? 'bg-gray-200/60 dark:bg-surface-750' : 'hover:bg-gray-200/60 dark:hover:bg-surface-750'
+                }`}
                 title="Download Options"
               >
                 <FiDownload className="text-sm text-cyan-500" />
               </button>
 
-              {/* Invisible bridge wrapper to prevent hover gap */}
-              <div className="absolute right-0 top-full pt-1.5 z-[999] opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto">
-                <div className="w-40 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
-                  <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
-                    Download As
+              {showDownloadDropdown && (
+                <div className="absolute right-0 top-full pt-1.5 z-[999]">
+                  <div className="w-40 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
+                    <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
+                      Download As
+                    </div>
+                    <button
+                      onClick={() => { setShowDownloadDropdown(false); onDownload('pdf'); }}
+                      className="w-full flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-xs text-left transition-all text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-surface-750"
+                    >
+                      <div className="flex items-center justify-center w-6 h-6 rounded-md bg-orange-500 text-white shadow-sm">
+                        <FaFilePdf className="text-[10px]" />
+                      </div>
+                      <span className="font-semibold text-gray-800 dark:text-white">PDF Document</span>
+                    </button>
+                    <button
+                      onClick={() => { setShowDownloadDropdown(false); onDownload('docx'); }}
+                      className="w-full flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-xs text-left transition-all text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-surface-750"
+                    >
+                      <div className="flex items-center justify-center w-6 h-6 rounded-md bg-blue-500 text-white shadow-sm">
+                        <FaFileWord className="text-[10px]" />
+                      </div>
+                      <span className="font-semibold text-gray-800 dark:text-white">Word Document</span>
+                    </button>
                   </div>
-                  <button
-                    onClick={() => onDownload('pdf')}
-                    className="w-full flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-xs text-left transition-all text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-surface-750"
-                  >
-                    <div className="flex items-center justify-center w-6 h-6 rounded-md bg-orange-500 text-white shadow-sm">
-                      <FaFilePdf className="text-[10px]" />
-                    </div>
-                    <span className="font-semibold text-gray-800 dark:text-white">PDF Document</span>
-                  </button>
-                  <button
-                    onClick={() => onDownload('docx')}
-                    className="w-full flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-xs text-left transition-all text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-surface-750"
-                  >
-                    <div className="flex items-center justify-center w-6 h-6 rounded-md bg-blue-500 text-white shadow-sm">
-                      <FaFileWord className="text-[10px]" />
-                    </div>
-                    <span className="font-semibold text-gray-800 dark:text-white">Word Document</span>
-                  </button>
                 </div>
-              </div>
+              )}
             </div>
 
             <button
