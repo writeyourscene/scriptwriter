@@ -166,17 +166,20 @@ export default function ScreenplayEditor({
     const heightLimit = pageSize === 'letter' ? 1056 : 1122
     const blockElements = editorRef.current.querySelectorAll('.script-block-wrapper')
 
+    const zoomScale = (zoom || 100) / 100
     const newPageBreaks = []
     const newPageHeights = {}
     let currentPage = 1
     let currentHeight = 72  // start at top padding
     let prevMarginBottom = 0 // track previous element's bottom margin for CSS collapsing
+    let isFirstElementOnPage = true
 
     blockElements.forEach((el, idx) => {
       // Margins are on the wrapper element (scene-heading, character, etc.)
       const wrapperStyle = window.getComputedStyle(el)
-      const marginTop = Math.round(parseFloat(wrapperStyle.marginTop) || 0)
-      const marginBottom = Math.round(parseFloat(wrapperStyle.marginBottom) || 0)
+      // Normalize computed pixel values by zoomScale to get unscaled dimensions matching heightLimit (1122)
+      const marginTop = Math.round((parseFloat(wrapperStyle.marginTop) || 0) / zoomScale)
+      const marginBottom = Math.round((parseFloat(wrapperStyle.marginBottom) || 0) / zoomScale)
 
       const block = blocks[idx]
       const prevBlock = blocks[idx - 1]
@@ -188,7 +191,9 @@ export default function ScreenplayEditor({
         (block?.pageBreakBefore === true)
 
       // CSS margin collapsing: the gap before this element is max(prevBottom, curTop), not their sum.
-      const spaceBefore = Math.max(prevMarginBottom, marginTop)
+      // At the top of a page (either Page 1 or after a page break), there is no space before the first element
+      // because top margins are collapsed/ignored at page boundaries (matching iText/PDF top-of-page behavior).
+      const spaceBefore = isFirstElementOnPage ? 0 : Math.max(prevMarginBottom, marginTop)
 
       let contentHeight = el.offsetHeight
       const ta = el.querySelector('.script-block')
@@ -212,8 +217,8 @@ export default function ScreenplayEditor({
         // Determine number of lines (rounded to nearest integer)
         const linesCount = Math.round(textHeight / elementLineHeight) || 1
         
-        // Match the PDF line height: 12pt * 1.2 = 14.4pt (exactly 19.2px in editor scale)
-        const pdfLineHeightPx = 19.2
+        // Match the PDF line height: 13pt * 1.2 = 15.6pt (exactly 20.8px in editor scale)
+        const pdfLineHeightPx = 20.8
         contentHeight = linesCount * pdfLineHeightPx
       }
 
@@ -226,9 +231,13 @@ export default function ScreenplayEditor({
         currentPage++
         currentHeight = 72   // reset: new page starts at top padding
         prevMarginBottom = 0 // no previous element on new page
+        isFirstElementOnPage = true
+      } else {
+        isFirstElementOnPage = false
       }
 
-      currentHeight += elementHeight
+      currentHeight += isFirstElementOnPage ? contentHeight : elementHeight
+      isFirstElementOnPage = false
       prevMarginBottom = marginBottom  // remember for next element's collapse calculation
     })
     newPageHeights[currentPage] = currentHeight
@@ -264,7 +273,7 @@ export default function ScreenplayEditor({
         setPageHeights(newPageHeights)
       }
     }
-  }, [blocks, pageSize])
+  }, [blocks, pageSize, zoom])
 
   const getPastUniqueWords = useCallback((currentIndex) => {
     const words = new Set()
