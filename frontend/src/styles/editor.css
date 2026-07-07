@@ -2,7 +2,7 @@
 
 .editor-root {
   --page-width: 210mm;
-  --page-min-height: 322mm; /* 297mm A4 + 5 extra lines (~25mm) to match PDF capacity */
+  --page-min-height: 297mm;
   --editor-font: 'Courier New', Courier, 'Suranna', 'Peddana', 'NTR', monospace;
   --editor-font-size: 12pt;
   --editor-line-height: 1.2;
@@ -186,6 +186,14 @@ html:not(.light-mode) .script-block {
 .wrapper-title-page {
   margin-top: 0;
 }
+
+/* Discard top margins at page starts (both the very first element of the document 
+   and the first element after any page break) to match PDF/iText page-boundary collapsing. */
+.editor-page > div:first-child > .script-block-wrapper,
+.visual-page-break + .script-block-wrapper {
+  margin-top: 0 !important;
+}
+
 
 /* Title page structured field inputs */
 .block-title-page-container {
