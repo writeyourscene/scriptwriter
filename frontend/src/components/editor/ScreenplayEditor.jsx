@@ -101,6 +101,22 @@ export default function ScreenplayEditor({
 
   const editorRef = useRef(null)
   const editorRootRef = useRef(null)
+  const unscaledContainerRef = useRef(null)
+  const [unscaledHeight, setUnscaledHeight] = useState(0)
+
+  useEffect(() => {
+    const el = unscaledContainerRef.current
+    if (!el) return
+
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        setUnscaledHeight(entry.contentRect.height)
+      }
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   const undoStack = useRef([])
   const redoStack = useRef([])
   // Keep a ref copy of pageBreaks so handlers always see latest value without stale closure
@@ -1032,17 +1048,28 @@ export default function ScreenplayEditor({
 
         <div
           style={{
-            zoom: zoom / 100,
-            transform: zoom !== 100 && typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('firefox') ? `scale(${zoom / 100})` : undefined,
-            transformOrigin: 'top center',
             width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            minHeight: 'fit-content',
-            WebkitFontSmoothing: 'antialiased',
-            MozOsxFontSmoothing: 'grayscale',
+            height: unscaledHeight ? `${unscaledHeight * (zoom / 100)}px` : 'auto',
+            overflow: 'visible',
+            position: 'relative',
           }}
         >
+          <div
+            ref={unscaledContainerRef}
+            style={{
+              transform: `scale(${zoom / 100})`,
+              transformOrigin: 'top center',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              minHeight: 'fit-content',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+            }}
+          >
 
       <div
         ref={editorRef}
@@ -1301,6 +1328,7 @@ export default function ScreenplayEditor({
             </div>
           )
         })}
+      </div>
       </div>
       </div>
     </div>
