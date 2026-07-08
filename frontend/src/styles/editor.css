@@ -1,12 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Suranna&family=Peddana&family=NTR&display=swap');
 
 .editor-root {
-  --page-width: 210mm;
-  --page-min-height: 297mm;
+  --page-width: 794px;
+  --page-min-height: 1123px;
   --editor-font: 'Courier New', Courier, 'Suranna', 'Peddana', 'NTR', monospace;
-  --editor-font-size: 14pt;
+  --editor-font-size: 18.67px; /* 14pt equivalent */
   --editor-line-height: 1.2;
   cursor: default;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .editor-page {
@@ -68,7 +70,7 @@
   bottom: 36px;
   right: 36px;
   font-family: var(--editor-font);
-  font-size: 14pt;
+  font-size: 18.67px;
   font-weight: 700;
   color: black;
   pointer-events: none;
@@ -303,16 +305,16 @@ html:not(.light-mode) .title-page-field-secondary:focus {
 }
 
 .title-field-title {
-  font-size: 42pt;
+  font-size: 56px;
 }
 .title-field-director {
-  font-size: 26pt;
+  font-size: 34.67px;
 }
 .title-field-writer {
-  font-size: 23pt;
+  font-size: 30.67px;
 }
 .title-field-screenplay {
-  font-size: 20pt;
+  font-size: 26.67px;
 }
 
 @keyframes slideInLeft {
@@ -337,7 +339,7 @@ html:not(.light-mode) .title-page-field-secondary:focus {
   overflow: hidden;
 }
 .watermark-text {
-  font-size: 64pt;
+  font-size: 85.33px;
   font-weight: 900;
   color: #a0aec0; /* Tailwind gray-400 */
   text-transform: uppercase;

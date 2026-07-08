@@ -1048,8 +1048,8 @@ export default function ScreenplayEditor({
         ref={editorRef}
         className="editor-page"
         style={{
-          '--page-width': pageSize === 'letter' ? '215.9mm' : '210mm',
-          '--page-min-height': pageSize === 'script' ? 'auto' : pageSize === 'letter' ? '279.4mm' : '297mm',
+          '--page-width': pageSize === 'letter' ? '816px' : '794px',
+          '--page-min-height': pageSize === 'script' ? 'auto' : pageSize === 'letter' ? '1056px' : '1123px',
           width: 'var(--page-width)',
           minHeight: 'var(--page-min-height)',
           fontFamily: fontFamily,
