@@ -132,13 +132,12 @@ export default function ScriptBlock({
   }
 
   const adjustScroll = () => {
+    if (window.__isZooming) return
     const textarea = ref.current
     if (!textarea) return
     if (block.type === ELEMENT_TYPES.TITLE_PAGE) return
 
     const scrollContainer = textarea.closest('.editor-root')
-    if (!scrollContainer) return
-
     if (!scrollContainer) return
 
     // Calculate the absolute vertical offset of the textarea relative to the scrollable container content
@@ -192,11 +191,6 @@ export default function ScriptBlock({
       return
     }
 
-    // Skip all height recalculations while the user is actively zooming the page.
-    // The browser's native scaling handles the visual sizing smoothly, and we trigger a 
-    // single clean recalculation when the zoom gesture ends.
-    if (window.__isZooming) return
-
     const wrapper = textarea.closest('.script-block-wrapper')
     const prevHeight = textarea.style.height
 
@@ -223,13 +217,11 @@ export default function ScriptBlock({
     }
 
     const resizeObserver = new ResizeObserver((entries) => {
-      if (window.__isZooming) return // Skip observer updates during active zoom
       for (let entry of entries) {
         const { width } = entry.contentRect
         if (textarea.__prevWidth !== width) {
           textarea.__prevWidth = width
           requestAnimationFrame(() => {
-            if (window.__isZooming) return
             const currentWrapper = textarea.closest('.script-block-wrapper')
             if (currentWrapper) {
               currentWrapper.style.minHeight = `${currentWrapper.offsetHeight}px`
