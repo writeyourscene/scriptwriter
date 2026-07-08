@@ -186,13 +186,14 @@ export default function EditorPage() {
       if (scriptData.fontFamily) {
         setFontFamily(scriptData.fontFamily)
       }
-      const versionsRes = await scriptApi.getVersions(scriptData.id)
-      setVersions(versionsRes.data.data || [])
-      await Promise.all([
+      
+      const [versionsRes] = await Promise.all([
+        scriptApi.getVersions(scriptData.id),
         loadCharacters(),
         loadSuggestions(),
         loadScenes(),
       ])
+      setVersions(versionsRes.data.data || [])
     } catch {
       navigate('/dashboard')
     } finally {
@@ -483,7 +484,24 @@ export default function EditorPage() {
           />
         </div>
 
-        <div className={`transition-all duration-300 ease-in-out ${showSidebar ? 'w-72 opacity-100 border-l border-surface-700' : 'w-0 opacity-0 overflow-hidden border-l-0'}`}>
+        {/* Backdrop for mobile panels */}
+        {(showSidebar || showAi || showSettings) && (
+          <div
+            className="md:hidden fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
+            onClick={() => {
+              setShowSidebar(false)
+              setShowAi(false)
+              setShowSettings(false)
+            }}
+          />
+        )}
+
+        <div className={`
+          transition-all duration-300 ease-in-out z-50
+          md:relative md:w-72 md:translate-x-0 md:opacity-100 md:border-l md:border-surface-700 md:shadow-none
+          fixed inset-y-0 right-0 w-72 bg-surface-900 border-l border-surface-700 shadow-2xl
+          ${showSidebar ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto'}
+        `}>
           <EditorSidebar
             stats={{ ...stats, dialogues: stats.dialogues }}
             versions={versions}
@@ -502,7 +520,12 @@ export default function EditorPage() {
           />
         </div>
 
-        <div className={`transition-all duration-300 ease-in-out ${showAi ? 'w-80 opacity-100 border-l border-surface-700' : 'w-0 opacity-0 overflow-hidden border-l-0'}`}>
+        <div className={`
+          transition-all duration-300 ease-in-out z-50
+          md:relative md:w-80 md:translate-x-0 md:opacity-100 md:border-l md:border-surface-700 md:shadow-none
+          fixed inset-y-0 right-0 w-80 bg-surface-900 border-l border-surface-700 shadow-2xl
+          ${showAi ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto'}
+        `}>
           <AiPanel
             open={true}
             onClose={() => setShowAi(false)}
@@ -512,7 +535,12 @@ export default function EditorPage() {
           />
         </div>
 
-        <div className={`transition-all duration-300 ease-in-out ${showSettings ? 'w-80 opacity-100 border-l border-surface-700' : 'w-0 opacity-0 overflow-hidden border-l-0'}`}>
+        <div className={`
+          transition-all duration-300 ease-in-out z-50
+          md:relative md:w-80 md:translate-x-0 md:opacity-100 md:border-l md:border-surface-700 md:shadow-none
+          fixed inset-y-0 right-0 w-80 bg-surface-900 border-l border-surface-700 shadow-2xl
+          ${showSettings ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto'}
+        `}>
           <SettingsPanel
             zoom={zoom}
             onZoomChange={setZoom}
