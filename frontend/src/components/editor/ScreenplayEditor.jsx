@@ -355,7 +355,7 @@ export default function ScreenplayEditor({
   }, [blocks])
 
   useEffect(() => {
-    const timer = setTimeout(recalculatePageBreaks, 100)
+    const timer = setTimeout(recalculatePageBreaks, 30)
     return () => clearTimeout(timer)
   }, [blocks, pageSize, recalculatePageBreaks])
 
