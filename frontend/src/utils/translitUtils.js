@@ -3,6 +3,8 @@
  * Supports all major Indian languages.
  */
 
+import { API_BASE_URL } from '../constants/api'
+
 export const INDIAN_LANGUAGES = [
   { code: 'te-t-i0-und', label: 'Telugu',    native: 'తెలుగు',   short: 'తె', flag: '🇮🇳' },
   { code: 'hi-t-i0-und', label: 'Hindi',     native: 'हिंदी',    short: 'हि', flag: '🇮🇳' },
@@ -29,8 +31,8 @@ export async function transliterateWord(word, langCode) {
   // Only transliterate purely English (ASCII letter) words
   if (!/^[a-zA-Z]+$/.test(word)) return word
   try {
-    // Route through backend proxy to avoid CORS restrictions on localhost
-    const url = `/api/v1/transliterate?text=${encodeURIComponent(word)}&itc=${encodeURIComponent(langCode)}`
+    const base = API_BASE_URL.startsWith('http') ? API_BASE_URL : '/api/v1'
+    const url = `${base}/transliterate?text=${encodeURIComponent(word)}&itc=${encodeURIComponent(langCode)}`
     const res = await fetch(url)
     if (!res.ok) return word
     const data = await res.json()

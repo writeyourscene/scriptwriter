@@ -129,14 +129,8 @@ export default function EditorPage() {
 
   // Auto-calculate zoom for mobile screens to fit the page exactly like desktop mode
   useEffect(() => {
-    let lastWidth = window.innerWidth
     const handleAutoZoom = () => {
       if (window.innerWidth < 768) {
-        // Only trigger auto-zoom calculations if the actual width of the screen changed (e.g. rotation).
-        // This stops programmatic resize events from resetting the user's custom pinch-to-zoom level!
-        if (window.innerWidth === lastWidth) return
-        lastWidth = window.innerWidth
-
         const pageWidthPx = pageSize === 'letter' ? 816 : 794
         const availableWidth = window.innerWidth - 24
         const autoZoomVal = Math.min(100, Math.max(20, Math.floor((availableWidth / pageWidthPx) * 100)))
