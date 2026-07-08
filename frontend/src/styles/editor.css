@@ -354,3 +354,12 @@ html:not(.light-mode) .title-page-field-secondary:focus {
   }
 }
 
+/* Mobile-only style to make the editor background white.
+   This blends the scroll container space with the white screenplay page,
+   completely eliminating the dark gap under the page when typing or scrolling. */
+@media (max-w: 768px) {
+  .editor-root {
+    background-color: white !important;
+  }
+}
+
