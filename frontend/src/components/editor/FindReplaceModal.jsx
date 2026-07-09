@@ -110,7 +110,7 @@ export default function FindReplaceModal({ blocks, onReplace }) {
   }
 
   return (
-    <div className="w-[340px] rounded-2xl border border-gray-200 dark:border-surface-700 bg-white/95 dark:bg-surface-900/95 backdrop-blur-2xl p-4.5 shadow-2xl shadow-black/10 dark:shadow-black/40 text-gray-800 dark:text-white transition-all ring-1 ring-black/5 dark:ring-white/10 pointer-events-auto">
+    <div className="w-[calc(100vw-32px)] sm:w-[340px] max-w-[340px] rounded-2xl border border-gray-200 dark:border-surface-700 bg-white/95 dark:bg-surface-900/95 backdrop-blur-2xl p-4.5 shadow-2xl shadow-black/10 dark:shadow-black/40 text-gray-800 dark:text-white transition-all ring-1 ring-black/5 dark:ring-white/10 pointer-events-auto">
       <div className="mb-3 flex items-center justify-between border-b border-gray-100 dark:border-surface-700 pb-2">
         <h3 className="font-bold text-sm flex items-center gap-2 text-gray-800 dark:text-white tracking-wide">
           <div className="w-7 h-7 rounded-full bg-violet-500/10 flex items-center justify-center">

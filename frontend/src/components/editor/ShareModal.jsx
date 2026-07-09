@@ -118,7 +118,7 @@ export default function ShareModal({ scriptId, scriptTitle, isShared, onToggleSh
   }
 
   return (
-    <div className="w-[340px] rounded-2xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 backdrop-blur-2xl p-4.5 shadow-2xl shadow-black/10 dark:shadow-black/40 text-gray-800 dark:text-white pointer-events-auto ring-1 ring-black/5 dark:ring-white/10">
+    <div className="w-[calc(100vw-32px)] sm:w-[340px] max-w-[340px] rounded-2xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 backdrop-blur-2xl p-4.5 shadow-2xl shadow-black/10 dark:shadow-black/40 text-gray-800 dark:text-white pointer-events-auto ring-1 ring-black/5 dark:ring-white/10">
         {/* Header */}
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2 text-brand-400">
