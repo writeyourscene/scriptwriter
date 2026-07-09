@@ -17,7 +17,7 @@ export default function ProjectCard({ project, onAction, trash = false }) {
       tabIndex={0}
       onClick={openEditor}
       onKeyDown={(e) => e.key === 'Enter' && openEditor()}
-      className={`group relative rounded-2xl border border-gray-150 dark:border-surface-700 bg-surface-800 p-5 transition-all duration-300 hover:scale-[1.015] hover:shadow-xl hover:shadow-brand-primary/5 dark:hover:shadow-black/20 hover:border-brand-primary/40 overflow-hidden ${
+      className={`group relative rounded-2xl border border-gray-150 dark:border-surface-700 bg-surface-800 p-5 transition-all duration-300 hover:scale-[1.015] hover:shadow-xl hover:shadow-brand-primary/5 dark:hover:shadow-black/20 hover:border-brand-primary/40 ${
         !trash ? 'cursor-pointer' : ''
       }`}
     >

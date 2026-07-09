@@ -30,7 +30,7 @@ export default function ProjectMenu({ project, onAction, trash = false }) {
         ]
       : [
           { id: 'favorite', label: project.favorite ? 'Unfavorite' : 'Favorite', icon: FiStar },
-          { id: 'rename', label: 'Rename / Edit Details', icon: FiEdit2 },
+          { id: 'rename', label: 'Edit Details', icon: FiEdit2 },
           { id: 'duplicate', label: 'Duplicate', icon: FiCopy },
           { id: 'archive', label: 'Archive', icon: FiArchive },
           { id: 'delete', label: 'Delete', icon: FiTrash2, danger: true },
@@ -41,7 +41,7 @@ export default function ProjectMenu({ project, onAction, trash = false }) {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="rounded-lg p-1.5 text-gray-400 opacity-0 transition hover:bg-surface-700 hover:text-gray-900 dark:hover:text-white group-hover:opacity-100"
+        className="rounded-lg p-1.5 text-gray-400 opacity-100 md:opacity-0 transition-all hover:bg-surface-700 hover:text-gray-900 dark:hover:text-white group-hover:opacity-100 cursor-pointer"
       >
         <FiMoreVertical />
       </button>
