@@ -32,6 +32,24 @@ export default function PublicScriptPage() {
     loadScript()
   }, [scriptId])
 
+  // Auto-calculate zoom for mobile screens to fit the page exactly
+  useEffect(() => {
+    const handleAutoZoom = () => {
+      if (window.innerWidth < 768) {
+        const pageWidthPx = pageSize === 'letter' ? 816 : 794
+        const availableWidth = window.innerWidth - 24
+        const autoZoomVal = Math.min(100, Math.max(20, Math.floor((availableWidth / pageWidthPx) * 100)))
+        setZoom(autoZoomVal)
+      } else {
+        setZoom(100)
+      }
+    }
+
+    handleAutoZoom()
+    window.addEventListener('resize', handleAutoZoom)
+    return () => window.removeEventListener('resize', handleAutoZoom)
+  }, [pageSize])
+
   const handleExportPdf = async () => {
     if (!script?.id) return
     try {
@@ -132,12 +150,12 @@ export default function PublicScriptPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {/* Page Size Dropdown */}
           <select
             value={pageSize}
             onChange={(e) => setPageSize(e.target.value)}
-            className="rounded-lg border border-surface-600 bg-surface-700 px-2 py-1.5 text-xs text-white mr-1"
+            className="hidden sm:block rounded-lg border border-surface-600 bg-surface-700 px-2 py-1.5 text-xs text-white"
           >
             <option value="a4">A4</option>
             <option value="letter">Letter</option>
@@ -148,19 +166,12 @@ export default function PublicScriptPage() {
           <select
             value={zoom}
             onChange={(e) => setZoom(Number(e.target.value))}
-            className="rounded-lg border border-surface-600 bg-surface-700 px-2 py-1.5 text-xs text-white"
+            className="hidden sm:block rounded-lg border border-surface-600 bg-surface-700 px-2 py-1.5 text-xs text-white"
           >
             {ZOOM_LEVELS.map((z) => (
               <option key={z} value={z}>{z}%</option>
             ))}
           </select>
-
-          <Button variant="primary" onClick={handleExportPdf} className="gap-1.5 text-xs py-1.5 px-3">
-            <FiDownload /> PDF
-          </Button>
-          <Button variant="secondary" onClick={handleExportDocx} className="gap-1.5 text-xs py-1.5 px-3">
-            <FiDownload /> DOCX
-          </Button>
         </div>
       </header>
 
