@@ -100,7 +100,7 @@ export default function DashboardLayout() {
 
         {/* Drawer container: slides from Left for admin, slides from Right for writer dashboard */}
         <div
-          className={`fixed top-0 bottom-0 w-72 bg-surface-850 border-surface-700 shadow-2xl z-[1000] p-6 flex flex-col justify-between transition-transform duration-300 ease-in-out ${
+          className={`fixed top-0 bottom-0 w-64 bg-surface-850 border-surface-700 shadow-2xl z-[1000] p-6 flex flex-col justify-between transition-transform duration-300 ease-in-out ${
             isAdminPanel
               ? `left-0 border-r ${showAdminSidebar ? 'translate-x-0' : '-translate-x-full'}`
               : `right-0 border-l ${showAdminSidebar ? 'translate-x-0' : 'translate-x-full'}`
