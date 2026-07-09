@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
 import { FcGoogle } from 'react-icons/fc'
-import { FiEye, FiEyeOff } from 'react-icons/fi'
+import { FiEye, FiEyeOff, FiFilm } from 'react-icons/fi'
 import { useAuth } from '../../context/AuthContext'
 import { authApi } from '../../api/authApi'
 import { Button } from '../../components/ui/Button'
@@ -92,7 +92,13 @@ export default function LoginPage() {
       animate="visible"
       className="space-y-6"
     >
-      <motion.div variants={itemVariants}>
+      <motion.div variants={itemVariants} className="flex flex-col items-start">
+        <div className="flex items-center gap-2.5 mb-4 select-none">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#ee7712] shadow-md shadow-orange-500/20">
+            <FiFilm className="text-lg text-white" />
+          </div>
+          <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">ScriptWriter</span>
+        </div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back</h2>
         <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">Sign in to continue writing your screenplay</p>
       </motion.div>
