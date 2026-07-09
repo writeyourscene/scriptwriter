@@ -213,20 +213,11 @@ html:not(.light-mode) .script-block {
   padding: 4px 0;
   /* Hide native placeholder — we use our own overlay divs */
 }
-
-html:not(.light-mode) .title-page-field {
-  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='14'><rect x='3' y='0' width='2' height='14' fill='white'/><rect x='1' y='0' width='6' height='2' fill='white'/><rect x='1' y='12' width='6' height='2' fill='white'/></svg>") 4 7, text;
-}
-
 .title-page-field::placeholder {
-  color: rgba(0, 0, 0, 0.15) !important;
+  color: rgba(0, 0, 0, 0.18) !important;
   font-weight: 300 !important;
   text-transform: uppercase;
   opacity: 1 !important;
-}
-
-html:not(.light-mode) .title-page-field::placeholder {
-  color: rgba(255, 255, 255, 0.12) !important;
 }
 
 .title-page-field:focus::placeholder {
@@ -244,12 +235,6 @@ html:not(.light-mode) .title-page-field::placeholder {
 .title-page-field-secondary:focus {
   border-color: rgba(0, 0, 0, 0.08) !important;
   background-color: rgba(0, 0, 0, 0.01);
-}
-
-html:not(.light-mode) .title-page-field-secondary:hover,
-html:not(.light-mode) .title-page-field-secondary:focus {
-  border-color: rgba(255, 255, 255, 0.08) !important;
-  background-color: rgba(255, 255, 255, 0.01);
 }
 
 .block-note {

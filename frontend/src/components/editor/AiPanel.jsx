@@ -22,7 +22,7 @@ export default function AiPanel({ open, onClose, onSubmit, loading, lastResponse
   }
 
   return (
-    <aside className="flex w-80 shrink-0 flex-col border-l border-surface-700 bg-surface-800">
+    <aside className="flex w-full h-full shrink-0 flex-col bg-gray-55 dark:bg-surface-900 bg-gray-50">
       <div className="flex items-center justify-between border-b border-surface-700 p-4">
         <h3 className="font-semibold">AI Assistant</h3>
         <button type="button" onClick={onClose} className="text-gray-400 hover:text-white"><FiX /></button>

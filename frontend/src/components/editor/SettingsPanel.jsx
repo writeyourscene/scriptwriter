@@ -21,7 +21,7 @@ export default function SettingsPanel({
   onClose,
 }) {
   return (
-    <div className="flex h-full w-80 flex-col bg-white dark:bg-surface-850 select-none">
+    <div className="flex h-full w-full flex-col bg-white dark:bg-surface-850 select-none">
       {/* Panel Header */}
       <div className="flex h-12 items-center justify-between border-b border-gray-200 dark:border-surface-700 px-4">
         <div className="flex items-center gap-2">

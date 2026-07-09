@@ -42,7 +42,7 @@ import java.util.List;
 public class ScriptServiceImpl implements ScriptService {
 
     private static final String DEFAULT_CONTENT = """
-            [{"id":"b1","type":"TITLE_PAGE","text":"Untitled Screenplay\\nWritten by\\nAuthor"},{"id":"b2","type":"SCENE_HEADING","text":"INT. LOCATION - DAY"},{"id":"b3","type":"ACTION","text":""}]""";
+            [{"id":"b1","type":"TITLE_PAGE","text":""},{"id":"b2","type":"SCENE_HEADING","text":"INT. LOCATION - DAY"},{"id":"b3","type":"ACTION","text":""}]""";
 
     private final ScriptRepository scriptRepository;
     private final ScriptVersionRepository scriptVersionRepository;
@@ -114,8 +114,7 @@ public class ScriptServiceImpl implements ScriptService {
                     ? request.getVersionLabel()
                     : (autosave ? "Auto-save snapshot" : "Manual save");
 
-            String cleanTitle = script.getTitle() != null ? script.getTitle().replace("\"", "\\\"").replace("\n", "\\n") : "Untitled Screenplay";
-            String blankContent = "[{\"id\":\"b1\",\"type\":\"TITLE_PAGE\",\"text\":\"" + cleanTitle + "\\nWritten by\\nAuthor\"},{\"id\":\"b2\",\"type\":\"SCENE_HEADING\",\"text\":\"INT. LOCATION - DAY\"},{\"id\":\"b3\",\"type\":\"ACTION\",\"text\":\"\"}]";
+            String blankContent = "[{\"id\":\"b1\",\"type\":\"TITLE_PAGE\",\"text\":\"\"},{\"id\":\"b2\",\"type\":\"SCENE_HEADING\",\"text\":\"INT. LOCATION - DAY\"},{\"id\":\"b3\",\"type\":\"ACTION\",\"text\":\"\"}]";
             script.setContent(blankContent);
             
             // 3. Create the new version's snapshot record

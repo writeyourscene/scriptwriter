@@ -29,7 +29,7 @@ export default function EditorSidebar({
   const [tab, setTab] = useState('stats')
 
   return (
-    <aside className="flex w-72 shrink-0 flex-col border-l border-surface-700 bg-surface-800">
+    <aside className="flex w-full h-full shrink-0 flex-col bg-gray-55 dark:bg-surface-900 bg-gray-50">
       <div className="flex shrink-0 border-b border-surface-700 bg-surface-850">
         {TABS.map(({ id, label, icon: Icon, activeColor, inactiveColor }) => (
           <button
@@ -48,7 +48,7 @@ export default function EditorSidebar({
         ))}
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-50/50 dark:bg-surface-850/50 backdrop-blur-sm">
+      <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-surface-850">
         {tab === 'stats' && (
           <div className="space-y-4">
             <div className="flex items-center gap-1.5 pb-2 border-b border-gray-200 dark:border-surface-700">

@@ -149,7 +149,7 @@ export default function EditorToolbar({
   }
 
   return (
-    <div className="flex flex-col shrink-0 border-b border-gray-200 dark:border-surface-700 bg-white/80 dark:bg-surface-850/80 backdrop-blur-md sticky top-0 z-50">
+    <div className="flex flex-col shrink-0 border-b border-gray-200 dark:border-surface-700 bg-white/80 dark:bg-surface-850/80 backdrop-blur-md sticky top-0 z-[1010]">
       {/* Row 1: Top Navigation Bar */}
       <div className="flex h-14 items-center justify-between px-4 border-b border-gray-200/50 dark:border-surface-700/50">
         <div className="flex items-center gap-3 h-full">
@@ -372,7 +372,7 @@ export default function EditorToolbar({
       </div>
 
       {/* Row 2: Screenplay Format Toolbar */}
-      <div className="flex h-12 items-center justify-between px-4 bg-gray-50 dark:bg-surface-800">
+      <div className="flex h-10 items-center justify-between px-4 bg-gray-50 dark:bg-surface-800">
         <div className="flex items-center gap-2 md:gap-4">
           {/* Save Status & Time (Toolbar - Row 2) */}
           <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 select-none mr-2">
@@ -440,7 +440,7 @@ export default function EditorToolbar({
                 } ${showTranslitDropdown ? 'bg-gray-200/65 dark:bg-surface-750' : ''}`}
                 title={translitLang ? `Transliteration: ${INDIAN_LANGUAGES.find(l => l.code === translitLang)?.label || 'On'}` : 'Indian Language Transliteration'}
               >
-                <MdTranslate className={`text-[16px] ${!translitLang ? 'text-blue-500 drop-shadow-[0_0_2px_rgba(59,130,246,0.8)]' : ''}`} />
+                <MdTranslate className={`text-[17.5px] ${!translitLang ? 'text-blue-500 drop-shadow-[0_0_2px_rgba(59,130,246,0.8)]' : ''}`} />
                 {translitLang && (
                   <span className="text-[10px] font-bold leading-none">
                     {INDIAN_LANGUAGES.find(l => l.code === translitLang)?.short || ''}
@@ -449,7 +449,7 @@ export default function EditorToolbar({
               </button>
 
               {showTranslitDropdown && (
-                <div className="fixed top-[120px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
+                <div className="fixed top-[120px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
                   <div className="w-52 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
                     <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
                       Transliterate to
@@ -521,7 +521,7 @@ export default function EditorToolbar({
               className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer hidden md:block"
               title="AI Assistant"
             >
-              <FiZap className="text-sm text-amber-500" />
+              <FiZap className="text-base text-amber-500" />
             </button>
             {/* Share options */}
             <div className="relative" ref={shareDropdownRef}>
@@ -532,7 +532,7 @@ export default function EditorToolbar({
                 }`}
                 title="Share Script"
               >
-                <FiShare2 className="text-sm text-emerald-500" />
+                <FiShare2 className="text-base text-blue-500" />
               </button>
               
               {showShareDropdown && (
@@ -552,7 +552,7 @@ export default function EditorToolbar({
               className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer hidden md:block"
               title="Import file"
             >
-              <FiUpload className="text-sm text-pink-500" />
+              <FiUpload className="text-base text-pink-500" />
             </button>
 
             {/* Download Options */}
@@ -564,11 +564,11 @@ export default function EditorToolbar({
                 }`}
                 title="Download Options"
               >
-                <FiDownload className="text-sm text-cyan-500" />
+                <FiDownload className="text-base text-emerald-500" />
               </button>
 
               {showDownloadDropdown && (
-                <div className="fixed top-[120px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
+                <div className="fixed top-[120px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
                   <div className="w-40 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
                     <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
                       Download As
@@ -601,15 +601,15 @@ export default function EditorToolbar({
               className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer"
               title="Toggle Panel"
             >
-              <FiSidebar className="text-sm text-blue-500" />
+              <FiSidebar className="text-base text-violet-500" />
             </button>
 
             <button
               onClick={onToggleSettings}
-              className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer hidden md:block"
+              className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer"
               title="Editor Settings"
             >
-              <FiSettings className="text-sm text-gray-600 dark:text-gray-400" />
+              <FiSettings className="text-base text-gray-650 dark:text-gray-400" />
             </button>
           </div>
 
@@ -618,7 +618,7 @@ export default function EditorToolbar({
             onClick={onSave}
             className="hidden md:flex items-center gap-1.5 rounded bg-brand-primary hover:bg-brand-600 !text-white px-3.5 py-1.5 text-xs font-bold transition-all shadow-md shadow-brand-primary/10 active:scale-95 ml-2"
           >
-            <FiRefreshCw className="text-[11px] !text-white" />
+            <FiRefreshCw className="text-[12.5px] !text-white" />
             <span className="!text-white">Sync to Project</span>
           </button>
         </div>
