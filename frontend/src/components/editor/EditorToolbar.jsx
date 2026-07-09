@@ -309,6 +309,8 @@ export default function EditorToolbar({
               <FiMoon className="text-xs" />
             </div>
           </div>
+          {/* Profile Details Dropdown */}
+          <div className="relative" ref={profileRef}>
             <button
               onClick={() => setShowProfile(!showProfile)}
               className="relative flex h-8 w-8 items-center justify-center rounded-full bg-violet-600 hover:bg-violet-700 !text-white transition-all font-bold text-xs cursor-pointer shadow-sm ml-1"
