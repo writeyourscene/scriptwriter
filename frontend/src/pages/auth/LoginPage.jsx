@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { motion } from 'framer-motion'
 import { FcGoogle } from 'react-icons/fc'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 import { useAuth } from '../../context/AuthContext'
@@ -8,6 +9,30 @@ import { authApi } from '../../api/authApi'
 import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { Spinner } from '../../components/ui/Spinner'
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.05
+    }
+  }
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 100,
+      damping: 15
+    }
+  }
+}
 
 export default function LoginPage() {
   const { login } = useAuth()
@@ -61,11 +86,18 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back</h2>
-      <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">Sign in to continue writing your screenplay</p>
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-6"
+    >
+      <motion.div variants={itemVariants}>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back</h2>
+        <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">Sign in to continue writing your screenplay</p>
+      </motion.div>
 
-      <form onSubmit={handleSubmit(onEmailLogin)} className="mt-6 space-y-5">
+      <motion.form onSubmit={handleSubmit(onEmailLogin)} variants={itemVariants} className="space-y-4">
         <Input
           label="Email or Username"
           type="text"
@@ -73,6 +105,7 @@ export default function LoginPage() {
           error={errors.email?.message}
           {...register('email', { required: 'Email or Username is required' })}
         />
+        
         <div className="space-y-1.5 relative">
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Password
@@ -98,18 +131,21 @@ export default function LoginPage() {
           </div>
           {errors.password && <p className="text-xs text-red-550 dark:text-red-400 mt-1">{errors.password.message}</p>}
         </div>
+
         <div className="flex justify-end">
           <Link to="/forgot-password" className="text-xs font-semibold text-brand-400 hover:text-brand-300">
             Forgot password?
           </Link>
         </div>
+
         {apiError && <ErrorBox message={apiError} />}
+
         <Button type="submit" disabled={isSubmitting} className="w-full gap-2 py-2.5 font-bold shadow-md shadow-brand-primary/10 transition-all active:scale-[0.98]">
           {isSubmitting ? <Spinner /> : 'Sign in'}
         </Button>
-      </form>
+      </motion.form>
 
-      <div className="relative my-6 select-none">
+      <motion.div variants={itemVariants} className="relative my-4 select-none">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-gray-200 dark:border-surface-700" />
         </div>
@@ -118,22 +154,22 @@ export default function LoginPage() {
             Or continue with
           </span>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="space-y-4">
+      <motion.div variants={itemVariants} className="space-y-4">
         <Button variant="secondary" type="button" onClick={onGoogleLogin} disabled={loading} className="w-full gap-2.5 py-2.5 font-bold hover:bg-gray-50 dark:hover:bg-surface-800 transition-all border border-gray-200 dark:border-surface-700 active:scale-[0.98]">
           <FcGoogle className="text-lg" />
           Continue with Google
         </Button>
-      </div>
+      </motion.div>
 
-      <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+      <motion.p variants={itemVariants} className="text-center text-sm text-gray-500 dark:text-gray-400">
         Don&apos;t have an account?{' '}
         <Link to="/register" className="font-semibold text-brand-400 hover:text-brand-300 ml-1">
           Create one
         </Link>
-      </p>
-    </div>
+      </motion.p>
+    </motion.div>
   )
 }
 
