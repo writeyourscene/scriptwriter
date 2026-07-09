@@ -151,7 +151,7 @@ export default function EditorToolbar({
   return (
     <div className="flex flex-col shrink-0 border-b border-gray-200 dark:border-surface-700 bg-white/80 dark:bg-surface-850/80 backdrop-blur-md sticky top-0 z-[1010]">
       {/* Row 1: Top Navigation Bar */}
-      <div className="flex h-14 items-center justify-between px-4 border-b border-gray-200/50 dark:border-surface-700/50">
+      <div className="flex h-12 items-center justify-between px-4 border-b border-gray-200/50 dark:border-surface-700/50">
         <div className="flex items-center gap-3 h-full">
           {/* Back to Dashboard (Desktop) */}
           <button
@@ -162,18 +162,8 @@ export default function EditorToolbar({
             <FiArrowLeft className="text-base" />
           </button>
 
-          {/* Mobile Menu Toggle (Mobile) */}
-          <div className="relative md:hidden flex items-center">
-            <button
-              onClick={onMobileMenuToggle}
-              className="flex items-center justify-center h-8 w-8 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-surface-750 hover:text-gray-800 dark:hover:text-white transition-all active:scale-95 cursor-pointer"
-            >
-              <FiMenu className="text-base" />
-            </button>
-          </div>
-
           {/* Logo with Orange Accent */}
-          <div className="hidden md:flex items-center gap-2 mr-2">
+          <div className="flex items-center gap-2 mr-1">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#ee7712] text-white">
               <FiFilm className="text-sm" />
             </div>
@@ -210,6 +200,25 @@ export default function EditorToolbar({
 
           {/* Project & Version Switchers Wrapper */}
           <div className="flex items-center gap-0 md:gap-0.5 mr-0 md:mr-1 select-none">
+            {/* Professional Theme Toggle Switch (Left side of project name, visible on mobile and desktop) */}
+            <div
+              onClick={toggleTheme}
+              className="relative flex items-center bg-gray-150 dark:bg-surface-800 p-0.5 rounded-full border border-gray-300 dark:border-surface-700 h-6 w-11 cursor-pointer select-none transition-all mr-1.5 active:scale-95"
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              <div
+                className={`absolute top-0.5 bottom-0.5 w-5 h-5 rounded-full bg-white dark:bg-surface-600 shadow-sm transition-all duration-300 flex items-center justify-center ${
+                  theme === 'dark' ? 'left-[22px]' : 'left-0.5'
+                }`}
+              >
+                {theme === 'dark' ? (
+                  <FiMoon className="text-[10px] text-indigo-400 font-bold" />
+                ) : (
+                  <FiSun className="text-[10px] text-amber-500 font-bold" />
+                )}
+              </div>
+            </div>
+
             {/* Project Selector Dropdown */}
             <div className="relative" ref={projectsDropdownRef}>
               <button
@@ -372,10 +381,10 @@ export default function EditorToolbar({
       </div>
 
       {/* Row 2: Screenplay Format Toolbar */}
-      <div className="flex h-10 items-center justify-between px-4 bg-gray-50 dark:bg-surface-800">
-        <div className="flex items-center gap-2 md:gap-4">
+      <div className="flex h-10 items-center justify-start md:justify-between gap-1 xs:gap-3 px-2 xs:px-4 bg-gray-50 dark:bg-surface-800">
+        <div className="flex items-center gap-2 md:gap-4 shrink-0">
           {/* Save Status & Time (Toolbar - Row 2) */}
-          <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 select-none mr-2">
+          <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 select-none mr-1.5">
             <div className="relative inline-flex mr-0.5">
               <FiSave className="text-gray-400 dark:text-gray-500 text-sm" />
               {saveStatus === 'saving' ? (
@@ -386,7 +395,7 @@ export default function EditorToolbar({
                 <span className="absolute -bottom-0.5 -right-0.5 block h-1.5 w-1.5 rounded-full bg-emerald-500 ring-[1px] ring-gray-50 dark:ring-surface-800" />
               )}
             </div>
-            <span className="font-semibold text-[10px] text-gray-600 dark:text-gray-400 min-w-[90px]">
+            <span className="font-semibold text-[10px] text-gray-600 dark:text-gray-400 min-w-fit">
               {saveStatus === 'saving' ? 'Saving...' : lastSavedTime ? `Saved at ${lastSavedTime}` : 'Not saved yet'}
             </span>
           </div>
@@ -449,7 +458,7 @@ export default function EditorToolbar({
               </button>
 
               {showTranslitDropdown && (
-                <div className="fixed top-[96px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
+                <div className="fixed top-[88px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
                   <div className="w-52 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
                     <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
                       Transliterate to
@@ -507,8 +516,7 @@ export default function EditorToolbar({
               >
                 <FiSearch className="text-base text-red-500" />
               </button>
-              
-              <div className="fixed top-[96px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999] opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                          <div className="fixed top-[88px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999] opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                 <FindReplaceModal 
                   blocks={blocks}
                   onReplace={onReplace}
@@ -535,7 +543,7 @@ export default function EditorToolbar({
               </button>
               
               {showShareDropdown && (
-                <div className="fixed top-[96px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
+                <div className="fixed top-[88px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
                   <ShareModal 
                     scriptId={scriptId}
                     scriptTitle={title}
@@ -548,10 +556,10 @@ export default function EditorToolbar({
 
             <button
               onClick={onImport}
-              className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer hidden md:block"
+              className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer"
               title="Import file"
             >
-              <FiUpload className="text-base text-pink-500" />
+              <FiUpload className="text-base text-yellow-500" />
             </button>
 
             {/* Download Options */}
@@ -567,7 +575,7 @@ export default function EditorToolbar({
               </button>
 
               {showDownloadDropdown && (
-                <div className="fixed top-[96px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
+                <div className="fixed top-[88px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
                   <div className="w-40 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
                     <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
                       Download As

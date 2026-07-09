@@ -1281,18 +1281,18 @@ export default function ScreenplayEditor({
         )}
 
         {/* Live Watermark Overlay per page */}
-        {watermarkEnabled && pageSize !== 'script' && Array.from({ length: totalPages }).map((_, i) => {
+        {watermarkEnabled && Array.from({ length: totalPages }).map((_, i) => {
           const pageNum = i + 1
           if (pageNum === 1 && hasAuthorPage) return null
-          const pageTop = (pageNum - 1) * (heightLimit + 120)
-          const pageHeight = heightLimit + 72
+          const pageTop = pageSize === 'script' ? 0 : (pageNum - 1) * (heightLimit + 120)
+          const pageHeight = pageSize === 'script' ? '100%' : `${heightLimit + 72}px`
           return (
             <div
               key={i}
               className="watermark-overlay"
               style={{
-                top: `${pageTop}px`,
-                height: `${pageHeight}px`,
+                top: pageTop,
+                height: pageHeight,
                 opacity: watermarkOpacity,
               }}
             >

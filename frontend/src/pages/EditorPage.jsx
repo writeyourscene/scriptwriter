@@ -497,10 +497,10 @@ export default function EditorPage() {
           />
         </div>
 
-        {/* Backdrop for mobile panels - positioned below the top navigation (96px) */}
+        {/* Backdrop for mobile panels - positioned below the top navigation (88px) */}
         {(showSidebar || showAi || showSettings) && (
           <div
-            className="md:hidden fixed top-[96px] inset-x-0 bottom-0 z-40 bg-black/35 transition-opacity duration-300"
+            className="md:hidden fixed top-[88px] inset-x-0 bottom-0 z-40 bg-black/35 transition-opacity duration-300"
             onClick={() => {
               setShowSidebar(false)
               setShowAi(false)
@@ -512,7 +512,7 @@ export default function EditorPage() {
         <div className={`
           transition-all duration-300 ease-in-out z-50
           md:relative md:top-0 md:h-auto md:shadow-none
-          fixed top-[96px] bottom-0 right-0 w-64 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-96px)] h-[calc(100dvh-96px)]
+          fixed top-[88px] bottom-0 right-0 w-64 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-88px)] h-[calc(100dvh-88px)]
           ${showSidebar 
             ? 'translate-x-0 opacity-100 md:w-64 md:opacity-100 md:border-l md:border-surface-700 md:translate-x-0' 
             : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto md:w-0 md:opacity-0 md:border-l-0 md:overflow-hidden'
@@ -539,7 +539,7 @@ export default function EditorPage() {
         <div className={`
           transition-all duration-300 ease-in-out z-50
           md:relative md:top-0 md:h-auto md:shadow-none
-          fixed top-[96px] bottom-0 right-0 w-72 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-96px)] h-[calc(100dvh-96px)]
+          fixed top-[88px] bottom-0 right-0 w-72 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-88px)] h-[calc(100dvh-88px)]
           ${showAi 
             ? 'translate-x-0 opacity-100 md:w-72 md:opacity-100 md:border-l md:border-surface-700 md:translate-x-0' 
             : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto md:w-0 md:opacity-0 md:border-l-0 md:overflow-hidden'
@@ -557,7 +557,7 @@ export default function EditorPage() {
         <div className={`
           transition-all duration-300 ease-in-out z-50
           md:relative md:top-0 md:h-auto md:shadow-none
-          fixed top-[96px] bottom-0 right-0 w-72 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-96px)] h-[calc(100dvh-96px)]
+          fixed top-[88px] bottom-0 right-0 w-72 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-88px)] h-[calc(100dvh-88px)]
           ${showSettings 
             ? 'translate-x-0 opacity-100 md:w-72 md:opacity-100 md:border-l md:border-surface-700 md:translate-x-0' 
             : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto md:w-0 md:opacity-0 md:border-l-0 md:overflow-hidden'

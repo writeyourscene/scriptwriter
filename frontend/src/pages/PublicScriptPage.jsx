@@ -4,6 +4,7 @@ import { scriptApi } from '../api/scriptApi'
 import ScreenplayEditor from '../components/editor/ScreenplayEditor'
 import { Button } from '../components/ui/Button'
 import { FiDownload, FiGlobe, FiChevronLeft, FiFilm } from 'react-icons/fi'
+import { parseContent } from '../utils/screenplayHelpers'
 
 const ZOOM_LEVELS = [50, 75, 90, 100, 110, 125, 150]
 
@@ -21,7 +22,7 @@ export default function PublicScriptPage() {
       try {
         const { data } = await scriptApi.getPublicScript(scriptId)
         setScript(data.data)
-        setBlocks(JSON.parse(data.data.content || '[]'))
+        setBlocks(parseContent(data.data?.content))
       } catch (err) {
         console.error(err)
         setError(err.response?.data?.message || 'This screenplay is private or does not exist.')

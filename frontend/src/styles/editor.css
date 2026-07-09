@@ -74,10 +74,6 @@
   pointer-events: none;
 }
 
-html:not(.light-mode) .visual-page-break .page-number-label {
-  color: rgba(255, 255, 255, 0.9);
-}
-
 .script-block {
   display: block;
   position: relative;
