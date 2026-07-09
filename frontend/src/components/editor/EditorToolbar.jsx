@@ -149,7 +149,7 @@ export default function EditorToolbar({
   }
 
   return (
-    <div className="flex flex-col shrink-0 border-b border-gray-200 dark:border-surface-700 bg-white/80 dark:bg-surface-850/80 backdrop-blur-md sticky top-0 z-50">
+    <div className="flex flex-col shrink-0 border-b border-gray-200 dark:border-surface-700 bg-white/80 dark:bg-surface-850/80 backdrop-blur-md sticky top-0 z-[100]">
       {/* Row 1: Top Navigation Bar */}
       <div className="flex h-14 items-center justify-between px-4 border-b border-gray-200/50 dark:border-surface-700/50">
         {/* Item 1: Back Button & Logo (Desktop Only) */}
