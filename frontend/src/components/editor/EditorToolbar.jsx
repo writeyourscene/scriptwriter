@@ -387,7 +387,7 @@ export default function EditorToolbar({
               )}
             </div>
             <span className="font-semibold text-[10px] text-gray-600 dark:text-gray-400 min-w-[90px]">
-              {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'error' ? 'Failed' : `Saved at ${lastSavedTime}`}
+              {saveStatus === 'saving' ? 'Saving...' : lastSavedTime ? `Saved at ${lastSavedTime}` : 'Not saved yet'}
             </span>
           </div>
           
@@ -440,7 +440,7 @@ export default function EditorToolbar({
                 } ${showTranslitDropdown ? 'bg-gray-200/65 dark:bg-surface-750' : ''}`}
                 title={translitLang ? `Transliteration: ${INDIAN_LANGUAGES.find(l => l.code === translitLang)?.label || 'On'}` : 'Indian Language Transliteration'}
               >
-                <MdTranslate className={`text-[17.5px] ${!translitLang ? 'text-blue-500 drop-shadow-[0_0_2px_rgba(59,130,246,0.8)]' : ''}`} />
+                <MdTranslate className={`text-[17.5px] ${!translitLang ? 'text-[#ee7712] drop-shadow-[0_0_2px_rgba(238,119,18,0.8)]' : ''}`} />
                 {translitLang && (
                   <span className="text-[10px] font-bold leading-none">
                     {INDIAN_LANGUAGES.find(l => l.code === translitLang)?.short || ''}
@@ -449,7 +449,7 @@ export default function EditorToolbar({
               </button>
 
               {showTranslitDropdown && (
-                <div className="fixed top-[120px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
+                <div className="fixed top-[96px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
                   <div className="w-52 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
                     <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
                       Transliterate to
@@ -500,16 +500,15 @@ export default function EditorToolbar({
             </div>
 
             <div className="w-px h-4 bg-gray-300 dark:bg-surface-600 mx-1" />
-
             <div className="relative group">
               <button
                 className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer flex items-center gap-1"
                 title="Find & Replace"
               >
-                <FiSearch className="text-sm text-violet-500" />
+                <FiSearch className="text-base text-red-500" />
               </button>
               
-              <div className="fixed top-[120px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999] opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+              <div className="fixed top-[96px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999] opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                 <FindReplaceModal 
                   blocks={blocks}
                   onReplace={onReplace}
@@ -536,7 +535,7 @@ export default function EditorToolbar({
               </button>
               
               {showShareDropdown && (
-                <div className="fixed top-[120px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
+                <div className="fixed top-[96px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
                   <ShareModal 
                     scriptId={scriptId}
                     scriptTitle={title}
@@ -568,7 +567,7 @@ export default function EditorToolbar({
               </button>
 
               {showDownloadDropdown && (
-                <div className="fixed top-[120px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
+                <div className="fixed top-[96px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
                   <div className="w-40 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
                     <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
                       Download As
