@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { FcGoogle } from 'react-icons/fc'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
 import { useAuth } from '../../context/AuthContext'
 import { authApi } from '../../api/authApi'
 import { Button } from '../../components/ui/Button'
@@ -13,6 +14,7 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const [apiError, setApiError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     register,
@@ -60,8 +62,8 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold">Welcome back</h2>
-      <p className="mt-1 text-sm text-gray-400">Sign in to continue writing your screenplay</p>
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back</h2>
+      <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">Sign in to continue writing your screenplay</p>
 
       <form onSubmit={handleSubmit(onEmailLogin)} className="mt-6 space-y-5">
         <Input
@@ -71,34 +73,63 @@ export default function LoginPage() {
           error={errors.email?.message}
           {...register('email', { required: 'Email or Username is required' })}
         />
-        <Input
-          label="Password"
-          type="password"
-          placeholder="••••••••"
-          error={errors.password?.message}
-          {...register('password', { required: 'Password is required' })}
-        />
+        <div className="space-y-1.5 relative">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Password
+          </label>
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="••••••••"
+              {...register('password', { required: 'Password is required' })}
+              className={`w-full rounded-lg border border-surface-600 bg-surface-800 pl-3.5 pr-10 py-2.5 text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-500 outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 ${
+                errors.password ? 'border-red-500' : ''
+              }`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors cursor-pointer border-none bg-transparent"
+              title={showPassword ? 'Hide Password' : 'Show Password'}
+            >
+              {showPassword ? <FiEyeOff className="text-base" /> : <FiEye className="text-base" />}
+            </button>
+          </div>
+          {errors.password && <p className="text-xs text-red-550 dark:text-red-400 mt-1">{errors.password.message}</p>}
+        </div>
         <div className="flex justify-end">
-          <Link to="/forgot-password" className="text-sm text-brand-400 hover:text-brand-300">
+          <Link to="/forgot-password" className="text-xs font-semibold text-brand-400 hover:text-brand-300">
             Forgot password?
           </Link>
         </div>
         {apiError && <ErrorBox message={apiError} />}
-        <Button type="submit" disabled={isSubmitting} className="w-full gap-2">
+        <Button type="submit" disabled={isSubmitting} className="w-full gap-2 py-2.5 font-bold shadow-md shadow-brand-primary/10 transition-all active:scale-[0.98]">
           {isSubmitting ? <Spinner /> : 'Sign in'}
         </Button>
       </form>
 
-      <div className="mt-6 space-y-4">
-        <Button variant="secondary" type="button" onClick={onGoogleLogin} disabled={loading} className="w-full gap-2">
+      <div className="relative my-6 select-none">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-200 dark:border-surface-700" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-white dark:bg-surface-850 px-3 text-gray-400 dark:text-gray-500 font-bold tracking-wider">
+            Or continue with
+          </span>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <Button variant="secondary" type="button" onClick={onGoogleLogin} disabled={loading} className="w-full gap-2.5 py-2.5 font-bold hover:bg-gray-50 dark:hover:bg-surface-800 transition-all border border-gray-200 dark:border-surface-700 active:scale-[0.98]">
           <FcGoogle className="text-lg" />
           Continue with Google
         </Button>
       </div>
 
-      <p className="mt-6 text-center text-sm text-gray-400">
+      <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
         Don&apos;t have an account?{' '}
-        <Link to="/register" className="font-medium text-brand-400 hover:text-brand-300">
+        <Link to="/register" className="font-semibold text-brand-400 hover:text-brand-300 ml-1">
           Create one
         </Link>
       </p>

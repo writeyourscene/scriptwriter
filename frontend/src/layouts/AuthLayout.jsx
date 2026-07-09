@@ -31,14 +31,14 @@ export default function AuthLayout() {
         <p className="relative z-10 text-sm text-gray-400">© 2026 ScriptWriter</p>
       </div>
 
-      <div className="flex w-full flex-col items-center justify-center px-6 py-12 lg:w-1/2">
-        <div className="mb-8 flex items-center gap-2 lg:hidden">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#ee7712]">
+      <div className="flex w-full flex-col items-center justify-center px-4 sm:px-6 py-12 lg:w-1/2 bg-surface-900">
+        <div className="mb-8 flex items-center gap-2.5 lg:hidden animate-fade-in select-none">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#ee7712] shadow-md shadow-orange-500/20">
             <FiFilm className="text-lg text-white" />
           </div>
-          <span className="text-lg font-semibold">ScriptWriter</span>
+          <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">ScriptWriter</span>
         </div>
-        <div className="w-full max-w-md auth-card">
+        <div className="w-full max-w-md bg-white dark:bg-surface-850 p-6 sm:p-8 rounded-2xl border border-gray-150 dark:border-surface-700/60 shadow-xl dark:shadow-black/25">
           <Outlet />
         </div>
       </div>
