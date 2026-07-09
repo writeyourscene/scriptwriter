@@ -21,7 +21,7 @@ export default function DashboardLayout() {
     <div className="min-h-screen bg-surface-900">
       <header className="border-b border-surface-700 bg-surface-800/80 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <Link to="/dashboard" className="flex items-center gap-2.5">
+          <Link to={user?.role === 'ADMIN' ? '/admin' : '/dashboard'} className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ee7712]">
               <FiFilm className="text-white" />
             </div>

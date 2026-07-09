@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import { Spinner } from '../components/ui/Spinner'
 
 export function ProtectedRoute() {
-  const { isAuthenticated, loading } = useAuth()
+  const { isAuthenticated, user, loading } = useAuth()
 
   if (loading) {
     return (
@@ -17,11 +17,15 @@ export function ProtectedRoute() {
     return <Navigate to="/login" replace />
   }
 
+  if (user?.role === 'ADMIN') {
+    return <Navigate to="/admin" replace />
+  }
+
   return <Outlet />
 }
 
 export function PublicRoute() {
-  const { isAuthenticated, loading } = useAuth()
+  const { isAuthenticated, user, loading } = useAuth()
 
   if (loading) {
     return (
@@ -32,6 +36,9 @@ export function PublicRoute() {
   }
 
   if (isAuthenticated) {
+    if (user?.role === 'ADMIN') {
+      return <Navigate to="/admin" replace />
+    }
     return <Navigate to="/dashboard" replace />
   }
 
