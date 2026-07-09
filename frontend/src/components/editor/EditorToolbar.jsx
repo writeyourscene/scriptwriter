@@ -170,123 +170,8 @@ export default function EditorToolbar({
           </div>
         </div>
 
-        {/* Item 2: Project & Version Switchers Wrapper (Mobile: Left, Desktop: Right grouped before Profile) */}
-        <div className="flex items-center gap-0.5 select-none md:ml-auto md:mr-3">
-          {/* Project Selector Dropdown */}
-          <div className="relative" ref={projectsDropdownRef}>
-            <button
-              onClick={() => setShowProjectsDropdown(!showProjectsDropdown)}
-              className="flex items-center gap-1 text-sm font-semibold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-surface-750 px-2 py-1 rounded-lg select-none outline-none cursor-pointer border-none bg-transparent active:scale-95 transition-all"
-            >
-              <span className="max-w-[150px] md:max-w-none truncate">{title || 'Untitled Screenplay'}</span>
-              <FiChevronDown className={`text-xs text-gray-500 dark:text-gray-400 transition-transform duration-200 ${showProjectsDropdown ? 'rotate-180' : ''}`} />
-            </button>
-
-            {showProjectsDropdown && (
-              <div className="absolute left-0 mt-1.5 w-64 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl z-[999] backdrop-blur-sm">
-                <div className="px-2 py-1.5 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
-                  Switch Project
-                </div>
-                <div className="max-h-60 overflow-y-auto custom-scrollbar">
-                  {projects && projects.length > 0 ? (
-                    projects.map((p) => {
-                      const isCurrent = p.title === title
-                      return (
-                        <button
-                          key={p.id}
-                          onClick={() => {
-                            setShowProjectsDropdown(false)
-                            onProjectSelect && onProjectSelect(p.id)
-                          }}
-                          className={`w-full flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-xs transition-all ${
-                            isCurrent
-                              ? 'bg-violet-500/10 text-violet-600 dark:text-violet-400 font-semibold'
-                              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-surface-750'
-                          }`}
-                        >
-                          <FiFolder className={isCurrent ? 'text-violet-500' : 'text-gray-400 dark:text-gray-500'} size={14} />
-                          <span className="truncate flex-1">{p.title}</span>
-                        </button>
-                      )
-                    })
-                  ) : (
-                    <div className="px-2 py-3 text-xs text-gray-400 dark:text-gray-500 text-center select-none">
-                      No other projects
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Version Selector Dropdown */}
-          <div className="relative" ref={versionDropdownRef}>
-            <button
-              onClick={() => setShowVersionDropdown(!showVersionDropdown)}
-              className="flex items-center gap-0.5 px-2 py-1 rounded-md text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-all active:scale-95 select-none outline-none cursor-pointer border-none bg-transparent"
-              title="Switch active version"
-            >
-              <span>v{currentVersion}</span>
-              <FiChevronDown className={`text-[9px] transition-transform duration-200 ${showVersionDropdown ? 'rotate-180' : ''}`} />
-            </button>
-
-            {showVersionDropdown && (
-              <div className="absolute right-0 mt-1.5 w-48 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl z-[999] backdrop-blur-sm">
-                <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
-                  Switch Version
-                </div>
-                
-                <div className="max-h-52 overflow-y-auto custom-scrollbar space-y-0.5 mb-1.5">
-                  {versions && versions.length > 0 ? (
-                    versions.map((v) => {
-                      const isActive = v.versionNumber === currentVersion
-                      return (
-                        <button
-                          key={v.id}
-                          onClick={() => {
-                            setShowVersionDropdown(false)
-                            onSwitchVersion && onSwitchVersion(v.versionNumber)
-                          }}
-                          className={`w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-xs transition-all ${
-                            isActive
-                              ? 'bg-brand-primary/10 text-brand-primary font-semibold'
-                              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-surface-750'
-                          }`}
-                        >
-                          <span className="font-semibold">v{v.versionNumber}</span>
-                          <span className="text-[9px] text-gray-400 dark:text-gray-500">
-                            {new Date(v.createdAt).toLocaleDateString([], { month: 'numeric', day: 'numeric' })}
-                          </span>
-                        </button>
-                      )
-                    })
-                  ) : (
-                    <div className="px-2 py-3 text-xs text-gray-400 dark:text-gray-500 text-center select-none">
-                      No versions
-                    </div>
-                  )}
-                </div>
-
-                {/* Create New Version option at the bottom */}
-                <div className="pt-1.5 border-t border-gray-100 dark:border-surface-800">
-                  <button
-                    onClick={() => {
-                      setShowVersionDropdown(false)
-                      onCreateVersion && onCreateVersion()
-                    }}
-                    className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-[#ee7712] hover:bg-[#d6650b] !text-white py-1.5 text-[11px] font-bold transition-all shadow-sm cursor-pointer border-none"
-                  >
-                    <FiPlus className="text-xs" />
-                    <span>New Version</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Item 3: Theme Toggle & Profile Details */}
-        <div className="flex items-center gap-3">
+        {/* Item 2: Right Side Elements (Grouped on the right: switchers + profile + theme toggle) */}
+        <div className="flex items-center gap-1.5 md:gap-3 ml-auto">
           {/* Professional Dual Theme Toggle Slider (Desktop Only) */}
           <div
             onClick={toggleTheme}
@@ -307,6 +192,121 @@ export default function EditorToolbar({
               theme === 'dark' ? 'text-indigo-400 font-bold' : 'text-gray-500 hover:text-gray-600'
             }`}>
               <FiMoon className="text-xs" />
+            </div>
+          </div>
+
+          {/* Project & Version Switchers Wrapper (Grouped on the right side) */}
+          <div className="flex items-center gap-0.5 select-none">
+            {/* Project Selector Dropdown */}
+            <div className="relative" ref={projectsDropdownRef}>
+              <button
+                onClick={() => setShowProjectsDropdown(!showProjectsDropdown)}
+                className="flex items-center gap-1 text-sm font-semibold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-surface-750 px-1.5 py-1 md:px-3 md:py-1.5 rounded-lg select-none outline-none cursor-pointer border-none bg-transparent active:scale-95 transition-all"
+              >
+                <span className="max-w-[120px] md:max-w-none truncate">{title || 'Untitled Screenplay'}</span>
+                <FiChevronDown className={`text-xs text-gray-500 dark:text-gray-400 transition-transform duration-200 ${showProjectsDropdown ? 'rotate-180' : ''}`} />
+              </button>
+
+              {showProjectsDropdown && (
+                <div className="absolute right-0 mt-1.5 w-64 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl z-[999] backdrop-blur-sm">
+                  <div className="px-2 py-1.5 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
+                    Switch Project
+                  </div>
+                  <div className="max-h-60 overflow-y-auto custom-scrollbar">
+                    {projects && projects.length > 0 ? (
+                      projects.map((p) => {
+                        const isCurrent = p.title === title
+                        return (
+                          <button
+                            key={p.id}
+                            onClick={() => {
+                              setShowProjectsDropdown(false)
+                              onProjectSelect && onProjectSelect(p.id)
+                            }}
+                            className={`w-full flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-xs transition-all ${
+                              isCurrent
+                                ? 'bg-violet-500/10 text-violet-600 dark:text-violet-400 font-semibold'
+                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-surface-750'
+                            }`}
+                          >
+                            <FiFolder className={isCurrent ? 'text-violet-500' : 'text-gray-400 dark:text-gray-500'} size={14} />
+                            <span className="truncate flex-1">{p.title}</span>
+                          </button>
+                        )
+                      })
+                    ) : (
+                      <div className="px-2 py-3 text-xs text-gray-400 dark:text-gray-500 text-center select-none">
+                        No other projects
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Version Selector Dropdown */}
+            <div className="relative" ref={versionDropdownRef}>
+              <button
+                onClick={() => setShowVersionDropdown(!showVersionDropdown)}
+                className="flex items-center gap-0.5 px-1 py-1 md:px-2 md:py-1 rounded-md text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-all active:scale-95 select-none outline-none cursor-pointer border-none bg-transparent"
+                title="Switch active version"
+              >
+                <span>v{currentVersion}</span>
+                <FiChevronDown className={`text-[9px] transition-transform duration-200 ${showVersionDropdown ? 'rotate-180' : ''}`} />
+              </button>
+
+              {showVersionDropdown && (
+                <div className="absolute right-0 mt-1.5 w-48 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl z-[999] backdrop-blur-sm">
+                  <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
+                    Switch Version
+                  </div>
+                  
+                  <div className="max-h-52 overflow-y-auto custom-scrollbar space-y-0.5 mb-1.5">
+                    {versions && versions.length > 0 ? (
+                      versions.map((v) => {
+                        const isActive = v.versionNumber === currentVersion
+                        return (
+                          <button
+                            key={v.id}
+                            onClick={() => {
+                              setShowVersionDropdown(false)
+                              onSwitchVersion && onSwitchVersion(v.versionNumber)
+                            }}
+                            className={`w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-xs transition-all ${
+                              isActive
+                                ? 'bg-brand-primary/10 text-brand-primary font-semibold'
+                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-surface-750'
+                            }`}
+                          >
+                            <span className="font-semibold">v{v.versionNumber}</span>
+                            <span className="text-[9px] text-gray-400 dark:text-gray-500">
+                              {new Date(v.createdAt).toLocaleDateString([], { month: 'numeric', day: 'numeric' })}
+                            </span>
+                          </button>
+                        )
+                      })
+                    ) : (
+                      <div className="px-2 py-3 text-xs text-gray-400 dark:text-gray-500 text-center select-none">
+                        No versions
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Create New Version option at the bottom */}
+                  <div className="pt-1.5 border-t border-gray-100 dark:border-surface-800">
+                    <button
+                      onClick={() => {
+                        setShowVersionDropdown(false)
+                        onCreateVersion && onCreateVersion()
+                      }}
+                      className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-[#ee7712] hover:bg-[#d6650b] !text-white py-1.5 text-[11px] font-bold transition-all shadow-sm cursor-pointer border-none"
+                    >
+                      <FiPlus className="text-xs" />
+                      <span>New Version</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           {/* Profile Details Dropdown */}
