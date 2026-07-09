@@ -24,36 +24,67 @@ export default function DashboardLayout() {
     <div className="min-h-screen bg-surface-900">
       <header className="border-b border-surface-700 bg-surface-800/80 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          {/* Left side: Hamburger menu toggle button for main menu drawer */}
-          <button
-            onClick={() => setShowAdminSidebar(true)}
-            className="rounded-lg p-2 text-gray-400 hover:bg-surface-700 hover:text-white transition-colors cursor-pointer select-none"
-            title="Open Navigation Menu"
-          >
-            <FiMenu className="text-xl" />
-          </button>
-
-          {/* Right side logo and user profile details */}
-          <div className="flex items-center gap-4">
-            {user?.role === 'ADMIN' && !window.location.pathname.startsWith('/admin') && (
-              <Link
-                to="/admin"
-                className="text-xs text-brand-400 hover:text-brand-300 font-semibold px-3 py-1.5 rounded-lg border border-brand-500/25 bg-brand-500/5 hover:bg-brand-500/10 transition-all mr-2"
-              >
-                Admin Panel &rarr;
-              </Link>
-            )}
-            <div className="hidden text-right sm:block select-none">
-              <p className="text-sm font-medium">{user?.username}</p>
-              <p className="text-xs text-gray-400">{user?.role}</p>
-            </div>
-            <Link to={user?.role === 'ADMIN' ? '/admin' : '/dashboard'} className="flex items-center gap-2.5">
-              <span className="font-semibold">ScriptWriter</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ee7712]">
+          {isAdminPanel ? (
+            /* Admin view: Left side is hamburger toggle */
+            <button
+              onClick={() => setShowAdminSidebar(true)}
+              className="rounded-lg p-2 text-gray-400 hover:bg-surface-700 hover:text-white transition-colors cursor-pointer select-none"
+              title="Open Navigation Menu"
+            >
+              <FiMenu className="text-xl" />
+            </button>
+          ) : (
+            /* Dashboard view: Left side is logo */
+            <Link to="/dashboard" className="flex items-center gap-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ee7712] shadow-md shadow-orange-500/10">
                 <FiFilm className="text-white" />
               </div>
+              <span className="font-semibold text-sm">ScriptWriter</span>
             </Link>
-          </div>
+          )}
+
+          {isAdminPanel ? (
+            /* Admin view: Right side is logo */
+            <div className="flex items-center gap-4">
+              {user?.role === 'ADMIN' && !window.location.pathname.startsWith('/admin') && (
+                <Link
+                  to="/admin"
+                  className="text-xs text-brand-400 hover:text-brand-300 font-semibold px-3 py-1.5 rounded-lg border border-brand-500/25 bg-brand-500/5 hover:bg-brand-500/10 transition-all mr-2"
+                >
+                  Admin Panel &rarr;
+                </Link>
+              )}
+              <div className="hidden text-right sm:block select-none">
+                <p className="text-sm font-medium">{user?.username}</p>
+                <p className="text-xs text-gray-400">{user?.role}</p>
+              </div>
+              <Link to="/admin" className="flex items-center gap-2.5">
+                <span className="font-semibold">ScriptWriter</span>
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ee7712]">
+                  <FiFilm className="text-white" />
+                </div>
+              </Link>
+            </div>
+          ) : (
+            /* Dashboard view: Right side is hamburger toggle + optional admin path redirect link */
+            <div className="flex items-center gap-3">
+              {user?.role === 'ADMIN' && (
+                <Link
+                  to="/admin"
+                  className="text-xs text-brand-400 hover:text-brand-300 font-semibold px-3 py-1.5 rounded-lg border border-brand-500/25 bg-brand-500/5 hover:bg-brand-500/10 transition-all"
+                >
+                  Admin Panel &rarr;
+                </Link>
+              )}
+              <button
+                onClick={() => setShowAdminSidebar(true)}
+                className="rounded-lg p-2 text-gray-400 hover:bg-surface-700 hover:text-white transition-colors cursor-pointer select-none"
+                title="Open Navigation Menu"
+              >
+                <FiMenu className="text-xl" />
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
@@ -67,10 +98,12 @@ export default function DashboardLayout() {
           onClick={() => setShowAdminSidebar(false)}
         />
 
-        {/* Drawer container */}
+        {/* Drawer container: slides from Left for admin, slides from Right for writer dashboard */}
         <div
-          className={`fixed top-0 bottom-0 left-0 w-64 bg-surface-850 border-r border-surface-700 shadow-2xl z-[1000] p-5 flex flex-col justify-between transition-transform duration-300 ease-in-out ${
-            showAdminSidebar ? 'translate-x-0' : '-translate-x-full'
+          className={`fixed top-0 bottom-0 w-72 bg-surface-850 border-surface-700 shadow-2xl z-[1000] p-6 flex flex-col justify-between transition-transform duration-300 ease-in-out ${
+            isAdminPanel
+              ? `left-0 border-r ${showAdminSidebar ? 'translate-x-0' : '-translate-x-full'}`
+              : `right-0 border-l ${showAdminSidebar ? 'translate-x-0' : 'translate-x-full'}`
           }`}
         >
           <div className="space-y-6">
@@ -79,7 +112,7 @@ export default function DashboardLayout() {
               <div className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-primary animate-pulse" />
                 <span className="text-xs font-bold uppercase tracking-wider text-brand-primary select-none">
-                  {isAdminPanel ? 'Console Menu' : 'Main Menu'}
+                  {isAdminPanel ? 'Console Menu' : 'Menu'}
                 </span>
               </div>
               <button
@@ -90,6 +123,19 @@ export default function DashboardLayout() {
                 <FiX className="text-lg" />
               </button>
             </div>
+
+            {/* Profile Info block inside Drawer (Dashboard user view only) */}
+            {!isAdminPanel && (
+              <div className="rounded-2xl bg-surface-800 border border-surface-700/60 p-4 flex items-center gap-3 shadow-inner my-2 select-none">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-primary to-orange-500 text-white font-bold text-sm shadow-md shadow-orange-500/20 uppercase">
+                  {user?.username?.substring(0, 2)}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold truncate text-white">{user?.username}</p>
+                  <p className="text-xs text-gray-400 truncate">{user?.role || 'Writer'}</p>
+                </div>
+              </div>
+            )}
 
             {/* Menu items list */}
             <div className="space-y-1.5">
@@ -112,7 +158,7 @@ export default function DashboardLayout() {
                   ) : (
                     <FiSun className="text-lg text-amber-500" />
                   )}
-                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-305">Dark Mode</span>
+                  <span className="text-sm font-semibold text-gray-705 dark:text-gray-300">Dark Mode</span>
                 </div>
                 <button
                   onClick={toggleTheme}
