@@ -149,11 +149,11 @@ export default function EditorToolbar({
   }
 
   return (
-    <div className="flex flex-col shrink-0 border-b border-gray-200 dark:border-surface-700 bg-white/80 dark:bg-surface-850/80 backdrop-blur-md sticky top-0 z-[100]">
+    <div className="flex flex-col shrink-0 border-b border-gray-200 dark:border-surface-700 bg-white/80 dark:bg-surface-850/80 backdrop-blur-md sticky top-0 z-50">
       {/* Row 1: Top Navigation Bar */}
       <div className="flex h-14 items-center justify-between px-4 border-b border-gray-200/50 dark:border-surface-700/50">
-        {/* Item 1: Back Button & Logo (Desktop Only) */}
-        <div className="hidden md:flex items-center gap-3 h-full">
+        <div className="flex items-center gap-3 h-full">
+          {/* Back to Dashboard (Desktop) */}
           <button
             onClick={onBack}
             className="hidden md:flex items-center justify-center h-8 w-8 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-surface-750 hover:text-gray-800 dark:hover:text-white transition-all active:scale-95 cursor-pointer"
@@ -162,6 +162,17 @@ export default function EditorToolbar({
             <FiArrowLeft className="text-base" />
           </button>
 
+          {/* Mobile Menu Toggle (Mobile) */}
+          <div className="relative md:hidden flex items-center">
+            <button
+              onClick={onMobileMenuToggle}
+              className="flex items-center justify-center h-8 w-8 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-surface-750 hover:text-gray-800 dark:hover:text-white transition-all active:scale-95 cursor-pointer"
+            >
+              <FiMenu className="text-base" />
+            </button>
+          </div>
+
+          {/* Logo with Orange Accent */}
           <div className="hidden md:flex items-center gap-2 mr-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#ee7712] text-white">
               <FiFilm className="text-sm" />
@@ -170,24 +181,26 @@ export default function EditorToolbar({
           </div>
         </div>
 
-        {/* Item 2: Right Side Elements (Grouped on the right: switchers + profile + theme toggle) */}
-        <div className="flex items-center gap-1.5 md:gap-3 ml-auto">
-          {/* Professional Dual Theme Toggle Slider (Desktop Only) */}
+        <div className="flex items-center gap-1 md:gap-3">
+          {/* Professional Dual Theme Toggle Slider */}
           <div
             onClick={toggleTheme}
             className="relative hidden md:flex items-center bg-gray-100 dark:bg-surface-800 p-0.5 rounded-full border border-gray-200 dark:border-surface-700 h-8 w-[60px] cursor-pointer select-none transition-all mr-1"
             title={theme === 'dark' ? 'Switch to Normal Mode' : 'Switch to Dark Mode'}
           >
+            {/* Sliding Pill Indicator */}
             <div
               className={`absolute top-0.5 bottom-0.5 w-6 rounded-full bg-white dark:bg-surface-700 shadow-sm transition-all duration-300 ${
                 theme === 'dark' ? 'left-[32px]' : 'left-0.5'
               }`}
             />
+            {/* Sun Icon */}
             <div className={`relative flex-1 flex items-center justify-center text-sm z-10 transition-colors duration-200 ${
               theme === 'light' ? 'text-amber-500 font-bold' : 'text-gray-400 hover:text-gray-300'
             }`}>
               <FiSun className="text-xs" />
             </div>
+            {/* Moon Icon */}
             <div className={`relative flex-1 flex items-center justify-center text-sm z-10 transition-colors duration-200 ${
               theme === 'dark' ? 'text-indigo-400 font-bold' : 'text-gray-500 hover:text-gray-600'
             }`}>
@@ -195,15 +208,15 @@ export default function EditorToolbar({
             </div>
           </div>
 
-          {/* Project & Version Switchers Wrapper (Grouped on the right side) */}
-          <div className="flex items-center gap-0.5 select-none">
+          {/* Project & Version Switchers Wrapper */}
+          <div className="flex items-center gap-0 md:gap-0.5 mr-0 md:mr-1 select-none">
             {/* Project Selector Dropdown */}
             <div className="relative" ref={projectsDropdownRef}>
               <button
                 onClick={() => setShowProjectsDropdown(!showProjectsDropdown)}
-                className="flex items-center gap-1 text-sm font-semibold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-surface-750 px-1.5 py-1 md:px-3 md:py-1.5 rounded-lg select-none outline-none cursor-pointer border-none bg-transparent active:scale-95 transition-all"
+                className="flex items-center gap-1 text-sm font-semibold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-surface-750 px-1.5 py-1.5 md:px-3 rounded-lg select-none outline-none cursor-pointer border-none bg-transparent active:scale-95 transition-all"
               >
-                <span className="max-w-[120px] md:max-w-none truncate">{title || 'Untitled Screenplay'}</span>
+                <span>{title || 'Untitled Screenplay'}</span>
                 <FiChevronDown className={`text-xs text-gray-500 dark:text-gray-400 transition-transform duration-200 ${showProjectsDropdown ? 'rotate-180' : ''}`} />
               </button>
 
@@ -248,7 +261,7 @@ export default function EditorToolbar({
             <div className="relative" ref={versionDropdownRef}>
               <button
                 onClick={() => setShowVersionDropdown(!showVersionDropdown)}
-                className="flex items-center gap-0.5 px-1 py-1 md:px-2 md:py-1 rounded-md text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-all active:scale-95 select-none outline-none cursor-pointer border-none bg-transparent"
+                className="flex items-center gap-0.5 px-1 py-1 md:px-2 rounded-md text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-all active:scale-95 select-none outline-none cursor-pointer border-none bg-transparent"
                 title="Switch active version"
               >
                 <span>v{currentVersion}</span>
@@ -309,11 +322,12 @@ export default function EditorToolbar({
               )}
             </div>
           </div>
+
           {/* Profile Details Dropdown */}
           <div className="relative" ref={profileRef}>
             <button
               onClick={() => setShowProfile(!showProfile)}
-              className="relative flex h-8 w-8 items-center justify-center rounded-full bg-violet-600 hover:bg-violet-700 !text-white transition-all font-bold text-xs cursor-pointer shadow-sm ml-1"
+              className="relative flex h-8 w-8 items-center justify-center rounded-full bg-violet-600 hover:bg-violet-700 !text-white transition-all font-bold text-xs cursor-pointer shadow-sm ml-0 md:ml-1"
               title="View Profile"
             >
               {user?.username ? user.username.charAt(0).toUpperCase() : <FiUser />}
