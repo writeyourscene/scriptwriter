@@ -137,7 +137,7 @@ export default function PublicScriptPage() {
   return (
     <div className="flex h-screen flex-col bg-surface-900 text-white">
       {/* Read Only Header Bar */}
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-surface-700 bg-surface-800 px-4">
+      <header className="flex h-14 shrink-0 items-center justify-between border-b border-surface-700 bg-surface-800 px-4 text-white">
         {/* Left side: Back Button and Brand Logo */}
         <div className="flex items-center gap-1.5">
           <Link to="/login" className="rounded-lg p-1.5 text-gray-400 hover:bg-surface-700 hover:text-white transition-colors cursor-pointer" title="Back to Login">
@@ -147,7 +147,7 @@ export default function PublicScriptPage() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ee7712] shadow-md shadow-orange-500/10">
               <FiFilm className="text-white text-base" />
             </div>
-            <span className="font-semibold text-sm">ScriptWriter</span>
+            <span className="font-semibold text-sm text-white">ScriptWriter</span>
           </Link>
         </div>
 
@@ -179,10 +179,10 @@ export default function PublicScriptPage() {
 
           {/* Project Title Info */}
           <div className="flex flex-col items-end text-right select-none">
-            <h1 className="text-sm font-semibold truncate max-w-[120px] xs:max-w-[180px] sm:max-w-[300px]">
+            <h1 className="text-sm font-semibold text-white truncate max-w-[120px] xs:max-w-[180px] sm:max-w-[300px]">
               {script?.title}
             </h1>
-            <p className="text-[10px] text-emerald-450 flex items-center gap-1">
+            <p className="text-[10px] text-emerald-400 flex items-center gap-1 font-medium">
               <FiGlobe className="text-[9px]" /> View Only
             </p>
           </div>
