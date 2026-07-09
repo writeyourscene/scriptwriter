@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiUsers, FiLock, FiUnlock, FiTrash2, FiSearch, FiAlertTriangle, FiCheckCircle, FiKey } from 'react-icons/fi'
 import { adminApi } from '../api/adminApi'
@@ -116,11 +117,24 @@ export default function AdminPage() {
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Administration Portal</h1>
-        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          Manage user accounts, toggle screenplay creation access, and delete user profiles.
-        </p>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-surface-700 pb-5 gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-primary animate-pulse" />
+            <span className="text-[10px] font-bold uppercase tracking-wider text-brand-primary select-none">Console Manager</span>
+          </div>
+          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mt-1">System Administration</h1>
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-2xl leading-relaxed">
+            Monitor active system accounts, approve screenplay authoring permissions, and handle user security credentials across the ScriptWriter workspace.
+          </p>
+        </div>
+        
+        <Link
+          to="/dashboard"
+          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-surface-700 bg-surface-800 hover:bg-surface-750 text-gray-700 dark:text-gray-300 px-4 py-2.5 text-xs font-bold transition-all shadow-md active:scale-95 self-start md:self-center cursor-pointer select-none"
+        >
+          &larr; Return to Dashboard
+        </Link>
       </div>
 
       {/* Stats Cards */}

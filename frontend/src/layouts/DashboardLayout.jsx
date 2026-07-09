@@ -29,12 +29,12 @@ export default function DashboardLayout() {
           </Link>
 
           <div className="flex items-center gap-4">
-            {user?.role === 'ADMIN' && (
+            {user?.role === 'ADMIN' && !window.location.pathname.startsWith('/admin') && (
               <Link
-                to={window.location.pathname.startsWith('/admin') ? '/dashboard' : '/admin'}
+                to="/admin"
                 className="text-xs text-brand-400 hover:text-brand-300 font-semibold px-3 py-1.5 rounded-lg border border-brand-500/25 bg-brand-500/5 hover:bg-brand-500/10 transition-all"
               >
-                {window.location.pathname.startsWith('/admin') ? '← User Dashboard' : 'Admin Panel →'}
+                Admin Panel &rarr;
               </Link>
             )}
             <div className="hidden text-right sm:block">
