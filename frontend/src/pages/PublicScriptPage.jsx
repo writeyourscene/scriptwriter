@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { scriptApi } from '../api/scriptApi'
 import ScreenplayEditor from '../components/editor/ScreenplayEditor'
 import { Button } from '../components/ui/Button'
-import { FiDownload, FiGlobe, FiChevronLeft } from 'react-icons/fi'
+import { FiDownload, FiGlobe, FiChevronLeft, FiFilm } from 'react-icons/fi'
 
 const ZOOM_LEVELS = [50, 75, 90, 100, 110, 125, 150]
 
@@ -138,40 +138,54 @@ export default function PublicScriptPage() {
     <div className="flex h-screen flex-col bg-surface-900 text-white">
       {/* Read Only Header Bar */}
       <header className="flex h-14 shrink-0 items-center justify-between border-b border-surface-700 bg-surface-800 px-4">
-        <div className="flex items-center gap-3">
-          <Link to="/login" className="rounded-lg p-2 text-gray-400 hover:bg-surface-700 hover:text-white transition-colors">
-            <FiChevronLeft className="text-lg" />
+        {/* Left side: Back Button and Brand Logo */}
+        <div className="flex items-center gap-1.5">
+          <Link to="/login" className="rounded-lg p-1.5 text-gray-400 hover:bg-surface-700 hover:text-white transition-colors cursor-pointer" title="Back to Login">
+            <FiChevronLeft className="text-xl" />
           </Link>
-          <div>
-            <h1 className="text-sm font-semibold">{script?.title}</h1>
-            <p className="text-xs text-emerald-400 flex items-center gap-1">
-              <FiGlobe className="text-[10px]" /> Public view mode
-            </p>
-          </div>
+          <Link to="/login" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ee7712] shadow-md shadow-orange-500/10">
+              <FiFilm className="text-white text-base" />
+            </div>
+            <span className="font-semibold text-sm">ScriptWriter</span>
+          </Link>
         </div>
 
-        <div className="flex items-center gap-1.5">
-          {/* Page Size Dropdown */}
-          <select
-            value={pageSize}
-            onChange={(e) => setPageSize(e.target.value)}
-            className="hidden sm:block rounded-lg border border-surface-600 bg-surface-700 px-2 py-1.5 text-xs text-white"
-          >
-            <option value="a4">A4</option>
-            <option value="letter">Letter</option>
-            <option value="script">Script</option>
-          </select>
+        {/* Right side: Page settings dropdowns + Project Title */}
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-1.5">
+            {/* Page Size Dropdown */}
+            <select
+              value={pageSize}
+              onChange={(e) => setPageSize(e.target.value)}
+              className="rounded-lg border border-surface-600 bg-surface-700 px-2 py-1 text-xs text-white"
+            >
+              <option value="a4">A4</option>
+              <option value="letter">Letter</option>
+              <option value="script">Script</option>
+            </select>
 
-          {/* Zoom Dropdown */}
-          <select
-            value={zoom}
-            onChange={(e) => setZoom(Number(e.target.value))}
-            className="hidden sm:block rounded-lg border border-surface-600 bg-surface-700 px-2 py-1.5 text-xs text-white"
-          >
-            {ZOOM_LEVELS.map((z) => (
-              <option key={z} value={z}>{z}%</option>
-            ))}
-          </select>
+            {/* Zoom Dropdown */}
+            <select
+              value={zoom}
+              onChange={(e) => setZoom(Number(e.target.value))}
+              className="rounded-lg border border-surface-600 bg-surface-700 px-2 py-1 text-xs text-white"
+            >
+              {ZOOM_LEVELS.map((z) => (
+                <option key={z} value={z}>{z}%</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Project Title Info */}
+          <div className="flex flex-col items-end text-right select-none">
+            <h1 className="text-sm font-semibold truncate max-w-[120px] xs:max-w-[180px] sm:max-w-[300px]">
+              {script?.title}
+            </h1>
+            <p className="text-[10px] text-emerald-450 flex items-center gap-1">
+              <FiGlobe className="text-[9px]" /> View Only
+            </p>
+          </div>
         </div>
       </header>
 
