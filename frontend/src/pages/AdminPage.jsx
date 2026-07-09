@@ -124,7 +124,7 @@ export default function AdminPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {[
           { label: 'Total Users', value: totalUsers, icon: FiUsers, color: 'text-brand-primary bg-brand-lightbg' },
           { label: 'Administrators', value: adminsCount, icon: FiUnlock, color: 'text-purple-700 dark:text-purple-400 bg-purple-500/10' },
@@ -136,14 +136,14 @@ export default function AdminPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
-            className="flex items-center gap-4 rounded-xl border border-surface-700 bg-surface-800 p-5 shadow-lg"
+            className="flex items-center gap-3 sm:gap-4 rounded-xl border border-surface-700 bg-surface-800 p-3.5 sm:p-5 shadow-lg"
           >
-            <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${stat.color}`}>
-              <stat.icon className="text-xl" />
+            <div className={`flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl ${stat.color}`}>
+              <stat.icon className="text-lg sm:text-xl" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{stat.label}</p>
-              <p className="text-2xl font-bold mt-0.5 text-gray-900 dark:text-white">{stat.value}</p>
+              <p className="text-[11px] sm:text-sm text-gray-500 dark:text-gray-400 font-medium leading-none sm:leading-normal">{stat.label}</p>
+              <p className="text-lg sm:text-2xl font-bold mt-1 text-gray-900 dark:text-white leading-none">{stat.value}</p>
             </div>
           </motion.div>
         ))}
@@ -200,7 +200,8 @@ export default function AdminPage() {
         animate={{ opacity: 1 }}
         className="overflow-hidden rounded-2xl border border-surface-700 bg-surface-800 shadow-xl"
       >
-        <div className="overflow-x-auto">
+        {/* Desktop View: Table Layout */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-surface-700 bg-surface-850/50 text-xs font-semibold uppercase tracking-wider text-gray-400">
@@ -327,6 +328,115 @@ export default function AdminPage() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile View: Card-Based Layout */}
+        <div className="block md:hidden divide-y divide-surface-700/50">
+          {filteredUsers.length === 0 ? (
+            <div className="px-6 py-12 text-center text-gray-400">
+              No users found matching your criteria.
+            </div>
+          ) : (
+            filteredUsers.map((u) => {
+              const initials = `${u.firstName?.[0] || ''}${u.lastName?.[0] || u.username?.[0] || ''}`.toUpperCase()
+              return (
+                <div key={u.id} className="p-4 space-y-4 bg-surface-800 hover:bg-surface-850/30 transition-all duration-200">
+                  {/* Row 1: Profile & Role Badge */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      {u.profileImage ? (
+                        <img
+                          src={u.profileImage}
+                          alt={u.username}
+                          className="h-10 w-10 rounded-full object-cover border border-surface-650"
+                        />
+                      ) : (
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-700 text-xs font-bold text-gray-700 dark:text-gray-250 border border-surface-600 animate-none">
+                          {initials}
+                        </div>
+                      )}
+                      <div>
+                        <div className="font-semibold text-gray-900 dark:text-white flex flex-wrap items-center gap-1.5">
+                          <span>{u.firstName} {u.lastName}</span>
+                          {u.id === currentUser?.id && (
+                            <span className="rounded bg-brand-lightbg text-brand-primary text-[9px] px-1.5 py-0.5 font-bold uppercase tracking-wider">
+                              You
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-455 mt-0.5">@{u.username}</div>
+                      </div>
+                    </div>
+                    
+                    <span className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-semibold shrink-0 ${
+                      u.role === 'ADMIN' 
+                        ? 'bg-purple-500/10 text-purple-700 dark:text-purple-400' 
+                        : 'bg-surface-700 text-gray-750 dark:text-gray-300'
+                    }`}>
+                      {u.role}
+                    </span>
+                  </div>
+
+                  {/* Row 2: Email */}
+                  <div className="text-xs text-gray-600 dark:text-gray-300 font-mono break-all bg-surface-850/50 px-2.5 py-1.5 rounded-lg border border-surface-700">
+                    <span className="text-[10px] uppercase font-bold text-gray-500 mr-2">Email:</span>
+                    {u.email}
+                  </div>
+
+                  {/* Row 3: Project Access Status */}
+                  <div className="flex items-center justify-between py-1.5 border-t border-b border-surface-700/50">
+                    <span className="text-xs font-semibold text-gray-450">Creation Access:</span>
+                    {u.role === 'ADMIN' ? (
+                      <span className="text-xs text-purple-700 dark:text-purple-400 font-medium italic">Always Granted</span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => handleToggleAccess(u)}
+                        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                          u.projectAccess
+                            ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 active:bg-emerald-500/20'
+                            : 'bg-amber-500/10 text-amber-700 dark:text-amber-400 active:bg-amber-500/20'
+                        }`}
+                      >
+                        {u.projectAccess ? (
+                          <>
+                            <FiUnlock className="text-sm" /> Approved (Revoke)
+                          </>
+                        ) : (
+                          <>
+                            <FiLock className="text-sm" /> Blocked (Approve)
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Row 4: Action Buttons */}
+                  <div className="flex items-center justify-end gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setResettingUser(u)}
+                      className="flex items-center gap-1.5 rounded-lg border border-amber-500/25 bg-amber-500/5 hover:bg-amber-500/15 px-3 py-2 text-xs font-semibold text-amber-600 dark:text-amber-400 transition-colors"
+                    >
+                      <FiKey className="text-sm" /> Reset Password
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteUser(u)}
+                      disabled={u.id === currentUser?.id || u.role === 'ADMIN'}
+                      className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition-all ${
+                        u.id === currentUser?.id || u.role === 'ADMIN'
+                          ? 'border-gray-700/30 text-gray-500 bg-transparent cursor-not-allowed opacity-50'
+                          : 'border-red-500/25 bg-red-500/5 text-red-600 dark:text-red-400 hover:bg-red-500/15'
+                      }`}
+                    >
+                      <FiTrash2 className="text-sm" /> Delete Account
+                    </button>
+                  </div>
+                </div>
+              )
+            })
+          )}
         </div>
       </motion.div>
 
