@@ -502,7 +502,7 @@ export default function EditorPage() {
           md:relative md:top-0 md:h-auto md:shadow-none md:translate-x-0 md:bg-transparent
           ${showSidebar 
             ? 'translate-x-0 opacity-100 md:w-72 md:opacity-100 md:border-l md:border-surface-700' 
-            : 'translate-x-full opacity-0 pointer-events-none md:w-0 md:opacity-0 md:overflow-hidden md:border-l-0 md:pointer-events-auto'
+            : 'translate-x-full opacity-0 pointer-events-none md:hidden'
           }
         `}>
           <EditorSidebar
@@ -529,7 +529,7 @@ export default function EditorPage() {
           md:relative md:top-0 md:h-auto md:shadow-none md:translate-x-0 md:bg-transparent
           ${showAi 
             ? 'translate-x-0 opacity-100 md:w-80 md:opacity-100 md:border-l md:border-surface-700' 
-            : 'translate-x-full opacity-0 pointer-events-none md:w-0 md:opacity-0 md:overflow-hidden md:border-l-0 md:pointer-events-auto'
+            : 'translate-x-full opacity-0 pointer-events-none md:hidden'
           }
         `}>
           <AiPanel
@@ -547,7 +547,7 @@ export default function EditorPage() {
           md:relative md:top-0 md:h-auto md:shadow-none md:translate-x-0 md:bg-transparent
           ${showSettings 
             ? 'translate-x-0 opacity-100 md:w-80 md:opacity-100 md:border-l md:border-surface-700' 
-            : 'translate-x-full opacity-0 pointer-events-none md:w-0 md:opacity-0 md:overflow-hidden md:border-l-0 md:pointer-events-auto'
+            : 'translate-x-full opacity-0 pointer-events-none md:hidden'
           }
         `}>
           <SettingsPanel
