@@ -106,41 +106,51 @@ export default function DashboardPage() {
         className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome back, {user?.firstName || user?.username}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Welcome back, {user?.firstName || user?.username}</h1>
           <p className="mt-1 text-gray-500 dark:text-gray-400">{data?.totalElements ?? 0} projects</p>
         </div>
         {!trash && (
-          <Button onClick={handleNewProjectClick} className="gap-2">
-            <FiPlus /> New Project
-          </Button>
+          <button
+            onClick={handleNewProjectClick}
+            className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-primary to-orange-600 hover:from-orange-600 hover:to-orange-700 !text-white px-5 py-2.5 text-xs font-bold transition-all shadow-lg shadow-orange-500/10 hover:shadow-orange-500/20 active:scale-[0.98] cursor-pointer border-none"
+          >
+            <FiPlus className="text-sm" /> New Project
+          </button>
         )}
       </motion.div>
 
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap gap-2">
-          {filters.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => setFilter(id)}
-              className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition ${
-                filter === id
-                  ? 'bg-brand-lightbg text-brand-primary'
-                  : 'text-gray-500 dark:text-gray-400 hover:bg-surface-700 hover:text-gray-900 dark:hover:text-white'
-              }`}
-            >
-              <Icon /> {label}
-            </button>
-          ))}
+      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        {/* Premium Segmented Controls Group */}
+        <div className="flex p-1 bg-surface-800 dark:bg-surface-850 rounded-xl border border-gray-150 dark:border-surface-700/60 shadow-sm w-full md:w-auto overflow-x-auto custom-scrollbar gap-0.5 select-none">
+          {filters.map(({ id, label, icon: Icon }) => {
+            const isActive = filter === id
+            return (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setFilter(id)}
+                className={`flex items-center justify-center gap-2 rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold transition-all duration-200 flex-1 md:flex-initial cursor-pointer select-none border-none outline-none ${
+                  isActive
+                    ? 'bg-brand-primary !text-white shadow-md shadow-brand-primary/10'
+                    : 'text-gray-500 dark:text-gray-400 hover:bg-surface-750/30 hover:text-gray-800 dark:hover:text-white'
+                }`}
+              >
+                <Icon className="text-sm shrink-0" />
+                <span>{label}</span>
+              </button>
+            )
+          })}
         </div>
-        <div className="relative">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+
+        {/* Premium Search input */}
+        <div className="relative w-full md:w-64">
+          <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-500 text-xs" />
           <input
             type="text"
             placeholder="Search projects..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-surface-600 bg-surface-800 py-2.5 pl-10 pr-4 text-sm text-gray-900 dark:text-white outline-none focus:border-brand-primary sm:w-64"
+            className="w-full rounded-xl border border-gray-150 dark:border-surface-700 bg-surface-800/80 px-4 py-2.5 pl-10 text-xs text-gray-900 dark:text-white placeholder:text-gray-500 outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 transition-all shadow-sm"
           />
         </div>
       </div>

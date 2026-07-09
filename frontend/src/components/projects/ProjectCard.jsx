@@ -17,8 +17,12 @@ export default function ProjectCard({ project, onAction, trash = false }) {
       tabIndex={0}
       onClick={openEditor}
       onKeyDown={(e) => e.key === 'Enter' && openEditor()}
-      className={`group relative rounded-2xl border border-surface-700 bg-surface-800 p-5 transition hover:border-brand-primary/40 ${!trash ? 'cursor-pointer' : ''}`}
+      className={`group relative rounded-2xl border border-gray-150 dark:border-surface-700 bg-surface-800 p-5 transition-all duration-300 hover:scale-[1.015] hover:shadow-xl hover:shadow-brand-primary/5 dark:hover:shadow-black/20 hover:border-brand-primary/40 overflow-hidden ${
+        !trash ? 'cursor-pointer' : ''
+      }`}
     >
+      {/* Glowing Left Accent */}
+      <span className="absolute inset-y-4 left-0 w-1 rounded-r bg-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <div className="mb-3 flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
