@@ -498,9 +498,12 @@ export default function EditorPage() {
 
         <div className={`
           transition-all duration-300 ease-in-out z-50
-          md:relative md:w-72 md:translate-x-0 md:opacity-100 md:border-l md:border-surface-700 md:shadow-none md:top-0 md:h-auto
+          md:relative md:top-0 md:h-auto md:shadow-none
           fixed top-[104px] bottom-0 w-72 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-104px)] h-[calc(100dvh-104px)]
-          ${showSidebar ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto'}
+          ${showSidebar 
+            ? 'translate-x-0 opacity-100 md:w-72 md:opacity-100 md:border-l md:border-surface-700 md:translate-x-0' 
+            : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto md:w-0 md:opacity-0 md:border-l-0 md:overflow-hidden'
+          }
         `}>
           <EditorSidebar
             stats={{ ...stats, dialogues: stats.dialogues }}
@@ -522,9 +525,12 @@ export default function EditorPage() {
 
         <div className={`
           transition-all duration-300 ease-in-out z-50
-          md:relative md:w-80 md:translate-x-0 md:opacity-100 md:border-l md:border-surface-700 md:shadow-none md:top-0 md:h-auto
+          md:relative md:top-0 md:h-auto md:shadow-none
           fixed top-[104px] bottom-0 w-80 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-104px)] h-[calc(100dvh-104px)]
-          ${showAi ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto'}
+          ${showAi 
+            ? 'translate-x-0 opacity-100 md:w-80 md:opacity-100 md:border-l md:border-surface-700 md:translate-x-0' 
+            : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto md:w-0 md:opacity-0 md:border-l-0 md:overflow-hidden'
+          }
         `}>
           <AiPanel
             open={true}
@@ -537,9 +543,12 @@ export default function EditorPage() {
 
         <div className={`
           transition-all duration-300 ease-in-out z-50
-          md:relative md:w-80 md:translate-x-0 md:opacity-100 md:border-l md:border-surface-700 md:shadow-none md:top-0 md:h-auto
+          md:relative md:top-0 md:h-auto md:shadow-none
           fixed top-[104px] bottom-0 w-80 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-104px)] h-[calc(100dvh-104px)]
-          ${showSettings ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto'}
+          ${showSettings 
+            ? 'translate-x-0 opacity-100 md:w-80 md:opacity-100 md:border-l md:border-surface-700 md:translate-x-0' 
+            : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto md:w-0 md:opacity-0 md:border-l-0 md:overflow-hidden'
+          }
         `}>
           <SettingsPanel
             zoom={zoom}
