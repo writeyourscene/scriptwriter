@@ -40,6 +40,7 @@ export default function ScreenplayEditor({
   watermarkEnabled = false,
   watermarkText = 'CONFIDENTIAL',
   watermarkOpacity = 0.1,
+  watermarkSize = 64,
 }) {
   const [localFocusedIndex, localSetFocusedIndex] = useState(0)
   const focusedIndex = propFocusedIndex !== undefined ? propFocusedIndex : localFocusedIndex
@@ -1295,7 +1296,10 @@ export default function ScreenplayEditor({
                 opacity: watermarkOpacity,
               }}
             >
-              <div className="watermark-text select-none pointer-events-none">
+              <div 
+                className="watermark-text select-none pointer-events-none"
+                style={{ fontSize: `${watermarkSize}pt` }}
+              >
                 {watermarkText}
               </div>
             </div>

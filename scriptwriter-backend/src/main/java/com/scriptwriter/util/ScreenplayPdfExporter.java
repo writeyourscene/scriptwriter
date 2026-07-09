@@ -165,21 +165,42 @@ public final class ScreenplayPdfExporter {
                     return;
                 }
                 try {
+                    String text = watermarkText;
+                    float opacity = 0.08f;
+                    int fontSize = 60;
+
+                    // Parse custom params format: TEXT;opacity=0.15;size=45
+                    if (text.contains(";opacity=") || text.contains(";size=")) {
+                        String[] parts = text.split(";");
+                        text = parts[0];
+                        for (int i = 1; i < parts.length; i++) {
+                            if (parts[i].startsWith("opacity=")) {
+                                try {
+                                    opacity = Float.parseFloat(parts[i].substring(8));
+                                } catch (Exception e) {}
+                            } else if (parts[i].startsWith("size=")) {
+                                try {
+                                    fontSize = Integer.parseInt(parts[i].substring(5));
+                                } catch (Exception e) {}
+                            }
+                        }
+                    }
+
                     PdfContentByte cb = writer.getDirectContentUnder();
                     cb.saveState();
                     cb.beginText();
 
                     BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-                    cb.setFontAndSize(bf, 60);
+                    cb.setFontAndSize(bf, fontSize);
                     cb.setRGBColorFill(180, 180, 180);
 
                     com.lowagie.text.pdf.PdfGState gstate = new com.lowagie.text.pdf.PdfGState();
-                    gstate.setFillOpacity(0.08f); // 8% opacity
+                    gstate.setFillOpacity(opacity);
                     cb.setGState(gstate);
 
                     float x = (document.left() + document.right()) / 2;
                     float y = (document.top() + document.bottom()) / 2;
-                    cb.showTextAligned(Element.ALIGN_CENTER, watermarkText.toUpperCase(), x, y, 45);
+                    cb.showTextAligned(Element.ALIGN_CENTER, text.toUpperCase(), x, y, 45);
 
                     cb.endText();
                     cb.restoreState();

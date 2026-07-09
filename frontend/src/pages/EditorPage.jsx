@@ -46,6 +46,10 @@ export default function EditorPage() {
     const val = localStorage.getItem(`watermark_${projectId}_opacity`)
     return val ? parseFloat(val) : 0.1
   })
+  const [watermarkSize, setWatermarkSize] = useState(() => {
+    const val = localStorage.getItem(`watermark_${projectId}_size`)
+    return val ? parseInt(val) : 64
+  })
 
   useEffect(() => {
     localStorage.setItem(`watermark_${projectId}_enabled`, watermarkEnabled)
@@ -58,6 +62,10 @@ export default function EditorPage() {
   useEffect(() => {
     localStorage.setItem(`watermark_${projectId}_opacity`, watermarkOpacity)
   }, [watermarkOpacity, projectId])
+
+  useEffect(() => {
+    localStorage.setItem(`watermark_${projectId}_size`, watermarkSize)
+  }, [watermarkSize, projectId])
 
   const [loading, setLoading] = useState(true)
   const [script, setScript] = useState(null)
@@ -210,7 +218,11 @@ export default function EditorPage() {
     try {
       const response = format === 'docx'
         ? await scriptApi.exportDocx(script.id, pageSize)
-        : await scriptApi.exportPdf(script.id, pageSize, watermarkEnabled ? watermarkText : '')
+        : await scriptApi.exportPdf(
+            script.id,
+            pageSize,
+            watermarkEnabled ? `${watermarkText};opacity=${watermarkOpacity};size=${watermarkSize}` : ''
+          )
       const data = response.data
 
       // Check if the response is actually a JSON error
@@ -481,6 +493,7 @@ export default function EditorPage() {
             watermarkEnabled={watermarkEnabled}
             watermarkText={watermarkText}
             watermarkOpacity={watermarkOpacity}
+            watermarkSize={watermarkSize}
           />
         </div>
 
@@ -565,6 +578,8 @@ export default function EditorPage() {
             onWatermarkTextChange={setWatermarkText}
             watermarkOpacity={watermarkOpacity}
             onWatermarkOpacityChange={setWatermarkOpacity}
+            watermarkSize={watermarkSize}
+            onWatermarkSizeChange={setWatermarkSize}
             onClose={() => setShowSettings(false)}
           />
         </div>

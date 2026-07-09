@@ -16,6 +16,8 @@ export default function SettingsPanel({
   onWatermarkTextChange,
   watermarkOpacity,
   onWatermarkOpacityChange,
+  watermarkSize,
+  onWatermarkSizeChange,
   onClose,
 }) {
   return (
@@ -183,6 +185,22 @@ export default function SettingsPanel({
                   step="0.01"
                   value={watermarkOpacity}
                   onChange={(e) => onWatermarkOpacityChange(parseFloat(e.target.value))}
+                  className="w-full accent-[#ee7712] cursor-pointer"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider select-none">
+                  <span>Size</span>
+                  <span>{watermarkSize} pt</span>
+                </div>
+                <input
+                  type="range"
+                  min="30"
+                  max="120"
+                  step="1"
+                  value={watermarkSize}
+                  onChange={(e) => onWatermarkSizeChange(parseInt(e.target.value))}
                   className="w-full accent-[#ee7712] cursor-pointer"
                 />
               </div>
