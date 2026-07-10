@@ -36,36 +36,10 @@ export default function EditorPage() {
   const { theme, toggleTheme } = useTheme()
   const [showMobileMenu, setShowMobileMenu] = useState(false)
 
-  const [watermarkEnabled, setWatermarkEnabled] = useState(() => {
-    return localStorage.getItem(`watermark_${projectId}_enabled`) === 'true'
-  })
-  const [watermarkText, setWatermarkText] = useState(() => {
-    return localStorage.getItem(`watermark_${projectId}_text`) || 'CONFIDENTIAL'
-  })
-  const [watermarkOpacity, setWatermarkOpacity] = useState(() => {
-    const val = localStorage.getItem(`watermark_${projectId}_opacity`)
-    return val ? parseFloat(val) : 0.1
-  })
-  const [watermarkSize, setWatermarkSize] = useState(() => {
-    const val = localStorage.getItem(`watermark_${projectId}_size`)
-    return val ? parseInt(val) : 64
-  })
-
-  useEffect(() => {
-    localStorage.setItem(`watermark_${projectId}_enabled`, watermarkEnabled)
-  }, [watermarkEnabled, projectId])
-
-  useEffect(() => {
-    localStorage.setItem(`watermark_${projectId}_text`, watermarkText)
-  }, [watermarkText, projectId])
-
-  useEffect(() => {
-    localStorage.setItem(`watermark_${projectId}_opacity`, watermarkOpacity)
-  }, [watermarkOpacity, projectId])
-
-  useEffect(() => {
-    localStorage.setItem(`watermark_${projectId}_size`, watermarkSize)
-  }, [watermarkSize, projectId])
+  const [watermarkEnabled, setWatermarkEnabled] = useState(false)
+  const [watermarkText, setWatermarkText] = useState('CONFIDENTIAL')
+  const [watermarkOpacity, setWatermarkOpacity] = useState(0.1)
+  const [watermarkSize, setWatermarkSize] = useState(64)
 
   const [loading, setLoading] = useState(true)
   const [script, setScript] = useState(null)
@@ -183,7 +157,18 @@ export default function EditorPage() {
     ])
   }, [refreshCharacters, loadScenes])
 
-  const { status, save } = useAutoSave(script?.id, blocks, script?.title, fontFamily, !!script?.id, refreshAfterSave)
+  const { status, save } = useAutoSave(
+    script?.id,
+    blocks,
+    script?.title,
+    fontFamily,
+    watermarkEnabled,
+    watermarkText,
+    watermarkOpacity,
+    watermarkSize,
+    !!script?.id,
+    refreshAfterSave
+  )
 
   const loadScript = useCallback(async () => {
     try {
@@ -193,6 +178,16 @@ export default function EditorPage() {
       setBlocks(parseContent(scriptData.content))
       if (scriptData.fontFamily) {
         setFontFamily(scriptData.fontFamily)
+      }
+      setWatermarkEnabled(scriptData.watermarkEnabled)
+      if (scriptData.watermarkText) {
+        setWatermarkText(scriptData.watermarkText)
+      }
+      if (scriptData.watermarkOpacity > 0) {
+        setWatermarkOpacity(scriptData.watermarkOpacity)
+      }
+      if (scriptData.watermarkSize > 0) {
+        setWatermarkSize(scriptData.watermarkSize)
       }
       
       const [versionsRes] = await Promise.all([
@@ -497,10 +492,10 @@ export default function EditorPage() {
           />
         </div>
 
-        {/* Backdrop for mobile panels - positioned below the top navigation (88px) */}
+        {/* Backdrop for mobile panels - positioned below the top navigation (96px) */}
         {(showSidebar || showAi || showSettings) && (
           <div
-            className="md:hidden fixed top-[88px] inset-x-0 bottom-0 z-40 bg-black/35 transition-opacity duration-300"
+            className="md:hidden fixed top-[96px] inset-x-0 bottom-0 z-40 bg-black/35 transition-opacity duration-300"
             onClick={() => {
               setShowSidebar(false)
               setShowAi(false)
@@ -512,7 +507,7 @@ export default function EditorPage() {
         <div className={`
           transition-all duration-300 ease-in-out z-50
           md:relative md:top-0 md:h-auto md:shadow-none
-          fixed top-[88px] bottom-0 right-0 w-64 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-88px)] h-[calc(100dvh-88px)]
+          fixed top-[96px] bottom-0 right-0 w-64 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-96px)] h-[calc(100dvh-96px)]
           ${showSidebar 
             ? 'translate-x-0 opacity-100 md:w-64 md:opacity-100 md:border-l md:border-surface-700 md:translate-x-0' 
             : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto md:w-0 md:opacity-0 md:border-l-0 md:overflow-hidden'
@@ -539,7 +534,7 @@ export default function EditorPage() {
         <div className={`
           transition-all duration-300 ease-in-out z-50
           md:relative md:top-0 md:h-auto md:shadow-none
-          fixed top-[88px] bottom-0 right-0 w-72 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-88px)] h-[calc(100dvh-88px)]
+          fixed top-[96px] bottom-0 right-0 w-72 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-96px)] h-[calc(100dvh-96px)]
           ${showAi 
             ? 'translate-x-0 opacity-100 md:w-72 md:opacity-100 md:border-l md:border-surface-700 md:translate-x-0' 
             : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto md:w-0 md:opacity-0 md:border-l-0 md:overflow-hidden'
@@ -557,7 +552,7 @@ export default function EditorPage() {
         <div className={`
           transition-all duration-300 ease-in-out z-50
           md:relative md:top-0 md:h-auto md:shadow-none
-          fixed top-[88px] bottom-0 right-0 w-72 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-88px)] h-[calc(100dvh-88px)]
+          fixed top-[96px] bottom-0 right-0 w-72 bg-surface-900 border-l border-surface-700 shadow-2xl h-[calc(100vh-96px)] h-[calc(100dvh-96px)]
           ${showSettings 
             ? 'translate-x-0 opacity-100 md:w-72 md:opacity-100 md:border-l md:border-surface-700 md:translate-x-0' 
             : 'translate-x-full opacity-0 pointer-events-none md:pointer-events-auto md:w-0 md:opacity-0 md:border-l-0 md:overflow-hidden'

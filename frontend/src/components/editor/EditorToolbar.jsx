@@ -151,7 +151,7 @@ export default function EditorToolbar({
   return (
     <div className="flex flex-col shrink-0 border-b border-gray-200 dark:border-surface-700 bg-white/80 dark:bg-surface-850/80 backdrop-blur-md sticky top-0 z-[1010]">
       {/* Row 1: Top Navigation Bar */}
-      <div className="flex h-12 items-center justify-between px-4 border-b border-gray-200/50 dark:border-surface-700/50">
+      <div className="flex h-14 items-center justify-between px-4 border-b border-gray-200/50 dark:border-surface-700/50">
         <div className="flex items-center gap-3 h-full">
           {/* Back to Dashboard (Desktop) */}
           <button
@@ -395,7 +395,7 @@ export default function EditorToolbar({
                 <span className="absolute -bottom-0.5 -right-0.5 block h-1.5 w-1.5 rounded-full bg-emerald-500 ring-[1px] ring-gray-50 dark:ring-surface-800" />
               )}
             </div>
-            <span className="font-semibold text-[10px] text-gray-600 dark:text-gray-400 min-w-fit">
+            <span className="font-semibold text-[10px] text-gray-600 dark:text-gray-400 w-[100px] shrink-0">
               {saveStatus === 'saving' ? 'Saving...' : lastSavedTime ? `Saved at ${lastSavedTime}` : 'Not saved yet'}
             </span>
           </div>
@@ -458,7 +458,7 @@ export default function EditorToolbar({
               </button>
 
               {showTranslitDropdown && (
-                <div className="fixed top-[88px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
+                <div className="fixed top-[96px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
                   <div className="w-52 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
                     <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
                       Transliterate to
@@ -516,7 +516,8 @@ export default function EditorToolbar({
               >
                 <FiSearch className="text-base text-red-500" />
               </button>
-                          <div className="fixed top-[88px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999] opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+              
+              <div className="fixed top-[96px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999] opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                 <FindReplaceModal 
                   blocks={blocks}
                   onReplace={onReplace}
@@ -543,7 +544,7 @@ export default function EditorToolbar({
               </button>
               
               {showShareDropdown && (
-                <div className="fixed top-[88px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
+                <div className="fixed top-[96px] left-1/2 -translate-x-1/2 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
                   <ShareModal 
                     scriptId={scriptId}
                     scriptTitle={title}
@@ -575,7 +576,7 @@ export default function EditorToolbar({
               </button>
 
               {showDownloadDropdown && (
-                <div className="fixed top-[88px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
+                <div className="fixed top-[96px] right-4 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:pt-1.5 z-[999]">
                   <div className="w-40 rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-850 p-1.5 shadow-xl backdrop-blur-sm">
                     <div className="px-2 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider border-b border-gray-100 dark:border-surface-800 mb-1 select-none">
                       Download As

@@ -20,4 +20,9 @@ public class ScriptResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean isShared;
+    private LocalDateTime sharedAt;
+    private boolean watermarkEnabled;
+    private String watermarkText;
+    private double watermarkOpacity;
+    private int watermarkSize;
 }

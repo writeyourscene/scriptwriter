@@ -1,7 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { scriptApi } from '../api/scriptApi'
 
-export function useAutoSave(scriptId, content, title, fontFamily, enabled = true, onSaved) {
+export function useAutoSave(
+  scriptId,
+  content,
+  title,
+  fontFamily,
+  watermarkEnabled = false,
+  watermarkText = 'CONFIDENTIAL',
+  watermarkOpacity = 0.1,
+  watermarkSize = 64,
+  enabled = true,
+  onSaved
+) {
   const [status, setStatus] = useState('saved')
   const timerRef = useRef(null)
   const lastSavedRef = useRef('')
@@ -9,7 +20,15 @@ export function useAutoSave(scriptId, content, title, fontFamily, enabled = true
 
   const save = useCallback(async (isManual = false) => {
     if (!scriptId || !enabled) return
-    const payload = { content: JSON.stringify(content), title, fontFamily }
+    const payload = {
+      content: JSON.stringify(content),
+      title,
+      fontFamily,
+      watermarkEnabled,
+      watermarkText,
+      watermarkOpacity,
+      watermarkSize
+    }
     const serialized = JSON.stringify(payload)
     if (serialized === lastSavedRef.current && !isManual) return
 
@@ -23,7 +42,7 @@ export function useAutoSave(scriptId, content, title, fontFamily, enabled = true
     } catch {
       setStatus('error')
     }
-  }, [scriptId, content, title, fontFamily, enabled, onSaved])
+  }, [scriptId, content, title, fontFamily, watermarkEnabled, watermarkText, watermarkOpacity, watermarkSize, enabled, onSaved])
 
   useEffect(() => {
     if (!enabled || !scriptId) return
@@ -32,7 +51,7 @@ export function useAutoSave(scriptId, content, title, fontFamily, enabled = true
     timerRef.current = setTimeout(() => save(false), 2000)
 
     return () => clearTimeout(timerRef.current)
-  }, [content, title, fontFamily, scriptId, enabled, save])
+  }, [content, title, fontFamily, watermarkEnabled, watermarkText, watermarkOpacity, watermarkSize, scriptId, enabled, save])
 
   useEffect(() => {
     if (!enabled || !scriptId) return

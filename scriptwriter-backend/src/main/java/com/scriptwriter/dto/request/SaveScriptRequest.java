@@ -14,4 +14,8 @@ public class SaveScriptRequest {
     private String fontFamily;
     private boolean createVersion;
     private String versionLabel;
+    private boolean watermarkEnabled;
+    private String watermarkText;
+    private double watermarkOpacity;
+    private int watermarkSize;
 }

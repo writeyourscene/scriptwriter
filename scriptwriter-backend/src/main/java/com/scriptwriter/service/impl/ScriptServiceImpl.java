@@ -96,6 +96,16 @@ public class ScriptServiceImpl implements ScriptService {
         if (request.getFontFamily() != null) {
             script.setFontFamily(request.getFontFamily());
         }
+        script.setWatermarkEnabled(request.isWatermarkEnabled());
+        if (request.getWatermarkText() != null) {
+            script.setWatermarkText(request.getWatermarkText());
+        }
+        if (request.getWatermarkOpacity() > 0) {
+            script.setWatermarkOpacity(request.getWatermarkOpacity());
+        }
+        if (request.getWatermarkSize() > 0) {
+            script.setWatermarkSize(request.getWatermarkSize());
+        }
         script.setUpdatedBy(userId);
         updateStats(script);
         scriptContentSyncService.syncFromScriptContent(script, userId);
@@ -230,6 +240,11 @@ public class ScriptServiceImpl implements ScriptService {
     public ScriptResponse toggleShare(Long userId, Long scriptId, boolean isShared) {
         Script script = findOwnedScript(userId, scriptId);
         script.setIsShared(isShared);
+        if (isShared) {
+            script.setSharedAt(java.time.LocalDateTime.now());
+        } else {
+            script.setSharedAt(null);
+        }
         return scriptMapper.toResponse(scriptRepository.save(script));
     }
 
@@ -240,6 +255,9 @@ public class ScriptServiceImpl implements ScriptService {
                 .orElseThrow(() -> new ResourceNotFoundException("Script not found"));
         if (!script.isShared()) {
             throw new ResourceNotFoundException("This script is not shared publicly");
+        }
+        if (script.getSharedAt() != null && script.getSharedAt().plusHours(24).isBefore(java.time.LocalDateTime.now())) {
+            throw new ResourceNotFoundException("This public link has expired");
         }
         return scriptMapper.toResponse(script);
     }

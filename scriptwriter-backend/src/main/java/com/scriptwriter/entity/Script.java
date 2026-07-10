@@ -71,4 +71,35 @@ public class Script extends BaseEntity {
     public boolean isShared() {
         return isShared != null && isShared;
     }
+
+    @Column(name = "shared_at")
+    private java.time.LocalDateTime sharedAt;
+
+    @Column(name = "watermark_enabled")
+    private Boolean watermarkEnabled = false;
+
+    public boolean isWatermarkEnabled() {
+        return watermarkEnabled != null && watermarkEnabled;
+    }
+
+    @Column(name = "watermark_text", length = 100)
+    private String watermarkText = "CONFIDENTIAL";
+
+    public String getWatermarkText() {
+        return watermarkText != null ? watermarkText : "CONFIDENTIAL";
+    }
+
+    @Column(name = "watermark_opacity")
+    private Double watermarkOpacity = 0.15;
+
+    public double getWatermarkOpacity() {
+        return watermarkOpacity != null ? watermarkOpacity : 0.15;
+    }
+
+    @Column(name = "watermark_size")
+    private Integer watermarkSize = 64;
+
+    public int getWatermarkSize() {
+        return watermarkSize != null ? watermarkSize : 64;
+    }
 }

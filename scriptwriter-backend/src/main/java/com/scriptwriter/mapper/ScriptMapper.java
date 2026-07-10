@@ -30,6 +30,11 @@ public class ScriptMapper {
                 .createdAt(script.getCreatedAt())
                 .updatedAt(script.getUpdatedAt())
                 .isShared(script.isShared())
+                .sharedAt(script.getSharedAt())
+                .watermarkEnabled(script.isWatermarkEnabled())
+                .watermarkText(script.getWatermarkText())
+                .watermarkOpacity(script.getWatermarkOpacity())
+                .watermarkSize(script.getWatermarkSize())
                 .build();
     }
 

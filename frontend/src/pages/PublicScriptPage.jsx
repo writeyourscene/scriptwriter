@@ -16,6 +16,7 @@ export default function PublicScriptPage() {
   const [blocks, setBlocks] = useState([])
   const [zoom, setZoom] = useState(100)
   const [pageSize, setPageSize] = useState('a4')
+  const [timeLeft, setTimeLeft] = useState('')
 
   useEffect(() => {
     async function loadScript() {
@@ -32,6 +33,36 @@ export default function PublicScriptPage() {
     }
     loadScript()
   }, [scriptId])
+
+  useEffect(() => {
+    if (!script?.sharedAt) return
+
+    const calculateTimeLeft = () => {
+      const sharedDate = new Date(script.sharedAt)
+      const expiryDate = new Date(sharedDate.getTime() + 24 * 60 * 60 * 1000)
+      const now = new Date()
+      const diffMs = expiryDate.getTime() - now.getTime()
+
+      if (diffMs <= 0) {
+        setTimeLeft('Expired')
+        setError('This public link has expired')
+        return
+      }
+
+      const hours = Math.floor(diffMs / (1000 * 60 * 60))
+      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))
+      
+      if (hours > 0) {
+        setTimeLeft(`Expires in ${hours}h ${minutes}m`)
+      } else {
+        setTimeLeft(`Expires in ${minutes}m`)
+      }
+    }
+
+    calculateTimeLeft()
+    const timer = setInterval(calculateTimeLeft, 60000)
+    return () => clearInterval(timer)
+  }, [script])
 
   // Auto-calculate zoom for mobile screens to fit the page exactly
   useEffect(() => {
@@ -183,9 +214,16 @@ export default function PublicScriptPage() {
             <h1 className="text-sm font-semibold text-white truncate max-w-[120px] xs:max-w-[180px] sm:max-w-[300px]">
               {script?.title}
             </h1>
-            <p className="text-[10px] text-emerald-400 flex items-center gap-1 font-medium">
-              <FiGlobe className="text-[9px]" /> View Only
-            </p>
+            <div className="flex items-center gap-2">
+              {timeLeft && timeLeft !== 'Expired' && (
+                <span className="text-[9px] text-amber-300 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">
+                  {timeLeft}
+                </span>
+              )}
+              <p className="text-[10px] text-emerald-400 flex items-center gap-1 font-medium">
+                <FiGlobe className="text-[9px]" /> View Only
+              </p>
+            </div>
           </div>
         </div>
       </header>
@@ -199,6 +237,10 @@ export default function PublicScriptPage() {
           readOnly={true}
           onChange={() => {}}
           fontFamily={script?.fontFamily || 'Courier Prime'}
+          watermarkEnabled={script?.watermarkEnabled}
+          watermarkText={script?.watermarkText}
+          watermarkOpacity={script?.watermarkOpacity}
+          watermarkSize={script?.watermarkSize}
         />
       </div>
     </div>

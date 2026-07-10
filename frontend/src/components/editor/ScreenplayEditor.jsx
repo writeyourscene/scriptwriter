@@ -1284,15 +1284,15 @@ export default function ScreenplayEditor({
         {watermarkEnabled && Array.from({ length: totalPages }).map((_, i) => {
           const pageNum = i + 1
           if (pageNum === 1 && hasAuthorPage) return null
-          const pageTop = pageSize === 'script' ? 0 : (pageNum - 1) * (heightLimit + 120)
-          const pageHeight = pageSize === 'script' ? '100%' : `${heightLimit + 72}px`
+          const pageTop = (pageNum - 1) * (heightLimit + 120)
+          const pageHeight = heightLimit + 72
           return (
             <div
               key={i}
               className="watermark-overlay"
               style={{
-                top: pageTop,
-                height: pageHeight,
+                top: `${pageTop}px`,
+                height: `${pageHeight}px`,
                 opacity: watermarkOpacity,
               }}
             >
