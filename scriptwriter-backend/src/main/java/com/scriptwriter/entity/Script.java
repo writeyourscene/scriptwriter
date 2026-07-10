@@ -76,6 +76,7 @@ public class Script extends BaseEntity {
     private java.time.LocalDateTime sharedAt;
 
     @Column(name = "watermark_enabled")
+    @Builder.Default
     private Boolean watermarkEnabled = false;
 
     public boolean isWatermarkEnabled() {
@@ -83,6 +84,7 @@ public class Script extends BaseEntity {
     }
 
     @Column(name = "watermark_text", length = 100)
+    @Builder.Default
     private String watermarkText = "CONFIDENTIAL";
 
     public String getWatermarkText() {
@@ -90,6 +92,7 @@ public class Script extends BaseEntity {
     }
 
     @Column(name = "watermark_opacity")
+    @Builder.Default
     private Double watermarkOpacity = 0.15;
 
     public double getWatermarkOpacity() {
@@ -97,6 +100,7 @@ public class Script extends BaseEntity {
     }
 
     @Column(name = "watermark_size")
+    @Builder.Default
     private Integer watermarkSize = 64;
 
     public int getWatermarkSize() {
