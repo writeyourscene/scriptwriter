@@ -64,6 +64,41 @@ export default function PublicScriptPage() {
     return () => clearInterval(timer)
   }, [script])
 
+  // Prevent copying, selecting all, and opening developer context menus on public scripts
+  useEffect(() => {
+    const preventCopy = (e) => {
+      e.preventDefault()
+    }
+    const preventContextMenu = (e) => {
+      e.preventDefault()
+    }
+    const preventKeyDown = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        const key = e.key.toLowerCase()
+        if (key === 'c' || key === 'a' || key === 's' || key === 'p' || key === 'u') {
+          e.preventDefault()
+          return false
+        }
+      }
+      if (e.key === 'F12') {
+        e.preventDefault()
+        return false
+      }
+    }
+
+    document.addEventListener('copy', preventCopy)
+    document.addEventListener('cut', preventCopy)
+    document.addEventListener('contextmenu', preventContextMenu)
+    document.addEventListener('keydown', preventKeyDown)
+
+    return () => {
+      document.removeEventListener('copy', preventCopy)
+      document.removeEventListener('cut', preventCopy)
+      document.removeEventListener('contextmenu', preventContextMenu)
+      document.removeEventListener('keydown', preventKeyDown)
+    }
+  }, [])
+
   // Auto-calculate zoom for mobile screens to fit the page exactly
   useEffect(() => {
     const handleAutoZoom = () => {
