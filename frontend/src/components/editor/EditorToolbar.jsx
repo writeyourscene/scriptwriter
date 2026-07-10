@@ -381,10 +381,10 @@ export default function EditorToolbar({
       </div>
 
       {/* Row 2: Screenplay Format Toolbar */}
-      <div className="flex h-10 items-center justify-start md:justify-between gap-0.5 xs:gap-1.5 px-1.5 xs:px-4 bg-gray-50 dark:bg-surface-800">
-        <div className="flex items-center gap-2 md:gap-4 shrink-0">
+      <div className="flex h-10 items-center justify-start md:justify-between gap-0.5 xs:gap-1.5 px-1 xs:px-3 bg-gray-50 dark:bg-surface-800">
+        <div className="flex items-center gap-1.5 md:gap-4 shrink-0">
           {/* Save Status & Time (Toolbar - Row 2) */}
-          <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 select-none mr-0">
+          <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 select-none mr-0.5">
             <div className="relative inline-flex mr-0.5">
               <FiSave className="text-gray-400 dark:text-gray-500 text-sm" />
               {saveStatus === 'saving' ? (
@@ -395,7 +395,7 @@ export default function EditorToolbar({
                 <span className="absolute -bottom-0.5 -right-0.5 block h-1.5 w-1.5 rounded-full bg-emerald-500 ring-[1px] ring-gray-50 dark:ring-surface-800" />
               )}
             </div>
-            <span className="font-semibold text-[10px] text-gray-600 dark:text-gray-400 w-[100px] shrink-0">
+            <span className="font-semibold text-[10px] text-gray-600 dark:text-gray-400 w-[84px] shrink-0">
               {saveStatus === 'saving' ? 'Saving...' : lastSavedTime ? `Saved at ${lastSavedTime}` : 'Not saved yet'}
             </span>
           </div>
@@ -437,7 +437,7 @@ export default function EditorToolbar({
           {/* Selectors moved to settings panel */}
 
           {/* Action Button Toggles */}
-          <div className="flex items-center md:border-l border-gray-200 dark:border-surface-700 md:pl-2 gap-0.5 md:gap-1">
+          <div className="flex items-center border-l border-gray-200 dark:border-surface-700 pl-2 gap-1">
             {/* Language / Transliteration Picker */}
             <div className="relative mr-1" ref={translitDropdownRef}>
               <button
