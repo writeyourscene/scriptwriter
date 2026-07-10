@@ -381,7 +381,7 @@ export default function EditorToolbar({
       </div>
 
       {/* Row 2: Screenplay Format Toolbar */}
-      <div className="flex h-10 items-center justify-between gap-1 px-4 bg-gray-50 dark:bg-surface-800">
+      <div className="flex h-10 items-center justify-between gap-1 px-2 sm:px-4 bg-gray-50 dark:bg-surface-800">
         <div className="flex items-center gap-1.5 md:gap-4 shrink-0">
           {/* Save Status & Time (Toolbar - Row 2) */}
           <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 select-none mr-0.5">
@@ -395,7 +395,7 @@ export default function EditorToolbar({
                 <span className="absolute -bottom-0.5 -right-0.5 block h-1.5 w-1.5 rounded-full bg-emerald-500 ring-[1px] ring-gray-50 dark:ring-surface-800" />
               )}
             </div>
-            <span className="font-semibold text-[10px] text-gray-600 dark:text-gray-400 w-[84px] shrink-0">
+            <span className="font-semibold text-[9.5px] text-gray-600 dark:text-gray-400 w-[80px] shrink-0 block">
               {saveStatus === 'saving' ? 'Saving...' : lastSavedTime ? `Saved at ${lastSavedTime}` : 'Not saved yet'}
             </span>
           </div>
@@ -437,12 +437,12 @@ export default function EditorToolbar({
           {/* Selectors moved to settings panel */}
 
           {/* Action Button Toggles */}
-          <div className="flex items-center border-l border-gray-200 dark:border-surface-700 pl-2 gap-1">
+          <div className="flex items-center border-l border-gray-200 dark:border-surface-700 pl-1 sm:pl-2 gap-0.5 sm:gap-1">
             {/* Language / Transliteration Picker */}
-            <div className="relative mr-1" ref={translitDropdownRef}>
+            <div className="relative mr-0.5" ref={translitDropdownRef}>
               <button
                 onClick={() => setShowTranslitDropdown(!showTranslitDropdown)}
-                className={`rounded p-2 transition-colors cursor-pointer flex items-center gap-1 active:scale-95 ${
+                className={`rounded p-1.5 sm:p-2 transition-colors cursor-pointer flex items-center gap-1 active:scale-95 ${
                   translitLang
                     ? 'bg-orange-500/10 text-[#ee7712]'
                     : 'hover:bg-gray-200/60 dark:hover:bg-surface-750 text-gray-500 dark:text-gray-400'
@@ -511,7 +511,7 @@ export default function EditorToolbar({
             <div className="w-px h-4 bg-gray-300 dark:bg-surface-600 mx-1" />
             <div className="relative group">
               <button
-                className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer flex items-center gap-1"
+                className="rounded p-1.5 sm:p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer flex items-center gap-1"
                 title="Find & Replace"
               >
                 <FiSearch className="text-base text-red-500" />
@@ -526,7 +526,7 @@ export default function EditorToolbar({
             </div>
             <button
               onClick={onToggleAi}
-              className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer hidden md:block"
+              className="rounded p-1.5 sm:p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer hidden md:block"
               title="AI Assistant"
             >
               <FiZap className="text-base text-amber-500" />
@@ -535,7 +535,7 @@ export default function EditorToolbar({
             <div className="relative" ref={shareDropdownRef}>
               <button
                 onClick={() => setShowShareDropdown(!showShareDropdown)}
-                className={`rounded p-2 transition-all active:scale-95 cursor-pointer flex items-center gap-1 ${
+                className={`rounded p-1.5 sm:p-2 transition-all active:scale-95 cursor-pointer flex items-center gap-1 ${
                   showShareDropdown ? 'bg-gray-200/60 dark:bg-surface-750' : 'hover:bg-gray-200/60 dark:hover:bg-surface-750'
                 }`}
                 title="Share Script"
@@ -557,7 +557,7 @@ export default function EditorToolbar({
 
             <button
               onClick={onImport}
-              className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer"
+              className="rounded p-1.5 sm:p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer"
               title="Import file"
             >
               <FiUpload className="text-base text-yellow-500" />
@@ -567,7 +567,7 @@ export default function EditorToolbar({
             <div className="relative" ref={downloadDropdownRef}>
               <button
                 onClick={() => setShowDownloadDropdown(!showDownloadDropdown)}
-                className={`rounded p-2 transition-all active:scale-95 cursor-pointer flex items-center gap-1 ${
+                className={`rounded p-1.5 sm:p-2 transition-all active:scale-95 cursor-pointer flex items-center gap-1 ${
                   showDownloadDropdown ? 'bg-gray-200/60 dark:bg-surface-750' : 'hover:bg-gray-200/60 dark:hover:bg-surface-750'
                 }`}
                 title="Download Options"
@@ -606,7 +606,7 @@ export default function EditorToolbar({
 
             <button
               onClick={onToggleSidebar}
-              className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer"
+              className="rounded p-1.5 sm:p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer"
               title="Toggle Panel"
             >
               <FiSidebar className="text-base text-violet-500" />
@@ -614,7 +614,7 @@ export default function EditorToolbar({
 
             <button
               onClick={onToggleSettings}
-              className="rounded p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer"
+              className="rounded p-1.5 sm:p-2 hover:bg-gray-200/60 dark:hover:bg-surface-750 transition-all active:scale-95 cursor-pointer"
               title="Editor Settings"
             >
               <FiSettings className="text-base text-gray-650 dark:text-gray-400" />

@@ -14,9 +14,9 @@ export default function PageNavigator({ totalPages, onJump }) {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-16 sm:bottom-6 right-6 z-40">
       {open && (
-        <div className="mb-2 flex items-center gap-2 rounded-xl border border-surface-600 bg-surface-800 p-3 shadow-xl">
+        <div className="mb-1.5 flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-800 p-2 shadow-xl">
           <input
             type="number"
             min={1}
@@ -24,10 +24,10 @@ export default function PageNavigator({ totalPages, onJump }) {
             value={page}
             onChange={(e) => setPage(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && jump()}
-            className="w-16 rounded-lg border border-surface-600 bg-surface-700 px-2 py-1 text-sm text-white"
+            className="w-12 rounded border border-gray-200 dark:border-surface-750 bg-gray-50 dark:bg-surface-700 px-1.5 py-0.5 text-xs text-gray-800 dark:text-white outline-none"
           />
-          <span className="text-xs text-gray-400">/ {totalPages}</span>
-          <button type="button" onClick={jump} className="rounded-lg bg-brand-500 px-3 py-1 text-xs font-medium text-white">
+          <span className="text-[10px] text-gray-400">/ {totalPages}</span>
+          <button type="button" onClick={jump} className="rounded bg-brand-500 hover:bg-brand-600 px-2 py-0.5 text-xs font-bold text-white transition-all shadow-sm">
             Go
           </button>
         </div>
@@ -35,9 +35,9 @@ export default function PageNavigator({ totalPages, onJump }) {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-full border border-surface-600 bg-surface-800 px-4 py-2 text-sm shadow-lg hover:bg-surface-700"
+        className="flex items-center gap-1.5 rounded-full border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-3 py-1.5 text-xs font-bold text-gray-700 dark:text-gray-300 shadow-md hover:bg-gray-50 dark:hover:bg-surface-750 transition-all cursor-pointer active:scale-95"
       >
-        Page {page} <FiChevronUp className={open ? 'rotate-180' : ''} />
+        Page {page} <FiChevronUp className={`text-[10px] transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
       </button>
     </div>
   )
