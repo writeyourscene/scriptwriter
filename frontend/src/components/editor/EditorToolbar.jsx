@@ -381,7 +381,7 @@ export default function EditorToolbar({
       </div>
 
       {/* Row 2: Screenplay Format Toolbar */}
-      <div className="flex h-10 items-center justify-start md:justify-between gap-0.5 xs:gap-1.5 px-1 xs:px-3 bg-gray-50 dark:bg-surface-800">
+      <div className="flex h-10 items-center justify-between gap-1 px-4 bg-gray-50 dark:bg-surface-800">
         <div className="flex items-center gap-1.5 md:gap-4 shrink-0">
           {/* Save Status & Time (Toolbar - Row 2) */}
           <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 select-none mr-0.5">
