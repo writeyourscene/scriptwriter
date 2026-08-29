@@ -137,7 +137,7 @@ export default function SubscriptionModal({ open, onClose }) {
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-2xl rounded-3xl border border-surface-700 bg-surface-850 p-6 md:p-8 shadow-2xl z-10 my-4"
+          className="relative w-full max-w-md rounded-3xl border border-surface-700 bg-surface-850 p-5 md:p-7 shadow-2xl z-10 my-4 mx-2 sm:mx-auto"
         >
         {/* Glow Effects */}
         <div className="absolute -left-16 -top-16 h-36 w-36 rounded-full bg-brand-primary/10 blur-2xl" />
@@ -159,7 +159,7 @@ export default function SubscriptionModal({ open, onClose }) {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 10 }}
-              className="space-y-6"
+              className="space-y-4 md:space-y-5"
             >
               {/* Header */}
               <div className="text-center">
@@ -174,64 +174,60 @@ export default function SubscriptionModal({ open, onClose }) {
                 </p>
               </div>
 
-              {/* Plans Grid */}
-              <div className="grid gap-4 md:grid-cols-2">
-                {/* Monthly Plan */}
-                <div
-                  onClick={() => setPlanType('MONTHLY')}
-                  className={`relative p-5 rounded-2xl border-2 cursor-pointer transition-all ${
-                    planType === 'MONTHLY'
-                      ? 'border-brand-primary bg-brand-primary/5 shadow-md shadow-brand-primary/5'
-                      : 'border-surface-700 bg-surface-800/40 hover:border-surface-650'
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">Monthly Pro</span>
-                    <input
-                      type="radio"
-                      checked={planType === 'MONTHLY'}
-                      onChange={() => setPlanType('MONTHLY')}
-                      className="accent-[#ee7712] cursor-pointer"
-                    />
-                  </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-extrabold text-gray-900 dark:text-white">₹{prices.monthly}</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">/ month</span>
-                  </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
-                    Ideal for writing a single project or script revision.
-                  </p>
+              {/* Plan Toggle Selector */}
+              <div className="flex justify-center">
+                <div className="bg-surface-800 dark:bg-surface-900 border border-surface-750 p-1 rounded-xl flex gap-1 select-none">
+                  <button
+                    type="button"
+                    onClick={() => setPlanType('MONTHLY')}
+                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border-none ${
+                      planType === 'MONTHLY'
+                        ? 'bg-brand-primary text-white shadow-sm'
+                        : 'text-gray-500 dark:text-gray-400 hover:text-gray-750 dark:hover:text-gray-200'
+                    }`}
+                  >
+                    Monthly Billing
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPlanType('YEARLY')}
+                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border-none flex items-center gap-1.5 ${
+                      planType === 'YEARLY'
+                        ? 'bg-brand-primary text-white shadow-sm'
+                        : 'text-gray-500 dark:text-gray-400 hover:text-gray-750 dark:hover:text-gray-200'
+                    }`}
+                  >
+                    Yearly Billing
+                    <span className="bg-[#ee7712]/15 text-[#ee7712] dark:bg-[#ee7712]/20 dark:text-orange-450 px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wider">
+                      Save 15%
+                    </span>
+                  </button>
                 </div>
+              </div>
 
-                {/* Yearly Plan */}
-                <div
-                  onClick={() => setPlanType('YEARLY')}
-                  className={`relative p-5 rounded-2xl border-2 cursor-pointer transition-all ${
-                    planType === 'YEARLY'
-                      ? 'border-brand-primary bg-brand-primary/5 shadow-md shadow-brand-primary/5'
-                      : 'border-surface-700 bg-surface-800/40 hover:border-surface-650'
-                  }`}
-                >
-                  <div className="absolute top-2.5 right-2.5 rounded-full bg-brand-primary/15 px-2 py-0.5 text-[10px] font-bold text-brand-primary uppercase tracking-wide border border-brand-primary/20">
-                    Save 15%
+              {/* Selected Plan Details Card */}
+              <div className="rounded-2xl border border-brand-primary/30 bg-brand-primary/5 p-4 relative text-center">
+                {planType === 'YEARLY' && (
+                  <div className="absolute top-2.5 right-2.5 rounded-full bg-brand-primary/15 px-2 py-0.5 text-[9px] font-bold text-brand-primary uppercase tracking-wide border border-brand-primary/20">
+                    Best Value
                   </div>
-                  <div className="flex justify-between items-center mb-1 mt-1">
-                    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">Yearly Pro</span>
-                    <input
-                      type="radio"
-                      checked={planType === 'YEARLY'}
-                      onChange={() => setPlanType('YEARLY')}
-                      className="accent-[#ee7712] cursor-pointer"
-                    />
-                  </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-extrabold text-gray-900 dark:text-white">₹{prices.yearly}</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">/ year</span>
-                  </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
-                    Save money with our best-value yearly roadmap plan.
-                  </p>
+                )}
+                <div className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                  {planType === 'MONTHLY' ? 'Monthly Pro Plan' : 'Yearly Pro Plan'}
                 </div>
+                <div className="flex items-baseline justify-center gap-1 mt-1">
+                  <span className="text-3xl font-extrabold text-gray-900 dark:text-white">
+                    ₹{planType === 'YEARLY' ? prices.yearly : prices.monthly}
+                  </span>
+                  <span className="text-xs text-gray-550 dark:text-gray-400">
+                    / {planType === 'YEARLY' ? 'year' : 'month'}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1.5 px-4 max-w-sm mx-auto">
+                  {planType === 'MONTHLY'
+                    ? 'Ideal for writing a single project or script revision. Cancel anytime.'
+                    : 'Save money with our best-value yearly roadmap plan. Perfect for screenwriters.'}
+                </p>
               </div>
 
               {/* Features List */}
