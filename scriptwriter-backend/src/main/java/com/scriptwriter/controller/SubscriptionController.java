@@ -54,7 +54,7 @@ public class SubscriptionController {
     public ResponseEntity<ApiResponse<com.scriptwriter.entity.SubscriptionConfig>> updateConfig(
             @org.springframework.web.bind.annotation.RequestParam int monthlyPrice,
             @org.springframework.web.bind.annotation.RequestParam int yearlyPrice,
-            @org.springframework.web.bind.annotation.RequestParam int yearlyDiscountPercent
+            @org.springframework.web.bind.annotation.RequestParam(required = false, defaultValue = "15") int yearlyDiscountPercent
     ) {
         com.scriptwriter.entity.SubscriptionConfig updated = subscriptionService.updateConfig(monthlyPrice, yearlyPrice, yearlyDiscountPercent);
         return ResponseEntity.ok(ApiResponse.success("Subscription pricing configurations updated", updated));
