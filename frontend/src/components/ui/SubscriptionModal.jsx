@@ -163,13 +163,13 @@ export default function SubscriptionModal({ open, onClose }) {
             >
               {/* Header */}
               <div className="text-center">
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
-                  <FiZap className="text-2xl" />
+                <div className="mx-auto mb-2.5 hidden sm:flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
+                  <FiZap className="text-xl" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                   Upgrade to ScriptWriter Pro
                 </h3>
-                <p className="text-sm text-gray-550 dark:text-gray-400 mt-1">
+                <p className="text-xs sm:text-sm text-gray-550 dark:text-gray-400 mt-1 hidden sm:block">
                   Unlock limitless storytelling & professional formatting controls
                 </p>
               </div>
@@ -231,7 +231,7 @@ export default function SubscriptionModal({ open, onClose }) {
               </div>
 
               {/* Features List */}
-              <div className="rounded-2xl border border-surface-700 bg-surface-800/40 p-5 space-y-3">
+              <div className="rounded-2xl border border-surface-700 bg-surface-800/40 p-4 sm:p-5 space-y-3 hidden sm:block">
                 <span className="text-xs font-bold uppercase tracking-wider text-brand-primary">What's Included</span>
                 <div className="grid gap-2.5 text-xs text-gray-700 dark:text-gray-300 sm:grid-cols-2">
                   {features.map((f, i) => (
