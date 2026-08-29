@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FiUsers, FiLock, FiUnlock, FiTrash2, FiSearch, FiAlertTriangle, FiCheckCircle, FiKey } from 'react-icons/fi'
+import { FiUsers, FiLock, FiUnlock, FiTrash2, FiSearch, FiAlertTriangle, FiCheckCircle, FiKey, FiTag, FiCalendar, FiRefreshCw } from 'react-icons/fi'
 import { adminApi } from '../api/adminApi'
 import { subscriptionApi } from '../api/subscriptionApi'
 import { useAuth } from '../context/AuthContext'
@@ -15,6 +15,7 @@ export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [monthlyPriceInput, setMonthlyPriceInput] = useState(99)
   const [yearlyPriceInput, setYearlyPriceInput] = useState(999)
+  const [monthlyDiscountInput, setMonthlyDiscountInput] = useState(0)
   const [yearlyDiscountInput, setYearlyDiscountInput] = useState(15)
   const [savingPrices, setSavingPrices] = useState(false)
   const [pricesSuccess, setPricesSuccess] = useState('')
@@ -30,6 +31,7 @@ export default function AdminPage() {
       if (data.data) {
         setMonthlyPriceInput(data.data.monthlyPricePaise / 100)
         setYearlyPriceInput(data.data.yearlyPricePaise / 100)
+        setMonthlyDiscountInput(data.data.monthlyDiscountPercent ?? 0)
         setYearlyDiscountInput(data.data.yearlyDiscountPercent || 15)
       }
     } catch (err) {
@@ -61,7 +63,7 @@ export default function AdminPage() {
     setSavingPrices(true)
     setPricesSuccess('')
     try {
-      await subscriptionApi.updateConfig(monthlyPriceInput, yearlyPriceInput, yearlyDiscountInput)
+      await subscriptionApi.updateConfig(monthlyPriceInput, yearlyPriceInput, monthlyDiscountInput, yearlyDiscountInput)
       setPricesSuccess('Subscription pricing updated successfully!')
       setTimeout(() => setPricesSuccess(''), 3000)
     } catch (err) {
@@ -196,87 +198,186 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* Subscription pricing configuration card */}
+      {/* Subscription Pricing Configuration — Professional Card */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl border border-surface-700 bg-surface-800 p-5 md:p-6 shadow-xl space-y-4 text-left"
+        className="rounded-2xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-800 shadow-xl overflow-hidden"
       >
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
-            <FiKey className="text-xl" />
+        {/* Card Header */}
+        <div className="flex items-center justify-between px-5 md:px-6 py-4 border-b border-gray-100 dark:border-surface-700/60 bg-gray-50/60 dark:bg-surface-800/80">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
+              <FiTag className="text-base" />
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-900 dark:text-white text-sm">Subscription Pricing</h3>
+              <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">Set prices and discounts billed to writers via Razorpay</p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-bold text-gray-900 dark:text-white text-base">Subscription Plan Customization</h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              Customize the monthly and yearly subscription fees (in INR) billed to writers via Razorpay.
-            </p>
-          </div>
+          <button
+            type="button"
+            onClick={fetchConfig}
+            className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-brand-primary dark:hover:text-brand-primary transition-colors cursor-pointer border-none bg-transparent"
+          >
+            <FiRefreshCw className="text-xs" /> Reload
+          </button>
         </div>
 
-        <form onSubmit={handleSavePrices} className="grid gap-4 sm:grid-cols-4 items-end">
-          <div>
-            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
-              Monthly Plan (₹)
-            </label>
-            <input
-              type="number"
-              min="1"
-              required
-              value={monthlyPriceInput}
-              onChange={(e) => setMonthlyPriceInput(Number(e.target.value))}
-              className="w-full rounded-xl border border-surface-700 bg-surface-850 py-2.5 px-4 text-sm text-gray-900 dark:text-white outline-none focus:border-brand-primary transition-all shadow-inner"
-            />
+        {/* Two Plan Cards */}
+        <form onSubmit={handleSavePrices} className="p-5 md:p-6 space-y-5">
+          <div className="grid gap-4 sm:grid-cols-2">
+
+            {/* Monthly Plan Card */}
+            <div className="rounded-2xl border border-gray-200 dark:border-surface-700 bg-gray-50 dark:bg-surface-850 p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="h-7 w-7 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                    <FiCalendar className="text-blue-500 text-xs" />
+                  </div>
+                  <span className="text-sm font-bold text-gray-800 dark:text-white">Monthly Plan</span>
+                </div>
+                {monthlyDiscountInput > 0 && (
+                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                    {monthlyDiscountInput}% OFF
+                  </span>
+                )}
+              </div>
+
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-[10px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-widest">
+                    Base Price (₹ / month)
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-400">₹</span>
+                    <input
+                      type="number" min="1" required
+                      value={monthlyPriceInput}
+                      onChange={(e) => setMonthlyPriceInput(Number(e.target.value))}
+                      className="w-full rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-900 pl-7 pr-3 py-2.5 text-sm font-semibold text-gray-900 dark:text-white outline-none focus:border-brand-primary transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-widest">
+                    Discount (%)
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number" min="0" max="99" required
+                      value={monthlyDiscountInput}
+                      onChange={(e) => setMonthlyDiscountInput(Number(e.target.value))}
+                      className="w-full rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-900 px-3 pr-8 py-2.5 text-sm font-semibold text-gray-900 dark:text-white outline-none focus:border-brand-primary transition-all"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-400">%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Live Preview */}
+              <div className="rounded-xl bg-white dark:bg-surface-800 border border-gray-200 dark:border-surface-700 px-3 py-2.5 flex items-center justify-between">
+                <span className="text-[10px] uppercase tracking-wide font-semibold text-gray-400">Effective price</span>
+                <div className="flex items-baseline gap-1">
+                  {monthlyDiscountInput > 0 && (
+                    <span className="text-xs line-through text-gray-400">₹{monthlyPriceInput}</span>
+                  )}
+                  <span className="text-base font-extrabold text-gray-900 dark:text-white">
+                    ₹{Math.round(monthlyPriceInput * (1 - monthlyDiscountInput / 100))}
+                  </span>
+                  <span className="text-[10px] text-gray-400">/mo</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Yearly Plan Card */}
+            <div className="rounded-2xl border border-brand-primary/20 dark:border-brand-primary/20 bg-orange-50/40 dark:bg-surface-850 p-4 space-y-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-brand-primary/5 rounded-bl-[4rem] -z-0" />
+              <div className="flex items-center justify-between relative z-10">
+                <div className="flex items-center gap-2">
+                  <div className="h-7 w-7 rounded-lg bg-brand-primary/10 flex items-center justify-center">
+                    <FiCalendar className="text-brand-primary text-xs" />
+                  </div>
+                  <span className="text-sm font-bold text-gray-800 dark:text-white">Yearly Plan</span>
+                </div>
+                {yearlyDiscountInput > 0 && (
+                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm">
+                    {yearlyDiscountInput}% OFF
+                  </span>
+                )}
+              </div>
+
+              <div className="space-y-3 relative z-10">
+                <div>
+                  <label className="block text-[10px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-widest">
+                    Base Price (₹ / year)
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-400">₹</span>
+                    <input
+                      type="number" min="1" required
+                      value={yearlyPriceInput}
+                      onChange={(e) => setYearlyPriceInput(Number(e.target.value))}
+                      className="w-full rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-900 pl-7 pr-3 py-2.5 text-sm font-semibold text-gray-900 dark:text-white outline-none focus:border-brand-primary transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-widest">
+                    Discount (%)
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number" min="0" max="99" required
+                      value={yearlyDiscountInput}
+                      onChange={(e) => setYearlyDiscountInput(Number(e.target.value))}
+                      className="w-full rounded-xl border border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-900 px-3 pr-8 py-2.5 text-sm font-semibold text-gray-900 dark:text-white outline-none focus:border-brand-primary transition-all"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-400">%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Live Preview */}
+              <div className="rounded-xl bg-white dark:bg-surface-800 border border-gray-200 dark:border-surface-700 px-3 py-2.5 flex items-center justify-between relative z-10">
+                <span className="text-[10px] uppercase tracking-wide font-semibold text-gray-400">Effective price</span>
+                <div className="flex items-baseline gap-1">
+                  {yearlyDiscountInput > 0 && (
+                    <span className="text-xs line-through text-gray-400">₹{yearlyPriceInput}</span>
+                  )}
+                  <span className="text-base font-extrabold text-gray-900 dark:text-white">
+                    ₹{Math.round(yearlyPriceInput * (1 - yearlyDiscountInput / 100))}
+                  </span>
+                  <span className="text-[10px] text-gray-400">/yr</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
-              Yearly Plan (₹)
-            </label>
-            <input
-              type="number"
-              min="1"
-              required
-              value={yearlyPriceInput}
-              onChange={(e) => setYearlyPriceInput(Number(e.target.value))}
-              className="w-full rounded-xl border border-surface-700 bg-surface-850 py-2.5 px-4 text-sm text-gray-900 dark:text-white outline-none focus:border-brand-primary transition-all shadow-inner"
-            />
-          </div>
+          {/* Save Button & Success */}
+          <div className="flex items-center gap-3">
+            <button
+              type="submit"
+              disabled={savingPrices}
+              className="flex-1 sm:flex-none sm:px-8 justify-center bg-brand-primary hover:bg-[#d8680d] disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-xl py-2.5 text-sm font-bold select-none cursor-pointer border-none transition-all shadow-md shadow-brand-primary/20"
+            >
+              {savingPrices ? 'Saving…' : 'Save Pricing'}
+            </button>
 
-          <div>
-            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
-              Yearly Discount (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="99"
-              required
-              value={yearlyDiscountInput}
-              onChange={(e) => setYearlyDiscountInput(Number(e.target.value))}
-              className="w-full rounded-xl border border-surface-700 bg-surface-850 py-2.5 px-4 text-sm text-gray-900 dark:text-white outline-none focus:border-brand-primary transition-all shadow-inner"
-            />
+            {pricesSuccess && (
+              <motion.div
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-semibold"
+              >
+                <FiCheckCircle className="shrink-0" />
+                {pricesSuccess}
+              </motion.div>
+            )}
           </div>
-
-          <button
-            type="submit"
-            disabled={savingPrices}
-            className="w-full justify-center bg-brand-primary hover:bg-[#d8680d] disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-xl py-2.5 px-4 text-sm font-semibold select-none cursor-pointer border-none transition-all shadow-md shadow-brand-primary/10"
-          >
-            {savingPrices ? 'Saving...' : 'Save Pricing Plan'}
-          </button>
         </form>
-
-        {pricesSuccess && (
-          <motion.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-2.5 text-xs text-emerald-450 flex items-center gap-1.5"
-          >
-            <FiCheckCircle className="text-sm shrink-0" />
-            <span>{pricesSuccess}</span>
-          </motion.div>
-        )}
       </motion.div>
 
       {/* Control Bar */}

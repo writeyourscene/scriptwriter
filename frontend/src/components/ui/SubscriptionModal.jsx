@@ -19,7 +19,7 @@ export default function SubscriptionModal({ open, onClose }) {
   const [planType, setPlanType] = useState('MONTHLY') // 'MONTHLY' or 'YEARLY'
   const [loading, setLoading] = useState(false)
   const [mockOrder, setMockOrder] = useState(null)
-  const [prices, setPrices] = useState({ monthly: 99, yearly: 999, yearlyDiscountPercent: 15 })
+  const [prices, setPrices] = useState({ monthly: 99, yearly: 999, monthlyDiscountPercent: 0, yearlyDiscountPercent: 15 })
 
   useEffect(() => {
     if (!open) return
@@ -30,6 +30,7 @@ export default function SubscriptionModal({ open, onClose }) {
           setPrices({
             monthly: data.data.monthlyPricePaise / 100,
             yearly: data.data.yearlyPricePaise / 100,
+            monthlyDiscountPercent: data.data.monthlyDiscountPercent ?? 0,
             yearlyDiscountPercent: data.data.yearlyDiscountPercent || 15
           })
         }
@@ -181,13 +182,18 @@ export default function SubscriptionModal({ open, onClose }) {
                   <button
                     type="button"
                     onClick={() => setPlanType('MONTHLY')}
-                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border-none ${
+                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border-none flex items-center gap-1.5 ${
                       planType === 'MONTHLY'
                         ? 'bg-brand-primary text-white shadow-sm'
                         : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 bg-transparent'
                     }`}
                   >
                     Monthly Billing
+                    {prices.monthlyDiscountPercent > 0 && (
+                      <span className="bg-blue-500 text-white px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider shadow-sm">
+                        Save {prices.monthlyDiscountPercent}%
+                      </span>
+                    )}
                   </button>
                   <button
                     type="button"

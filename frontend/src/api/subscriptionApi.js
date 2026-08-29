@@ -13,7 +13,7 @@ export const subscriptionApi = {
     return api.get('/subscriptions/config')
   },
 
-  updateConfig(monthlyPrice, yearlyPrice, yearlyDiscountPercent) {
-    return api.put(`/subscriptions/config?monthlyPrice=${monthlyPrice}&yearlyPrice=${yearlyPrice}&yearlyDiscountPercent=${yearlyDiscountPercent}`)
+  updateConfig(monthlyPrice, yearlyPrice, monthlyDiscountPercent, yearlyDiscountPercent) {
+    return api.put(`/subscriptions/config?monthlyPrice=${monthlyPrice}&yearlyPrice=${yearlyPrice}&monthlyDiscountPercent=${monthlyDiscountPercent}&yearlyDiscountPercent=${yearlyDiscountPercent}`)
   }
 }

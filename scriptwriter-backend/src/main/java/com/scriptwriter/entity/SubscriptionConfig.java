@@ -25,4 +25,8 @@ public class SubscriptionConfig {
     @Column(name = "yearly_discount_percent", nullable = false)
     @Builder.Default
     private int yearlyDiscountPercent = 15;
+
+    @Column(name = "monthly_discount_percent", nullable = false)
+    @Builder.Default
+    private int monthlyDiscountPercent = 0;
 }
