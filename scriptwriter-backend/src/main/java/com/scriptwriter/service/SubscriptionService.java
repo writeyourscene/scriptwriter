@@ -10,5 +10,5 @@ public interface SubscriptionService {
     Map<String, Object> createOrder(Long userId, CreateOrderRequest request);
     UserResponse verifyPayment(Long userId, VerifyPaymentRequest request);
     com.scriptwriter.entity.SubscriptionConfig getConfig();
-    com.scriptwriter.entity.SubscriptionConfig updateConfig(int monthlyPriceRupees, int yearlyPriceRupees);
+    com.scriptwriter.entity.SubscriptionConfig updateConfig(int monthlyPriceRupees, int yearlyPriceRupees, int yearlyDiscountPercent);
 }

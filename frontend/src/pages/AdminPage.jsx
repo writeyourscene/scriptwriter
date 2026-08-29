@@ -15,6 +15,7 @@ export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [monthlyPriceInput, setMonthlyPriceInput] = useState(99)
   const [yearlyPriceInput, setYearlyPriceInput] = useState(999)
+  const [yearlyDiscountInput, setYearlyDiscountInput] = useState(15)
   const [savingPrices, setSavingPrices] = useState(false)
   const [pricesSuccess, setPricesSuccess] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -29,6 +30,7 @@ export default function AdminPage() {
       if (data.data) {
         setMonthlyPriceInput(data.data.monthlyPricePaise / 100)
         setYearlyPriceInput(data.data.yearlyPricePaise / 100)
+        setYearlyDiscountInput(data.data.yearlyDiscountPercent || 15)
       }
     } catch (err) {
       console.error('Failed to load prices config:', err)
@@ -59,7 +61,7 @@ export default function AdminPage() {
     setSavingPrices(true)
     setPricesSuccess('')
     try {
-      await subscriptionApi.updateConfig(monthlyPriceInput, yearlyPriceInput)
+      await subscriptionApi.updateConfig(monthlyPriceInput, yearlyPriceInput, yearlyDiscountInput)
       setPricesSuccess('Subscription pricing updated successfully!')
       setTimeout(() => setPricesSuccess(''), 3000)
     } catch (err) {
@@ -212,7 +214,7 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <form onSubmit={handleSavePrices} className="grid gap-4 sm:grid-cols-3 items-end">
+        <form onSubmit={handleSavePrices} className="grid gap-4 sm:grid-cols-4 items-end">
           <div>
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
               Monthly Plan (₹)
@@ -237,6 +239,21 @@ export default function AdminPage() {
               required
               value={yearlyPriceInput}
               onChange={(e) => setYearlyPriceInput(Number(e.target.value))}
+              className="w-full rounded-xl border border-surface-700 bg-surface-850 py-2.5 px-4 text-sm text-gray-900 dark:text-white outline-none focus:border-brand-primary transition-all shadow-inner"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
+              Yearly Discount (%)
+            </label>
+            <input
+              type="number"
+              min="0"
+              max="99"
+              required
+              value={yearlyDiscountInput}
+              onChange={(e) => setYearlyDiscountInput(Number(e.target.value))}
               className="w-full rounded-xl border border-surface-700 bg-surface-850 py-2.5 px-4 text-sm text-gray-900 dark:text-white outline-none focus:border-brand-primary transition-all shadow-inner"
             />
           </div>

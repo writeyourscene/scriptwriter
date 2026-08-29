@@ -149,6 +149,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             com.scriptwriter.entity.SubscriptionConfig defaultConfig = com.scriptwriter.entity.SubscriptionConfig.builder()
                     .monthlyPricePaise(9900) // default ₹99
                     .yearlyPricePaise(99900)  // default ₹999
+                    .yearlyDiscountPercent(15) // default 15%
                     .build();
             return subscriptionConfigRepository.save(defaultConfig);
         });
@@ -156,10 +157,11 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     @Transactional
-    public com.scriptwriter.entity.SubscriptionConfig updateConfig(int monthlyPriceRupees, int yearlyPriceRupees) {
+    public com.scriptwriter.entity.SubscriptionConfig updateConfig(int monthlyPriceRupees, int yearlyPriceRupees, int yearlyDiscountPercent) {
         com.scriptwriter.entity.SubscriptionConfig config = getConfig();
         config.setMonthlyPricePaise(monthlyPriceRupees * 100);
         config.setYearlyPricePaise(yearlyPriceRupees * 100);
+        config.setYearlyDiscountPercent(yearlyDiscountPercent);
         return subscriptionConfigRepository.save(config);
     }
 }

@@ -53,9 +53,10 @@ public class SubscriptionController {
     @org.springframework.security.access.prepost.PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<com.scriptwriter.entity.SubscriptionConfig>> updateConfig(
             @org.springframework.web.bind.annotation.RequestParam int monthlyPrice,
-            @org.springframework.web.bind.annotation.RequestParam int yearlyPrice
+            @org.springframework.web.bind.annotation.RequestParam int yearlyPrice,
+            @org.springframework.web.bind.annotation.RequestParam int yearlyDiscountPercent
     ) {
-        com.scriptwriter.entity.SubscriptionConfig updated = subscriptionService.updateConfig(monthlyPrice, yearlyPrice);
+        com.scriptwriter.entity.SubscriptionConfig updated = subscriptionService.updateConfig(monthlyPrice, yearlyPrice, yearlyDiscountPercent);
         return ResponseEntity.ok(ApiResponse.success("Subscription pricing configurations updated", updated));
     }
 }

@@ -19,7 +19,7 @@ export default function SubscriptionModal({ open, onClose }) {
   const [planType, setPlanType] = useState('MONTHLY') // 'MONTHLY' or 'YEARLY'
   const [loading, setLoading] = useState(false)
   const [mockOrder, setMockOrder] = useState(null)
-  const [prices, setPrices] = useState({ monthly: 99, yearly: 999 })
+  const [prices, setPrices] = useState({ monthly: 99, yearly: 999, yearlyDiscountPercent: 15 })
 
   useEffect(() => {
     if (!open) return
@@ -29,7 +29,8 @@ export default function SubscriptionModal({ open, onClose }) {
         if (data.data) {
           setPrices({
             monthly: data.data.monthlyPricePaise / 100,
-            yearly: data.data.yearlyPricePaise / 100
+            yearly: data.data.yearlyPricePaise / 100,
+            yearlyDiscountPercent: data.data.yearlyDiscountPercent || 15
           })
         }
       } catch (err) {
@@ -199,7 +200,7 @@ export default function SubscriptionModal({ open, onClose }) {
                   >
                     Yearly Billing
                     <span className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider shadow-sm">
-                      Save 15%
+                      Save {prices.yearlyDiscountPercent}%
                     </span>
                   </button>
                 </div>
