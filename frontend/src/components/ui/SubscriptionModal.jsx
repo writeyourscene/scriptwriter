@@ -128,15 +128,17 @@ export default function SubscriptionModal({ open, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
-      
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 15 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 15 }}
-        className="relative w-full max-w-2xl max-h-[calc(100vh-2rem)] overflow-y-auto rounded-3xl border border-surface-700 bg-surface-850 p-6 md:p-8 shadow-2xl scrollbar-thin"
-      >
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-md">
+      <div className="flex min-h-full items-center justify-center p-4">
+        {/* Backdrop overlay */}
+        <div className="fixed inset-0 bg-transparent" onClick={onClose} />
+        
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
+          className="relative w-full max-w-2xl rounded-3xl border border-surface-700 bg-surface-850 p-6 md:p-8 shadow-2xl z-10 my-4"
+        >
         {/* Glow Effects */}
         <div className="absolute -left-16 -top-16 h-36 w-36 rounded-full bg-brand-primary/10 blur-2xl" />
         <div className="absolute -right-16 -bottom-16 h-40 w-40 rounded-full bg-orange-500/10 blur-2xl" />
@@ -313,7 +315,8 @@ export default function SubscriptionModal({ open, onClose }) {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   )
 }
