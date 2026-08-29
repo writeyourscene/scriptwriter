@@ -137,7 +137,7 @@ export default function SubscriptionModal({ open, onClose }) {
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-md rounded-3xl border border-surface-700 bg-surface-850 p-5 md:p-7 shadow-2xl z-10 my-4 mx-2 sm:mx-auto"
+          className="relative w-full max-w-md rounded-3xl border border-gray-200 dark:border-surface-700/80 bg-white dark:bg-surface-850 p-5 md:p-7 shadow-2xl z-10 my-4 mx-2 sm:mx-auto overflow-hidden"
         >
         {/* Glow Effects */}
         <div className="absolute -left-16 -top-16 h-36 w-36 rounded-full bg-brand-primary/10 blur-2xl" />
@@ -146,7 +146,7 @@ export default function SubscriptionModal({ open, onClose }) {
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-2 text-gray-400 hover:bg-surface-750 hover:text-white transition-colors cursor-pointer"
+          className="absolute right-4 top-4 rounded-full p-2 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-surface-800 hover:text-gray-700 dark:hover:text-white transition-all cursor-pointer border-none bg-transparent"
         >
           <FiX className="text-xl" />
         </button>
@@ -176,14 +176,14 @@ export default function SubscriptionModal({ open, onClose }) {
 
               {/* Plan Toggle Selector */}
               <div className="flex justify-center">
-                <div className="bg-surface-800 dark:bg-surface-900 border border-surface-750 p-1 rounded-xl flex gap-1 select-none">
+                <div className="bg-gray-100 dark:bg-surface-900 border border-gray-200 dark:border-surface-750/80 p-1 rounded-xl flex gap-1 select-none">
                   <button
                     type="button"
                     onClick={() => setPlanType('MONTHLY')}
                     className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border-none ${
                       planType === 'MONTHLY'
                         ? 'bg-brand-primary text-white shadow-sm'
-                        : 'text-gray-500 dark:text-gray-400 hover:text-gray-750 dark:hover:text-gray-200'
+                        : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 bg-transparent'
                     }`}
                   >
                     Monthly Billing
@@ -194,11 +194,11 @@ export default function SubscriptionModal({ open, onClose }) {
                     className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border-none flex items-center gap-1.5 ${
                       planType === 'YEARLY'
                         ? 'bg-brand-primary text-white shadow-sm'
-                        : 'text-gray-500 dark:text-gray-400 hover:text-gray-750 dark:hover:text-gray-200'
+                        : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 bg-transparent'
                     }`}
                   >
                     Yearly Billing
-                    <span className="bg-[#ee7712]/15 text-[#ee7712] dark:bg-[#ee7712]/20 dark:text-orange-450 px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wider">
+                    <span className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider shadow-sm">
                       Save 15%
                     </span>
                   </button>
@@ -206,9 +206,9 @@ export default function SubscriptionModal({ open, onClose }) {
               </div>
 
               {/* Selected Plan Details Card */}
-              <div className="rounded-2xl border border-brand-primary/30 bg-brand-primary/5 p-4 relative text-center">
+              <div className="rounded-2xl border border-brand-primary/20 dark:border-brand-primary/30 bg-[#ee7712]/5 dark:bg-brand-primary/5 p-4 relative text-center shadow-inner">
                 {planType === 'YEARLY' && (
-                  <div className="absolute top-2.5 right-2.5 rounded-full bg-brand-primary/15 px-2 py-0.5 text-[9px] font-bold text-brand-primary uppercase tracking-wide border border-brand-primary/20">
+                  <div className="absolute top-2.5 right-2.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-2 py-0.5 text-[9px] font-bold text-white uppercase tracking-wide shadow-sm">
                     Best Value
                   </div>
                 )}
@@ -219,7 +219,7 @@ export default function SubscriptionModal({ open, onClose }) {
                   <span className="text-3xl font-extrabold text-gray-900 dark:text-white">
                     ₹{planType === 'YEARLY' ? prices.yearly : prices.monthly}
                   </span>
-                  <span className="text-xs text-gray-550 dark:text-gray-400">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
                     / {planType === 'YEARLY' ? 'year' : 'month'}
                   </span>
                 </div>
@@ -231,9 +231,9 @@ export default function SubscriptionModal({ open, onClose }) {
               </div>
 
               {/* Features List */}
-              <div className="rounded-2xl border border-surface-700 bg-surface-800/40 p-4 sm:p-5 space-y-3 hidden sm:block">
+              <div className="rounded-2xl border border-gray-200 dark:border-surface-700/80 bg-gray-50/50 dark:bg-surface-800/40 p-4 sm:p-5 space-y-3 hidden sm:block">
                 <span className="text-xs font-bold uppercase tracking-wider text-brand-primary">What's Included</span>
-                <div className="grid gap-2.5 text-xs text-gray-700 dark:text-gray-300 sm:grid-cols-2">
+                <div className="grid gap-2.5 text-xs text-gray-750 dark:text-gray-300 sm:grid-cols-2">
                   {features.map((f, i) => (
                     <div key={i} className="flex items-start gap-2">
                       <FiCheck className="text-brand-primary mt-0.5 shrink-0 text-sm font-bold" />
@@ -245,14 +245,16 @@ export default function SubscriptionModal({ open, onClose }) {
 
               {/* Action Button */}
               <div className="flex flex-col gap-2">
-                <Button
+                <motion.button
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
                   onClick={handleCheckout}
                   disabled={loading}
-                  className="w-full justify-center gap-2 py-3 text-sm font-bold shadow-lg shadow-brand-primary/10 select-none cursor-pointer"
+                  className="w-full justify-center gap-2.5 py-3 text-sm font-bold bg-gradient-to-r from-brand-primary to-orange-600 hover:from-brand-primary/95 hover:to-orange-600/95 disabled:from-gray-300 disabled:to-gray-400 disabled:dark:from-gray-700 disabled:dark:to-gray-800 text-white rounded-xl shadow-md transition-all select-none cursor-pointer flex items-center justify-center border-none"
                 >
                   <FiCreditCard className="text-lg" />
                   {loading ? 'Processing Checkout...' : `Pay ₹${planType === 'YEARLY' ? prices.yearly : prices.monthly} via Razorpay`}
-                </Button>
+                </motion.button>
                 <span className="text-[10px] text-center text-gray-550 dark:text-gray-500">
                   Payments secured via Razorpay. Cancel anytime. Terms & conditions apply.
                 </span>
