@@ -213,29 +213,44 @@ export default function SubscriptionModal({ open, onClose }) {
               </div>
 
               {/* Selected Plan Details Card */}
-              <div className="rounded-2xl border border-brand-primary/20 dark:border-brand-primary/30 bg-[#ee7712]/5 dark:bg-brand-primary/5 p-4 relative text-center shadow-inner">
-                {planType === 'YEARLY' && (
-                  <div className="absolute top-2.5 right-2.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-2 py-0.5 text-[9px] font-bold text-white uppercase tracking-wide shadow-sm">
-                    Best Value
+              {(() => {
+                const discountPct = planType === 'YEARLY' ? prices.yearlyDiscountPercent : prices.monthlyDiscountPercent
+                const basePrice   = planType === 'YEARLY' ? prices.yearly : prices.monthly
+                const effectivePrice = Math.round(basePrice * (1 - discountPct / 100))
+                return (
+                  <div className="rounded-2xl border border-brand-primary/20 dark:border-brand-primary/30 bg-[#ee7712]/5 dark:bg-brand-primary/5 p-4 relative text-center shadow-inner">
+                    {planType === 'YEARLY' && (
+                      <div className="absolute top-2.5 right-2.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-2 py-0.5 text-[9px] font-bold text-white uppercase tracking-wide shadow-sm">
+                        Best Value
+                      </div>
+                    )}
+                    <div className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                      {planType === 'MONTHLY' ? 'Monthly Pro Plan' : 'Yearly Pro Plan'}
+                    </div>
+                    <div className="flex items-baseline justify-center gap-1.5 mt-1">
+                      {discountPct > 0 && (
+                        <span className="text-base line-through text-gray-400 dark:text-gray-500">₹{basePrice}</span>
+                      )}
+                      <span className="text-3xl font-extrabold text-gray-900 dark:text-white">
+                        ₹{effectivePrice}
+                      </span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        / {planType === 'YEARLY' ? 'year' : 'month'}
+                      </span>
+                    </div>
+                    {discountPct > 0 && (
+                      <p className="text-[11px] font-semibold text-brand-primary mt-1">
+                        You save ₹{basePrice - effectivePrice} ({discountPct}% off)
+                      </p>
+                    )}
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1.5 px-4 max-w-sm mx-auto">
+                      {planType === 'MONTHLY'
+                        ? 'Ideal for writing a single project or script revision. Cancel anytime.'
+                        : 'Save money with our best-value yearly roadmap plan. Perfect for screenwriters.'}
+                    </p>
                   </div>
-                )}
-                <div className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-                  {planType === 'MONTHLY' ? 'Monthly Pro Plan' : 'Yearly Pro Plan'}
-                </div>
-                <div className="flex items-baseline justify-center gap-1 mt-1">
-                  <span className="text-3xl font-extrabold text-gray-900 dark:text-white">
-                    ₹{planType === 'YEARLY' ? prices.yearly : prices.monthly}
-                  </span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    / {planType === 'YEARLY' ? 'year' : 'month'}
-                  </span>
-                </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1.5 px-4 max-w-sm mx-auto">
-                  {planType === 'MONTHLY'
-                    ? 'Ideal for writing a single project or script revision. Cancel anytime.'
-                    : 'Save money with our best-value yearly roadmap plan. Perfect for screenwriters.'}
-                </p>
-              </div>
+                )
+              })()}
 
               {/* Features List */}
               <div className="rounded-2xl border border-gray-200 dark:border-surface-700/80 bg-gray-50/50 dark:bg-surface-800/40 p-4 sm:p-5 space-y-3 hidden sm:block">
