@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
-import { FiFilm, FiLogOut, FiSun, FiMoon, FiSettings, FiMenu, FiX } from 'react-icons/fi'
+import { FiFilm, FiLogOut, FiSun, FiMoon, FiSettings, FiMenu, FiX, FiZap } from 'react-icons/fi'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import { Button } from '../components/ui/Button'
 import UserSettingsModal from '../components/projects/UserSettingsModal'
+import SubscriptionModal from '../components/ui/SubscriptionModal'
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const [showSettings, setShowSettings] = useState(false)
+  const [showSubscription, setShowSubscription] = useState(false)
   const [showAdminSidebar, setShowAdminSidebar] = useState(false)
 
   const isAdminPanel = window.location.pathname.startsWith('/admin')
@@ -126,15 +128,56 @@ export default function DashboardLayout() {
 
             {/* Profile Info block inside Drawer (Dashboard user view only) */}
             {!isAdminPanel && (
-              <div className="rounded-2xl bg-surface-800 border border-surface-700/60 p-4 flex items-center gap-3 shadow-inner my-2 select-none">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-primary to-orange-500 text-white font-bold text-sm shadow-md shadow-orange-500/20 uppercase">
-                  {user?.username?.substring(0, 2)}
+              <>
+                <div className="rounded-2xl bg-surface-800 border border-surface-700/60 p-4 flex items-center gap-3 shadow-inner my-2 select-none">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-primary to-orange-500 text-white font-bold text-sm shadow-md shadow-orange-500/20 uppercase">
+                    {user?.username?.substring(0, 2)}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold truncate text-white">{user?.username}</p>
+                    <p className="text-xs text-gray-400 truncate">{user?.role || 'Writer'}</p>
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold truncate text-white">{user?.username}</p>
-                  <p className="text-xs text-gray-400 truncate">{user?.role || 'Writer'}</p>
-                </div>
-              </div>
+
+                {user?.role !== 'ADMIN' && (
+                  <div className="rounded-2xl bg-surface-800 border border-surface-700/60 p-4 shadow-inner my-3 select-none text-left">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Plan Status</span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                        user?.projectAccess 
+                          ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' 
+                          : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
+                      }`}>
+                        {user?.projectAccess ? 'Pro Plan' : 'Free Tier'}
+                      </span>
+                    </div>
+
+                    {user?.projectAccess ? (
+                      <div>
+                        <p className="text-xs text-gray-300">
+                          Active until: <span className="font-semibold">{user?.subscriptionExpiresAt ? new Date(user.subscriptionExpiresAt).toLocaleDateString() : 'N/A'}</span>
+                        </p>
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="text-xs text-gray-400 mb-3 leading-relaxed">
+                          Upgrade to create screenplays, format unlimited scripts, and sync backups.
+                        </p>
+                        <Button
+                          onClick={() => {
+                            setShowAdminSidebar(false)
+                            setShowSubscription(true)
+                          }}
+                          className="w-full justify-center gap-1.5 text-xs py-1.5 shadow shadow-brand-primary/10 select-none cursor-pointer"
+                        >
+                          <FiZap className="text-sm" />
+                          Upgrade to Pro
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
             )}
 
             {/* Menu items list */}
@@ -198,6 +241,7 @@ export default function DashboardLayout() {
       </main>
 
       <UserSettingsModal open={showSettings} onClose={() => setShowSettings(false)} />
+      <SubscriptionModal open={showSubscription} onClose={() => setShowSubscription(false)} />
     </div>
   )
 }

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScriptWriter Project - Complete Interview Questions & Answers (30 Q&As)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Courier+Prime:wght@400;700&display=swap');
+    
+    :root {
+      --primary: #ee7712;
+      --primary-hover: #d5630d;
+      --secondary: #3b82f6;
+      --dark: #0f172a;
+      --light-bg: #f8fafc;
+      --border: #e2e8f0;
+      --text: #334155;
+      --text-dark: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 50px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+
+    header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 30px;
+      margin-bottom: 40px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .logo-icon {
+      font-size: 28px;
+      color: var(--primary);
+    }
+
+    .logo-text {
+      font-weight: 800;
+      font-size: 24px;
+      color: var(--dark);
+      letter-spacing: -0.5px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text-dark);
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #64748b;
+      margin-top: 8px;
+    }
+
+    .btn-print {
+      position: absolute;
+      top: 50px;
+      right: 50px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+    }
+
+    .btn-print:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .toc {
+      background-color: #f1f5f9;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 40px;
+    }
+
+    .toc-title {
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+    }
+
+    .toc ul {
+      list-style-type: none;
+    }
+
+    .toc li {
+      margin-bottom: 8px;
+    }
+
+    .toc a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .toc a:hover {
+      text-decoration: underline;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-dark);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin: 40px 0 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .qa-card {
+      margin-bottom: 30px;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 25px;
+    }
+
+    .qa-card:last-of-type {
+      border-bottom: none;
+    }
+
+    .question {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .q-num {
+      color: var(--primary);
+    }
+
+    .answer {
+      font-size: 14px;
+      color: var(--text);
+      text-align: justify;
+      padding-left: 28px;
+    }
+
+    .answer p {
+      margin-bottom: 10px;
+    }
+
+    .answer ul, .answer ol {
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+
+    .answer li {
+      margin-bottom: 4px;
+    }
+
+    code {
+      font-family: 'Courier Prime', monospace;
+      background-color: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    pre code {
+      background-color: transparent;
+      color: inherit;
+      padding: 0;
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    @media print {
+      body {
+        background-color: white;
+        padding: 0;
+      }
+
+      .container {
+        box-shadow: none;
+        padding: 0;
+      }
+
+      .btn-print {
+        display: none;
+      }
+
+      .qa-card {
+        page-break-inside: avoid;
+      }
+
+      .section-title {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <button class="btn-print" onclick="window.print()">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5V8zm-2 1a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+      </svg>
+      Print / Save as PDF
+    </button>
+
+    <header>
+      <div class="logo-container">
+        <span class="logo-icon">🎬</span>
+        <span class="logo-text">ScriptWriter</span>
+      </div>
+      <h1>Complete Project Interview Questions &amp; Answers (30 Q&amp;As)</h1>
+      <p class="subtitle">A comprehensive guide covering architecture, backend, frontend, database, security, and responsive UI choices.</p>
+    </header>
+
+    <div class="toc">
+      <p class="toc-title">Table of Contents</p>
+      <ul>
+        <li><a href="#arch">1. System Architecture &amp; Project Overview (Q1-Q5)</a></li>
+        <li><a href="#backend">2. Backend Development &amp; Spring Boot Models (Q6-Q9)</a></li>
+        <li><a href="#frontend">3. Frontend Development &amp; React Editor (Q10-Q13)</a></li>
+        <li><a href="#db-schema">4. Database Schema Migrations &amp; Concurrency (Q14-Q16)</a></li>
+        <li><a href="#security">5. Link Security &amp; Copy Protection (Q17-Q19)</a></li>
+        <li><a href="#responsive">6. Responsive Design &amp; Layout Spacing (Q20-Q22)</a></li>
+        <li><a href="#utilities">7. Advanced Features &amp; Editor Utilities (Q23-Q26)</a></li>
+        <li><a href="#auth-deploy">8. Security Configurations, Tools &amp; Production Setup (Q27-Q30)</a></li>
+      </ul>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section-title" id="arch">1. System Architecture &amp; Project Overview</div>
+    
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q1.</span>
+        <span>What is the core purpose of the ScriptWriter application and what is its technology stack?</span>
+      </div>
+      <div class="answer">
+        <p><strong>ScriptWriter</strong> is a premium web-based screenplay editing and project collaboration tool. It mimics professional screenwriting software (like Final Draft) by offering standard formatting shortcuts, pagination, auto-save mechanisms, AI writing helpers, character index management, and secure public script sharing.</p>
+        <p><strong>Technology Stack:</strong></p>
+        <ul>
+          <li><strong>Frontend:</strong> React (v19), Vite, Tailwind CSS (v4), Axios, framer-motion, and react-icons.</li>
+          <li><strong>Backend:</strong> Java 17, Spring Boot (v3), Spring Data JPA, MapStruct, Lombok, OpenPDF, Apache POI.</li>
+          <li><strong>Database:</strong> PostgreSQL.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q2.</span>
+        <span>Explain the system design and how client requests flow to the database.</span>
+      </div>
+      <div class="answer">
+        <p>The application follows a standard decoupled Client-Server architecture:</p>
+        <ol>
+          <li>The **Client (React)** initiates HTTP REST API requests via **Axios** to the server.</li>
+          <li>The **Controller Layer** in Spring Boot intercepts request payloads, runs validations, and maps request DTOs (e.g. <code>SaveScriptRequest</code>) to system models.</li>
+          <li>The **Service Layer** performs business logic (e.g., checking link expiration, parsing screenplay blocks, compiling stats).</li>
+          <li>The **Repository Layer (Spring Data JPA)** translates operations into queries executed on the **PostgreSQL** database.</li>
+          <li>The database responses flow back through mappers to output response DTOs (e.g., <code>ScriptResponse</code>) which are returned to the client in JSON format.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q3.</span>
+        <span>What is Vite and what are its key advantages compared to Webpack in a React project?</span>
+      </div>
+      <div class="answer">
+        <p><strong>Vite</strong> is a modern frontend build tool that offers an extremely fast development environment. Its key advantages include:</p>
+        <ul>
+          <li><strong>Instant Server Start:</strong> It leverages native ES modules in the browser, serving code without pre-bundling. Webpack, conversely, bundles the entire application before starting the server.</li>
+          <li><strong>Lightning-Fast Hot Module Replacement (HMR):</strong> Only updated modules are compiled and hot-swapped, regardless of the size of the application.</li>
+          <li><strong>Highly Optimized Builds:</strong> Uses Rollup under the hood for production packaging, outputting highly optimized, split chunks.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q4.</span>
+        <span>Explain how framer-motion is used inside the editor page dashboard layout.</span>
+      </div>
+      <div class="answer">
+        <p><strong>Framer Motion</strong> is a React animation library. In ScriptWriter, it is used to orchestrate smooth layout transitions for sliding panel drawers (such as the AI Assistant Panel and the Editor Settings Drawer):</p>
+        <ul>
+          <li>It wraps the container in an <code>&lt;motion.div&gt;</code> component.</li>
+          <li>It uses the <code>animate</code> and <code>exit</code> attributes to transition CSS properties like <code>x</code> (transform-translate) and <code>opacity</code> when panels open or close.</li>
+          <li>This prevents jarring layouts and makes the panels feel lightweight and premium.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q5.</span>
+        <span>Why is PostgreSQL used as the primary database instead of a NoSQL database like MongoDB?</span>
+      </div>
+      <div class="answer">
+        <p>PostgreSQL was selected because screenplays, characters, users, and versions are highly relational entities that require strict data integrity:</p>
+        <ul>
+          <li><strong>ACID Compliance:</strong> Guarantees transaction safety when saving characters, blocks, and timeline statistics concurrently.</li>
+          <li><strong>Rich Joins:</strong> Essential for mapping user permissions, project shares, and script version history.</li>
+          <li><strong>JSONB Support:</strong> PostgreSQL offers a <code>JSONB</code> type which is utilized to store the array of dynamic screenplay block content in a single column while still allowing queries and updates, blending SQL structure with NoSQL flexibility.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-title" id="backend">2. Backend Development &amp; Spring Boot Models</div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q6.</span>
+        <span>Explain how Hibernate manages database schema updates and the configuration setting used in this project.</span>
+      </div>
+      <div class="answer">
+        <p>In this project, Hibernate is configured in the <code>application.properties</code> using <code>spring.jpa.hibernate.ddl-auto=update</code>. This configuration instructs Hibernate to inspect the Entity classes (decorated with <code>@Entity</code>) on startup and compare them with the existing database schema. If there are missing tables or columns, Hibernate automatically executes SQL <code>ALTER TABLE</code> commands to synchronize the database schema without requiring manual migration scripts.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q7.</span>
+        <span>What is Lombok, and how do annotations like @Builder, @Getter, and @Setter work in Script.java?</span>
+      </div>
+      <div class="answer">
+        <p><strong>Lombok</strong> is a Java library that plugs into the compiler to automatically generate repetitive boilerplate code like getters, setters, toString, equals, hashCode, and builders during build time.</p>
+        <ul>
+          <li><code>@Getter</code> / <code>@Setter</code>: Generates standard field getters and setters.</li>
+          <li><code>@Builder</code>: Implements the Builder Pattern, allowing objects to be instantiated in a fluent, readable way (e.g., <code>Script.builder().title("My Script").build()</code>).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q8.</span>
+        <span>What is MapStruct, and how is it used in ScriptMapper.java to map between entities and DTOs?</span>
+      </div>
+      <div class="answer">
+        <p><strong>MapStruct</strong> is an annotation-based code generator that simplifies mappings between Java bean types. During compile time, it generates code that handles mappings between JPA entity objects and REST payload DTOs. In <code>ScriptMapper.java</code>, it maps the <code>Script</code> entity to a <code>ScriptResponse</code> DTO, automatically converting fields like LocalDateTime and watermark objects.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q9.</span>
+        <span>How does ScriptWriter export screenplays to PDF and Word format?</span>
+      </div>
+      <div class="answer">
+        <p>Exporting is handled dynamically by backend utility classes:</p>
+        <ul>
+          <li><strong>PDF Export (ScreenplayPdfExporter):</strong> Uses **OpenPDF** (or iText) to construct PDF pages. It parses the JSON script content blocks, maps block types (Scene, Character, Action, Dialogue) to their industry-standard indentation rules, page-breaks blocks when they exceed page limits, and dynamically stamps watermarks onto the page canvases.</li>
+          <li><strong>Word Export (ScreenplayDocxExporter):</strong> Uses **Apache POI** to build Microsoft Word files. It loops through the screenplay blocks, inserting paragraphs with specified formatting, fonts (Courier Prime), sizes, and margin indents mapped to each block type.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-title" id="frontend">3. Frontend Development &amp; React Editor</div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q10.</span>
+        <span>Explain how page breaks and page numbers are dynamically calculated in the React editor.</span>
+      </div>
+      <div class="answer">
+        <p>Because the editor uses a single continuous scroll text area structure, pages must be calculated dynamically on the client side:</p>
+        <ol>
+          <li>The editor loops through all screenplay blocks and calculates the cumulative vertical height.</li>
+          <li>It uses an industry-standard height limit per page (e.g. 1050px for A4/Letter size at standard line height).</li>
+          <li>Whenever the vertical height accumulator exceeds the limit, a virtual page break element is inserted into the rendering list.</li>
+          <li>Each break records a page number index, rendering a <code>.visual-page-break</code> dividing line and a page number label in the margin.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q11.</span>
+        <span>Explain the difference between Page Zoom and Page Sizes ('a4', 'letter', 'script') in ScreenplayEditor.jsx.</span>
+      </div>
+      <div class="answer">
+        <p><strong>Page Size</strong> dictates the target physical dimensions and print aspect ratio of the script pages (e.g. A4, US Letter, or Script size). This changes the height limits and page break margins inside the rendering logic. </p>
+        <p><strong>Page Zoom</strong> is a purely visual presentation scale factor (managed by CSS <code>transform: scale(zoom%)</code> or font size multipliers) that allows writers to zoom in or out of the editor document without altering page formatting, layout boundaries, or line wraps.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q12.</span>
+        <span>What are custom hooks in React, and how is useAutoSave.js structured as a custom hook?</span>
+      </div>
+      <div class="answer">
+        <p>A **Custom Hook** is a Javascript function whose name starts with "use" and that can call other React hooks (like useState, useEffect, useRef). In ScriptWriter, <code>useAutoSave.js</code> abstracts the entire autosave process: it tracks the editor state, schedules timeout debounces, manages save states, and communicates updates to the script API. This keeps the main <code>EditorPage.jsx</code> component clean and maintainable.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q13.</span>
+        <span>Explain the configuration and event handling of PageNavigator.jsx.</span>
+      </div>
+      <div class="answer">
+        <p><code>PageNavigator.jsx</code> renders a floating button indicating the current page count. When clicked, it opens a small input container: </p>
+        <ul>
+          <li><strong>Range Validation:</strong> The input restricts entries using HTML properties (<code>min={1} max={totalPages}</code>).</li>
+          <li><strong>Keyboard Input:</strong> Listens for keydown events (<code>e.key === 'Enter'</code>) to fire the jump function, allowing authors to hit Enter to jump instantly.</li>
+          <li><strong>Callback Trigger:</strong> Fires <code>onJump(pageIndex)</code>, which sets scroll coordinates inside the editor.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section-title" id="db-schema">4. Database Schema Migrations &amp; Concurrency</div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q14.</span>
+        <span>Explain the column type mismatch issue encountered when adding new watermark columns to the PostgreSQL database, and how we resolved it.</span>
+      </div>
+      <div class="answer">
+        <p><strong>The Issue:</strong> Initially, new fields like <code>watermarkEnabled</code> were added to the <code>Script</code> entity as primitive booleans/doubles with <code>nullable = false</code> constraints. When Spring Boot booted up, Hibernate ran <code>ALTER TABLE scripts ADD COLUMN watermark_enabled boolean not null</code>. However, the database already contained existing rows (like project 28). Since existing rows had no data for this new column, PostgreSQL rejected the <code>NOT NULL</code> constraint insertion, causing a database exception which crashed all script loading APIs with a 500 Server Error.</p>
+        <p><strong>The Solution:</strong> We changed the column types in Java to nullable wrapper classes (<code>Boolean</code>, <code>Double</code>, <code>Integer</code>) instead of primitive types, and added defensive getters to supply default values when columns are null in the database:</p>
+        <pre><code>@Column(name = "watermark_enabled")
+private Boolean watermarkEnabled = false;
+
+public boolean isWatermarkEnabled() {
+    return watermarkEnabled != null && watermarkEnabled;
+}</code></pre>
+        <p>This allowed Hibernate's <code>ddl-auto=update</code> schema migration to execute successfully because PostgreSQL could fill the existing rows with <code>NULL</code> values during the alteration.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q15.</span>
+        <span>Explain the auto-save collision problem and how our request-queuing pattern resolved it.</span>
+      </div>
+      <div class="answer">
+        <p><strong>The Problem:</strong> When a user typed quickly, auto-save requests were triggered in quick succession. If a new request was sent before the previous database transaction completed, it resulted in overlapping concurrent database update calls. Hibernate threw concurrency exceptions or transaction deadlocks, resulting in save failures (red dot on UI).</p>
+        <p><strong>The Solution:</strong> We implemented a sequential request-queuing lock inside <code>useAutoSave.js</code> using refs:</p>
+        <pre><code>const isSavingRef = useRef(false);
+const pendingSaveRef = useRef(false);
+
+const save = async () => {
+  if (isSavingRef.current) {
+    pendingSaveRef.current = true; // Queue save
+    return;
+  }
+  isSavingRef.current = true;
+  // Send API request...
+  // in finally block:
+  isSavingRef.current = false;
+  if (pendingSaveRef.current) {
+    save(); // Trigger queued save
+  }
+}</code></pre>
+        <p>This locks concurrent saves: if a save is active, any new changes are queued. Once the save completes, the queue immediately triggers a follow-up save with the latest data, ensuring no transactions overlap and no edits are lost.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q16.</span>
+        <span>Explain the role of @Builder.Default in Lombok entities and why it was required for our watermark fields.</span>
+      </div>
+      <div class="answer">
+        <p>Lombok's <code>@Builder</code> ignores initializations declared inline on entity fields (e.g. <code>private String watermarkText = "CONFIDENTIAL";</code>) during building operations unless <code>@Builder.Default</code> is present. If you instantiate an entity using the generated builder without manually setting this field, it builds with a value of `null` or `false` instead of the defaults, which causes database constraint violations or bad JSON rendering. Placing <code>@Builder.Default</code> ensures values are mapped appropriately.</p>
+      </div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section-title" id="security">5. Link Security &amp; Copy Protection</div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q17.</span>
+        <span>How did we implement the 24-hour public link expiration feature? Explain both backend and frontend layers.</span>
+      </div>
+      <div class="answer">
+        <p><strong>Backend Layer:</strong> We added a <code>sharedAt</code> column (LocalDateTime) to the <code>Script</code> entity. When a user enables sharing, <code>sharedAt</code> is stamped with the current time. In the sharing endpoint, we validate that the current time is within 24 hours of <code>sharedAt</code>:</p>
+        <pre><code>if (script.getSharedAt() == null || 
+    script.getSharedAt().plusHours(24).isBefore(LocalDateTime.now())) {
+    throw new ResourceNotFoundException("This public link has expired");
+}</code></pre>
+        <p><strong>Frontend Layer:</strong> We added dynamic countdown logic to <code>PublicScriptPage.jsx</code> that subtracts the current time from <code>sharedAt + 24 hours</code>. It updates every minute, displaying a countdown pill (e.g. <code>Expires in 18h 4m</code>) or showing an error if it expires in real-time.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q18.</span>
+        <span>How did we implement copy protection on the public view page?</span>
+      </div>
+      <div class="answer">
+        <p>We combined CSS-level locks and JavaScript-level event handlers to block copying:</p>
+        <ul>
+          <li><strong>CSS Rules (editor.css):</strong> We set <code>user-select: none !important;</code> and <code>pointer-events: none !important;</code> on all read-only screenplay input textareas. This completely prevents text selection, drag-highlighting, and cursor focus on the page.</li>
+          <li><strong>JavaScript Blockers (PublicScriptPage.jsx):</strong> We registered window event listeners that cancel browser actions:
+            <ol>
+              <li>Blocks the <code>copy</code> and <code>cut</code> events (preventing clipboard injection).</li>
+              <li>Blocks the <code>contextmenu</code> event (preventing the right-click menu, hiding "Inspect Element").</li>
+              <li>Intercepts <code>keydown</code> shortcuts to block <code>Ctrl+C</code>, <code>Ctrl+A</code>, <code>Ctrl+S</code>, <code>Ctrl+P</code>, <code>Ctrl+U</code>, and <code>F12</code>.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q19.</span>
+        <span>Why does the PDF exporter skip rendering header margins on Page 1? Explain the pagination logic.</span>
+      </div>
+      <div class="answer">
+        <p>Screenwriting standards dictate that Page 1 serves as the Title Page (displaying the screenplay name, draft version, date, and author contact). Standard headers and page numbers must **never** appear on this page. In <code>ScreenplayPdfExporter.java</code>, a conditional check <code>if (pageNum == 1 && hasAuthorPage)</code> is run to skip writing header text, margins, page numbers, or watermark templates on the first sheet.</p>
+      </div>
+    </div>
+
+    <!-- SECTION 6 -->
+    <div class="section-title" id="responsive">6. Responsive Design &amp; Layout Spacing</div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q20.</span>
+        <span>Explain why the Settings Cog icon was overflowing on mobile, and how you solved it.</span>
+      </div>
+      <div class="answer">
+        <p><strong>The Issue:</strong> On mobile screens, the combined width of the Save Status block (84px text) and the 7 action toggles (Language, Search, Share, Import, Download, Sidebar, Settings cogs) exceeded 400px. Because most mobile viewports are 360px-390px, this caused horizontal layout overflow, pushing the rightmost Settings icon completely off the page.</p>
+        <p><strong>The Solution:</strong> We optimized spaces in <code>EditorToolbar.jsx</code>:</p>
+        <ul>
+          <li>Decreased save status text size to <code>text-[9.5px]</code> and width to <code>w-[80px]</code> to ensure it fits without wrapping.</li>
+          <li>Hidden the decorative vertical divider line on mobile (<code>hidden sm:block</code>).</li>
+          <li>Applied responsive padding/margins: container padding to <code>px-2 sm:px-4</code>, gaps to <code>gap-0.5 sm:gap-1</code>, and button paddings to <code>p-1.5 sm:p-2</code>.</li>
+        </ul>
+        <p>This shaves off over 140px on mobile viewports, allowing the toolbar to fit comfortably on 320px+ mobile screens.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q23.</span>
+        <span>How did we fix layout responsiveness and dark/light mismatches on the Character Profile Modal?</span>
+      </div>
+      <div class="answer">
+        <p><strong>Responsiveness:</strong> Changed columns like (Alias/Nickname, Age/Gender) from hardcoded <code>grid-cols-2</code> to responsive grid wrappers: <code>grid-cols-1 sm:grid-cols-2 gap-3</code>. This stacks input fields vertically on mobile while splitting them cleanly into double columns on desktop.</p>
+        <p><strong>Theme Mismatches:</strong> Replaced the hardcoded dark classes on textareas and dropdown selects with responsive tailwind classes: <code>border-gray-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-gray-700 dark:text-gray-300</code>. This makes forms seamlessly turn white in light mode and dark gray in dark mode.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q22.</span>
+        <span>How does responsive width work inside the custom font family dropdown card?</span>
+      </div>
+      <div class="answer">
+        <p>The native HTML <code>&lt;select&gt;</code> element was replaced by a custom React dropdown card. The card is set with the Tailwind classes: <code>absolute left-0 right-0 mt-1</code>. Because the parent container has a CSS property of <code>relative</code>, the absolute dropdown card inherits the exact width of the parent flex block. It scales automatically based on viewport changes, staying perfectly aligned without overflowing on mobile screens.</p>
+      </div>
+    </div>
+
+    <!-- SECTION 7 -->
+    <div class="section-title" id="utilities">7. Advanced Features &amp; Editor Utilities</div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q23.</span>
+        <span>How does the Indian Language Transliteration feature function in the editor toolbar, and what is its value?</span>
+      </div>
+      <div class="answer">
+        <p>The transliteration feature allows writers to type phonetically in English (e.g. typing "namaste") and have it automatically transliterated into their selected Indian regional language (e.g., Hindi: "नमस्ते", Telugu, Tamil, Malayalam, Bengali, etc.).</p>
+        <p>It uses a custom transliteration helper utility (<code>translitUtils.js</code>) that captures user keystrokes in real-time, queries phonetic transliteration mappings, and replaces text buffer inputs dynamically inside the script editing block. This is of high business value for regional screenwriters and production houses who write dialogues in local scripts using standard English keyboards.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q24.</span>
+        <span>Explain how Search and Replace is implemented inside a block-based screenplay editor.</span>
+      </div>
+      <div class="answer">
+        <p>Because screenplays are divided into separate structural block elements (Scene Heading, Action, Character, Dialogue) rather than a single rich-text string, standard browser find utilities fail. </p>
+        <p>We implemented a custom <code>FindReplaceModal</code> that loops through the array of block objects, executes case-insensitive string matches (or regex patterns), highlights matched segments dynamically using background highlights, and replaces matches by updating the specific block index text and dispatching the state changes to React and auto-save hooks.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q25.</span>
+        <span>How is character statistics tracking (dialogues, timelines) compiled and managed?</span>
+      </div>
+      <div class="answer">
+        <p>We have a repository-level statistics compiler. When a screenplay is saved, the backend parses the dialogue blocks. It counts the number of times a Character name block is used (Dialogues count), compiles scenes in which they speak (Timeline list), and counts words spoken. In the database, characters are mapped in a <code>characters</code> table with relationships to <code>scripts</code>. A statistics endpoint returns a dynamic DTO containing the compiled metrics, which is displayed in the sidebar or in the profile edit modal.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q26.</span>
+        <span>How does the AI Coprocessor Panel (AiPanel.jsx) interact with the editor block state?</span>
+      </div>
+      <div class="answer">
+        <p>The <code>AiPanel.jsx</code> is integrated with the main editor screen. When opened, it can capture the active screenplay block or scene text. Users write a prompt (e.g. "Rephrase dialogue to sound more dramatic"). The prompt is sent to the backend, which invokes the AI Model API. The generated suggestions are streamed back, and users can click "Insert" to replace the block content or append it directly to the editor blocks list.</p>
+      </div>
+    </div>
+
+    <!-- SECTION 8 -->
+    <div class="section-title" id="auth-deploy">8. Security Configurations, Tools &amp; Production Setup</div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q27.</span>
+        <span>Explain how authentication and route protection are handled between React and Spring Boot.</span>
+      </div>
+      <div class="answer">
+        <p>The backend uses **Spring Security** configured with a security filter chain. Users authenticate using login credentials, which return a secure session token (or JWT cookie) sent with subsequent Axios calls in the header.</p>
+        <p>The frontend protects private pages (like projects and editors) using a <code>ProtectedRoute.jsx</code> component. If the global auth context indicates that a visitor is unauthenticated, it cancels page rendering and redirects them to the log-in page.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q28.</span>
+        <span>How does Spring Security filter shared script requests? How is this configured?</span>
+      </div>
+      <div class="answer">
+        <p>In `SecurityConfig.java`, we define HTTP endpoint rules. To ensure public links are accessible to visitors without a log-in, we add a bypass rule:</p>
+        <pre><code>http.authorizeHttpRequests(auth -> auth
+    .requestMatchers("/api/v1/scripts/public/**").permitAll()
+    .anyRequest().authenticated()
+);</code></pre>
+        <p>This allows the backend to serve public shared scripts on public routes while securing all project, block editing, character index, and account management API calls.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q29.</span>
+        <span>Explain how Cross-Origin Resource Sharing (CORS) is configured in CorsConfig.java.</span>
+      </div>
+      <div class="answer">
+        <p>Since the React client runs on a different port/domain (e.g. `localhost:5173`) than the Spring Boot server (`localhost:8080`), browser policies block cross-origin requests by default. In `CorsConfig.java`, we register a CORS filter:</p>
+        <pre><code>CorsConfiguration config = new CorsConfiguration();
+config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://your-production-app.vercel.app"));
+config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+config.setAllowCredentials(true);</code></pre>
+        <p>This permits standard requests, header attachments, and cookie credentials from trusted domains.</p>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="question">
+        <span class="q-num">Q30.</span>
+        <span>How is the client and server set up for cloud hosting and production deployment?</span>
+      </div>
+      <div class="answer">
+        <p><strong>Frontend (React Client):</strong> Deployed to platforms like Vercel. A <code>vercel.json</code> configuration handles routing rewrites so that single-page React router paths (like <code>/projects/:id/editor</code>) map correctly to <code>index.html</code> instead of throwing a 404.</p>
+        <p><strong>Backend (Spring Boot Server):</strong> Packaged into an executable jar using Maven (<code>./mvnw clean package</code>) and hosted in a Docker container (using the custom <code>Dockerfile</code>) or cloud VMs (like AWS/Render/Heroku), communicating with a managed PostgreSQL database instance.</p>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

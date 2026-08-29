@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiUsers, FiLock, FiUnlock, FiTrash2, FiSearch, FiAlertTriangle, FiCheckCircle, FiKey } from 'react-icons/fi'
 import { adminApi } from '../api/adminApi'
+import { subscriptionApi } from '../api/subscriptionApi'
 import { useAuth } from '../context/AuthContext'
 import { Spinner } from '../components/ui/Spinner'
 
@@ -12,11 +13,27 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
+  const [monthlyPriceInput, setMonthlyPriceInput] = useState(99)
+  const [yearlyPriceInput, setYearlyPriceInput] = useState(999)
+  const [savingPrices, setSavingPrices] = useState(false)
+  const [pricesSuccess, setPricesSuccess] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [resettingUser, setResettingUser] = useState(null)
   const [newPassword, setNewPassword] = useState('')
   const [resettingError, setResettingError] = useState('')
   const [resettingSuccess, setResettingSuccess] = useState('')
+
+  const fetchConfig = async () => {
+    try {
+      const { data } = await subscriptionApi.getConfig()
+      if (data.data) {
+        setMonthlyPriceInput(data.data.monthlyPricePaise / 100)
+        setYearlyPriceInput(data.data.yearlyPricePaise / 100)
+      }
+    } catch (err) {
+      console.error('Failed to load prices config:', err)
+    }
+  }
 
   const fetchUsers = async () => {
     try {
@@ -34,7 +51,23 @@ export default function AdminPage() {
 
   useEffect(() => {
     fetchUsers()
+    fetchConfig()
   }, [])
+
+  const handleSavePrices = async (e) => {
+    e.preventDefault()
+    setSavingPrices(true)
+    setPricesSuccess('')
+    try {
+      await subscriptionApi.updateConfig(monthlyPriceInput, yearlyPriceInput)
+      setPricesSuccess('Subscription pricing updated successfully!')
+      setTimeout(() => setPricesSuccess(''), 3000)
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to update pricing.')
+    } finally {
+      setSavingPrices(false)
+    }
+  }
 
   const handleToggleAccess = async (user) => {
     const targetStatus = !user.projectAccess
@@ -161,6 +194,74 @@ export default function AdminPage() {
         </div>
       )}
 
+      {/* Subscription pricing configuration card */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="rounded-2xl border border-surface-700 bg-surface-800 p-5 md:p-6 shadow-xl space-y-4 text-left"
+      >
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
+            <FiKey className="text-xl" />
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-900 dark:text-white text-base">Subscription Plan Customization</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              Customize the monthly and yearly subscription fees (in INR) billed to writers via Razorpay.
+            </p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSavePrices} className="grid gap-4 sm:grid-cols-3 items-end">
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
+              Monthly Plan (₹)
+            </label>
+            <input
+              type="number"
+              min="1"
+              required
+              value={monthlyPriceInput}
+              onChange={(e) => setMonthlyPriceInput(Number(e.target.value))}
+              className="w-full rounded-xl border border-surface-700 bg-surface-850 py-2.5 px-4 text-sm text-gray-900 dark:text-white outline-none focus:border-brand-primary transition-all shadow-inner"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
+              Yearly Plan (₹)
+            </label>
+            <input
+              type="number"
+              min="1"
+              required
+              value={yearlyPriceInput}
+              onChange={(e) => setYearlyPriceInput(Number(e.target.value))}
+              className="w-full rounded-xl border border-surface-700 bg-surface-850 py-2.5 px-4 text-sm text-gray-900 dark:text-white outline-none focus:border-brand-primary transition-all shadow-inner"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={savingPrices}
+            className="w-full justify-center bg-brand-primary hover:bg-[#d8680d] disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-xl py-2.5 px-4 text-sm font-semibold select-none cursor-pointer border-none transition-all shadow-md shadow-brand-primary/10"
+          >
+            {savingPrices ? 'Saving...' : 'Save Pricing Plan'}
+          </button>
+        </form>
+
+        {pricesSuccess && (
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-2.5 text-xs text-emerald-450 flex items-center gap-1.5"
+          >
+            <FiCheckCircle className="text-sm shrink-0" />
+            <span>{pricesSuccess}</span>
+          </motion.div>
+        )}
+      </motion.div>
+
       {/* Control Bar */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         {/* Search */}
@@ -213,6 +314,7 @@ export default function AdminPage() {
                 <th className="px-6 py-4">User Details</th>
                 <th className="px-6 py-4">Email</th>
                 <th className="px-6 py-4">Role</th>
+                <th className="px-6 py-4">Subscription</th>
                 <th className="px-6 py-4 text-center">Project Creation Access</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
@@ -220,7 +322,7 @@ export default function AdminPage() {
             <tbody className="divide-y divide-surface-700/50 text-sm">
               {filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-12 text-center text-gray-400">
+                  <td colSpan="6" className="px-6 py-12 text-center text-gray-400">
                     No users found matching your criteria.
                   </td>
                 </tr>
@@ -272,6 +374,41 @@ export default function AdminPage() {
                         }`}>
                           {u.role}
                         </span>
+                      </td>
+
+                      {/* Subscription details */}
+                      <td className="px-6 py-4">
+                        {u.role === 'ADMIN' ? (
+                          <span className="text-xs text-gray-500 font-medium select-none">N/A (Admin)</span>
+                        ) : u.projectAccess ? (
+                          <div className="space-y-1">
+                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide border ${
+                              u.subscriptionExpiresAt && new Date(u.subscriptionExpiresAt).getFullYear() > new Date().getFullYear() + 50
+                                ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                                : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                            }`}>
+                              {u.subscriptionExpiresAt && new Date(u.subscriptionExpiresAt).getFullYear() > new Date().getFullYear() + 50
+                                ? 'Pro (Manual)'
+                                : 'Pro (Active)'}
+                            </span>
+                            {u.subscriptionExpiresAt && new Date(u.subscriptionExpiresAt).getFullYear() <= new Date().getFullYear() + 50 && (
+                              <p className="text-[10px] text-gray-400 font-medium">
+                                Expires: {new Date(u.subscriptionExpiresAt).toLocaleDateString()}
+                              </p>
+                            )}
+                            {u.razorpayPaymentId && (
+                              <p className="text-[9px] text-gray-500 font-mono truncate max-w-[140px] select-all" title={`Payment ID: ${u.razorpayPaymentId}`}>
+                                Pay ID: {u.razorpayPaymentId}
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          <div>
+                            <span className="inline-flex items-center rounded-full bg-surface-700/50 border border-surface-650/40 px-2 py-0.5 text-[10px] font-bold text-gray-450 uppercase tracking-wide">
+                              Inactive
+                            </span>
+                          </div>
+                        )}
                       </td>
 
                       {/* Access switch */}
@@ -387,6 +524,35 @@ export default function AdminPage() {
                     <span className="text-[10px] uppercase font-bold text-gray-500 mr-2">Email:</span>
                     {u.email}
                   </div>
+
+                  {/* Row 2.5: Subscription Status (Mobile) */}
+                  {u.role !== 'ADMIN' && (
+                    <div className="flex items-center justify-between text-xs py-1.5 border-t border-surface-700/30">
+                      <span className="text-gray-455 font-semibold">Subscription:</span>
+                      {u.projectAccess ? (
+                        <div className="text-right">
+                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide border ${
+                            u.subscriptionExpiresAt && new Date(u.subscriptionExpiresAt).getFullYear() > new Date().getFullYear() + 50
+                              ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                              : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                          }`}>
+                            {u.subscriptionExpiresAt && new Date(u.subscriptionExpiresAt).getFullYear() > new Date().getFullYear() + 50
+                              ? 'Pro (Manual)'
+                              : 'Pro (Active)'}
+                          </span>
+                          {u.subscriptionExpiresAt && new Date(u.subscriptionExpiresAt).getFullYear() <= new Date().getFullYear() + 50 && (
+                            <p className="text-[9px] text-gray-500 mt-0.5 font-medium">
+                              Exp: {new Date(u.subscriptionExpiresAt).toLocaleDateString()}
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="inline-flex items-center rounded-full bg-surface-700/50 border border-surface-650/40 px-2 py-0.5 text-[9px] font-bold text-gray-450 uppercase tracking-wide">
+                          Inactive
+                        </span>
+                      )}
+                    </div>
+                  )}
 
                   {/* Row 3: Project Access Status */}
                   <div className="flex items-center justify-between py-1.5 border-t border-b border-surface-700/50">

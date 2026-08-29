@@ -85,6 +85,29 @@ public class User extends BaseEntity {
     @Builder.Default
     private boolean projectAccess = false;
 
+    @Column(name = "subscription_status", length = 30)
+    @Builder.Default
+    private String subscriptionStatus = "INACTIVE";
+
+    @Column(name = "subscription_expires_at")
+    private LocalDateTime subscriptionExpiresAt;
+
+    @Column(name = "razorpay_order_id")
+    private String razorpayOrderId;
+
+    @Column(name = "razorpay_payment_id")
+    private String razorpayPaymentId;
+
+    public boolean isProjectAccess() {
+        if (com.scriptwriter.enums.Role.ADMIN.equals(this.role)) {
+            return true;
+        }
+        if (subscriptionExpiresAt != null) {
+            return subscriptionExpiresAt.isAfter(LocalDateTime.now()) && "ACTIVE".equals(subscriptionStatus);
+        }
+        return projectAccess;
+    }
+
     public boolean isAccountLocked() {
         return lockedUntil != null && lockedUntil.isAfter(LocalDateTime.now());
     }

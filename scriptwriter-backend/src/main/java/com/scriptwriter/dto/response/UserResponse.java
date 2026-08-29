@@ -27,4 +27,8 @@ public class UserResponse {
     private LocalDateTime lastLogin;
     private LocalDateTime createdAt;
     private boolean projectAccess;
+    private String subscriptionStatus;
+    private LocalDateTime subscriptionExpiresAt;
+    private String razorpayOrderId;
+    private String razorpayPaymentId;
 }

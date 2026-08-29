@@ -24,6 +24,10 @@ public class UserMapper {
                 .lastLogin(user.getLastLogin())
                 .createdAt(user.getCreatedAt())
                 .projectAccess(user.isProjectAccess())
+                .subscriptionStatus(user.getSubscriptionStatus())
+                .subscriptionExpiresAt(user.getSubscriptionExpiresAt())
+                .razorpayOrderId(user.getRazorpayOrderId())
+                .razorpayPaymentId(user.getRazorpayPaymentId())
                 .build();
     }
 }

@@ -56,6 +56,13 @@ public class AdminServiceImpl implements AdminService {
         }
         
         user.setProjectAccess(access);
+        if (access) {
+            user.setSubscriptionStatus("ACTIVE");
+            user.setSubscriptionExpiresAt(java.time.LocalDateTime.now().plusYears(100));
+        } else {
+            user.setSubscriptionStatus("INACTIVE");
+            user.setSubscriptionExpiresAt(null);
+        }
         userRepository.save(user);
         log.info("Admin {} toggled project access to {} for user {}", adminUserId, access, userId);
     }

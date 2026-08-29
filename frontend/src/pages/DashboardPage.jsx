@@ -9,7 +9,7 @@ import { Spinner } from '../components/ui/Spinner'
 import ProjectCard from '../components/projects/ProjectCard'
 import CreateProjectModal from '../components/projects/CreateProjectModal'
 import EditProjectModal from '../components/projects/EditProjectModal'
-import ApprovalRequiredModal from '../components/ui/ApprovalRequiredModal'
+import SubscriptionModal from '../components/ui/SubscriptionModal'
 
 const filters = [
   { id: 'all', label: 'All', icon: FiFolder },
@@ -206,7 +206,7 @@ export default function DashboardPage() {
         loading={mutations.update.isPending}
       />
 
-      <ApprovalRequiredModal
+      <SubscriptionModal
         open={showApprovalRequired}
         onClose={() => setShowApprovalRequired(false)}
       />
