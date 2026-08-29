@@ -135,7 +135,7 @@ export default function SubscriptionModal({ open, onClose }) {
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
-        className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-surface-700 bg-surface-850 p-6 md:p-8 shadow-2xl"
+        className="relative w-full max-w-2xl max-h-[calc(100vh-2rem)] overflow-y-auto rounded-3xl border border-surface-700 bg-surface-850 p-6 md:p-8 shadow-2xl scrollbar-thin"
       >
         {/* Glow Effects */}
         <div className="absolute -left-16 -top-16 h-36 w-36 rounded-full bg-brand-primary/10 blur-2xl" />
@@ -164,10 +164,10 @@ export default function SubscriptionModal({ open, onClose }) {
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
                   <FiZap className="text-2xl" />
                 </div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                   Upgrade to ScriptWriter Pro
                 </h3>
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-sm text-gray-550 dark:text-gray-400 mt-1">
                   Unlock limitless storytelling & professional formatting controls
                 </p>
               </div>
@@ -184,7 +184,7 @@ export default function SubscriptionModal({ open, onClose }) {
                   }`}
                 >
                   <div className="flex justify-between items-center mb-1">
-                    <span className="text-sm font-semibold text-gray-300">Monthly Pro</span>
+                    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">Monthly Pro</span>
                     <input
                       type="radio"
                       checked={planType === 'MONTHLY'}
@@ -193,10 +193,10 @@ export default function SubscriptionModal({ open, onClose }) {
                     />
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-extrabold text-white">₹{prices.monthly}</span>
-                    <span className="text-xs text-gray-400">/ month</span>
+                    <span className="text-3xl font-extrabold text-gray-900 dark:text-white">₹{prices.monthly}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">/ month</span>
                   </div>
-                  <p className="text-xs text-gray-400 mt-2">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
                     Ideal for writing a single project or script revision.
                   </p>
                 </div>
@@ -214,7 +214,7 @@ export default function SubscriptionModal({ open, onClose }) {
                     Save 15%
                   </div>
                   <div className="flex justify-between items-center mb-1 mt-1">
-                    <span className="text-sm font-semibold text-gray-300">Yearly Pro</span>
+                    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">Yearly Pro</span>
                     <input
                       type="radio"
                       checked={planType === 'YEARLY'}
@@ -223,10 +223,10 @@ export default function SubscriptionModal({ open, onClose }) {
                     />
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-extrabold text-white">₹{prices.yearly}</span>
-                    <span className="text-xs text-gray-400">/ year</span>
+                    <span className="text-3xl font-extrabold text-gray-900 dark:text-white">₹{prices.yearly}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">/ year</span>
                   </div>
-                  <p className="text-xs text-gray-400 mt-2">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
                     Save money with our best-value yearly roadmap plan.
                   </p>
                 </div>
@@ -235,7 +235,7 @@ export default function SubscriptionModal({ open, onClose }) {
               {/* Features List */}
               <div className="rounded-2xl border border-surface-700 bg-surface-800/40 p-5 space-y-3">
                 <span className="text-xs font-bold uppercase tracking-wider text-brand-primary">What's Included</span>
-                <div className="grid gap-2.5 text-xs text-gray-300 sm:grid-cols-2">
+                <div className="grid gap-2.5 text-xs text-gray-700 dark:text-gray-300 sm:grid-cols-2">
                   {features.map((f, i) => (
                     <div key={i} className="flex items-start gap-2">
                       <FiCheck className="text-brand-primary mt-0.5 shrink-0 text-sm font-bold" />
@@ -255,7 +255,7 @@ export default function SubscriptionModal({ open, onClose }) {
                   <FiCreditCard className="text-lg" />
                   {loading ? 'Processing Checkout...' : `Pay ₹${planType === 'YEARLY' ? prices.yearly : prices.monthly} via Razorpay`}
                 </Button>
-                <span className="text-[10px] text-center text-gray-500">
+                <span className="text-[10px] text-center text-gray-550 dark:text-gray-500">
                   Payments secured via Razorpay. Cancel anytime. Terms & conditions apply.
                 </span>
               </div>
@@ -272,23 +272,23 @@ export default function SubscriptionModal({ open, onClose }) {
                 <FiZap className="text-2xl animate-pulse" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white">Mock Environment Detected</h3>
-                <p className="text-sm text-gray-400 mt-1.5 px-4 max-w-md mx-auto">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Mock Environment Detected</h3>
+                <p className="text-sm text-gray-550 dark:text-gray-400 mt-1.5 px-4 max-w-md mx-auto">
                   A real Razorpay Key is not set (`rzp_test_dummy` matches). You can confirm checkout and verify signature instantly below.
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-surface-800 border border-surface-700/60 p-4 inline-block text-left max-w-sm w-full mx-auto select-none">
-                <div className="flex justify-between border-b border-surface-750 pb-2 mb-2 text-xs">
-                  <span className="text-gray-400">Order ID:</span>
-                  <span className="font-semibold text-gray-250 truncate max-w-[200px]">{mockOrder.orderId}</span>
+              <div className="rounded-2xl bg-surface-850 dark:bg-surface-800 border border-surface-700/60 p-4 inline-block text-left max-w-sm w-full mx-auto select-none">
+                <div className="flex justify-between border-b border-surface-700/50 pb-2 mb-2 text-xs">
+                  <span className="text-gray-550 dark:text-gray-400">Order ID:</span>
+                  <span className="font-semibold text-gray-800 dark:text-gray-255 truncate max-w-[200px]">{mockOrder.orderId}</span>
                 </div>
-                <div className="flex justify-between border-b border-surface-750 pb-2 mb-2 text-xs">
-                  <span className="text-gray-400">Plan type:</span>
-                  <span className="font-bold text-white uppercase">{mockOrder.planType}</span>
+                <div className="flex justify-between border-b border-surface-700/50 pb-2 mb-2 text-xs">
+                  <span className="text-gray-550 dark:text-gray-400">Plan type:</span>
+                  <span className="font-bold text-gray-900 dark:text-white uppercase">{mockOrder.planType}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-gray-400">Amount:</span>
+                  <span className="text-gray-550 dark:text-gray-400">Amount:</span>
                   <span className="font-extrabold text-brand-primary">₹{mockOrder.amount / 100}</span>
                 </div>
               </div>
