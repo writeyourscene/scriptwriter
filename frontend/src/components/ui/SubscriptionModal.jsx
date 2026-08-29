@@ -275,7 +275,12 @@ export default function SubscriptionModal({ open, onClose }) {
                   className="w-full justify-center gap-2.5 py-3 text-sm font-bold bg-gradient-to-r from-brand-primary to-orange-600 hover:from-brand-primary/95 hover:to-orange-600/95 disabled:from-gray-300 disabled:to-gray-400 disabled:dark:from-gray-700 disabled:dark:to-gray-800 text-white rounded-xl shadow-md transition-all select-none cursor-pointer flex items-center justify-center border-none"
                 >
                   <FiCreditCard className="text-lg" />
-                  {loading ? 'Processing Checkout...' : `Pay ₹${planType === 'YEARLY' ? prices.yearly : prices.monthly} via Razorpay`}
+                  {loading ? 'Processing Checkout...' : (() => {
+                    const discountPct = planType === 'YEARLY' ? prices.yearlyDiscountPercent : prices.monthlyDiscountPercent
+                    const basePrice   = planType === 'YEARLY' ? prices.yearly : prices.monthly
+                    const effective   = Math.round(basePrice * (1 - discountPct / 100))
+                    return `Pay ₹${effective} via Razorpay`
+                  })()}
                 </motion.button>
                 <span className="text-[10px] text-center text-gray-550 dark:text-gray-500">
                   Payments secured via Razorpay. Cancel anytime. Terms & conditions apply.

@@ -53,9 +53,13 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         int amount;
         com.scriptwriter.entity.SubscriptionConfig config = getConfig();
         if ("YEARLY".equalsIgnoreCase(request.getPlanType())) {
-            amount = config.getYearlyPricePaise();
+            int basePaise    = config.getYearlyPricePaise();
+            int discountPct  = config.getYearlyDiscountPercent();
+            amount = (int) Math.round(basePaise * (1.0 - discountPct / 100.0));
         } else {
-            amount = config.getMonthlyPricePaise();
+            int basePaise    = config.getMonthlyPricePaise();
+            int discountPct  = config.getMonthlyDiscountPercent();
+            amount = (int) Math.round(basePaise * (1.0 - discountPct / 100.0));
         }
 
         Map<String, Object> response = new HashMap<>();
